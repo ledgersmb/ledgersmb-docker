@@ -5,7 +5,7 @@ MAINTAINER  Freelock john@freelock.com
 ENV LSMB_VERSION master
 
 
-# Install PHP5 and modules along with composer binary
+# Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
   apt-get update && apt-get -y install \
   git \
