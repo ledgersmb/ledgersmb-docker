@@ -23,5 +23,8 @@ if [ ! -z ${CREATE_DATABASE+x} ]; then
   --postgres_password "$POSTGRES_PASS"
 fi
 
+# Needed for modules loaded by cpanm
+export PERL5LIB=/usr/local/lib/perl5/site_perl/5.22.0
+
 # start ledgersmb
 exec starman tools/starman.psgi

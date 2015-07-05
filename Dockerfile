@@ -1,4 +1,4 @@
-FROM        debian:jessie
+FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
@@ -61,6 +61,24 @@ COPY update_ssmtp.sh /usr/bin/update_ssmtp.sh
 RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
   chmod +x /usr/bin/update_ssmtp.sh /usr/bin/start.sh && \
   mkdir -p /var/www
+
+# 1.5 requirements
+RUN apt-get install -y \
+    libpgobject-perl \
+    libpgobject-simple-perl \
+    libpgobject-simple-role-perl \
+    libpgobject-util-dbmethod-perl
+RUN  cpanm \
+    Carton PGObject::Type::BigFloat \
+    PGObject::Composite \
+    PGObject::Type::JSON \
+    PGObject::Type::Composite \
+    PGObject::Type::DateTime \
+    App::LedgerSMB::Admin
+
+# Not sure why this is not set correctly, and also why
+# it gets overridden here -- moved to start.sh.
+# ENV PERL5LIB /usr/local/lib/perl5/site_perl/5.22.0
 
 # Internal Port Expose
 EXPOSE 5000
