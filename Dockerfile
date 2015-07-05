@@ -2,7 +2,7 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.4
+ENV LSMB_VERSION master
 
 
 # Install PHP5 and modules along with composer binary
