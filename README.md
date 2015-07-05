@@ -47,11 +47,13 @@ Log in with the "postgres" user and the password you set when starting up the Po
 
 Once you have completed the setup, you have a fully functional LedgerSMB instance running!
 
-## Updating the LedgerSMB container
+Visit http://localhost:5000/login.pl to log in and get started.
+
+# Updating the LedgerSMB container
 
 No persistant data is stored in the LedgerSMB container. All LedgerSMB data is stored in Postgres, so you can stop/destroy/run a new LedgerSMB container, and as long as you link it to the Postgres database, you should be able to pick up where you left off.
 
-## Environment Variables
+# Environment Variables
 
 The LedgerSMB image uses several environment variables which are easy to miss. While none of the variables are required, they may significantly aid you in using the image.
 
@@ -101,6 +103,10 @@ This is a brand new effort, and we will be adding documentation to the http://le
 If you have any problems with or questions about this image or LedgerSMB, please contact us on the [mailing list](http://ledgersmb.org/topic/support/mailing-lists-rss-and-nntp-feeds) or through a [GitHub issue](https://github.com/ledgersmb/ledgersmb-docker/issues).
 
 You can also reach some of the official LedgerSMB maintainers via the `#ledgersmb` IRC channel on [Freenode](https://freenode.net).
+
+1.4/latest: CREATE_DATABASE env variable currently does not provision a test company.
+
+1.5/dev-master: Currently no way to get a working database. Bugs are filed, blocking 3 different approaches: New database, Upgrade from 1.4, Test company
 
 ## Contributing
 
