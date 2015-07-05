@@ -18,9 +18,10 @@ if [[ ! -f ledgersmb.conf ]]; then
 fi
 
 if [ ! -z ${CREATE_DATABASE+x} ]; then
-  perl tools/create-company-database.pl --company $CREATE_DATABASE \
+  perl tools/prepare-company-database.pl --company $CREATE_DATABASE \
   --host $POSTGRES_HOST \
-  --postgres_password "$POSTGRES_PASS"
+  --owner postgres \
+  --password "$POSTGRES_PASS"
 fi
 
 # start ledgersmb
