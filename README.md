@@ -43,7 +43,7 @@ This image includes `EXPOSE 5432` (the postgres port), so standard container lin
 
 Visit http://myledger:5000/setup.pl (you can forward port 5000 to the host machine, or lookup the IP address for the "myledger" container if running on localhost)
 
-Log in with the "postgres" user and the password you set when starting up the Postgres container.
+Log in with the "postgres" user and the password you set when starting up the Postgres container, and provide the name of a company database you want to create.
 
 Once you have completed the setup, you have a fully functional LedgerSMB instance running!
 
