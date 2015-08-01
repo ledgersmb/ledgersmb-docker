@@ -7,8 +7,7 @@ This is a work in progress to make a docker image for running LedgerSMB. It shou
 
 -	`1.5`, `dev-master` - Master branch, unstable
 - `1.4`, `latest` - Tip of git 1.4 branch
-- `1.4.12` - Latest stable release (not yet built)
-- `1.3.45` - Last 1.3.x release (not yet built)
+- `1.3` - Latest 1.3.x release
 
 
 # What is LedgerSMB?
