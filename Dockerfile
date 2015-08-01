@@ -2,7 +2,7 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.4
+ENV LSMB_VERSION 1.3
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
