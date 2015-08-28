@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libtemplate-plugin-latex-perl texlive-latex-recommended \
   libnet-tclink-perl \
   libxml-twig-perl \
+  libdevel-trace-perl \
   starman \
   postgresql-client-9.4 \
   ssmtp
