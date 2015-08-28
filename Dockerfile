@@ -1,4 +1,4 @@
-FROM        debian:jessie
+FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
@@ -57,6 +57,9 @@ ENV POSTGRES_HOST postgres
 
 COPY start.sh /usr/bin/start.sh
 COPY update_ssmtp.sh /usr/bin/update_ssmtp.sh
+
+RUN  cpanm \
+   CGI::Compile
 
 
 RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
