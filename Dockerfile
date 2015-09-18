@@ -19,8 +19,8 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libconfig-inifiles-perl libnamespace-autoclean-perl \
   libcarp-always-perl libjson-perl \
   libtemplate-plugin-latex-perl texlive-latex-recommended \
-  libnet-tclink-perl \
   libxml-twig-perl \
+  libtex-encode-perl \
   libdevel-trace-perl \
   starman \
   postgresql-client-9.4 \
@@ -58,8 +58,8 @@ ENV POSTGRES_HOST postgres
 COPY start.sh /usr/bin/start.sh
 COPY update_ssmtp.sh /usr/bin/update_ssmtp.sh
 
-RUN  cpanm \
-   CGI::Compile
+#RUN  cpanm \
+#   CGI::Compile
 
 
 RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
