@@ -66,6 +66,10 @@ RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
   chmod +x /usr/bin/update_ssmtp.sh /usr/bin/start.sh && \
   mkdir -p /var/www
 
+# Work around an aufs bug related to directory permissions:
+RUN mkdir -p /tmp && \
+  chmod 1777 /tmp
+
 # Internal Port Expose
 EXPOSE 5000
 #USER www-data
