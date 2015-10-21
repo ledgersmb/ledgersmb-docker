@@ -68,7 +68,7 @@ RUN apt-get install -y \
     libpgobject-simple-perl \
     libpgobject-simple-role-perl \
     libpgobject-util-dbmethod-perl
-RUN  cpanm \
+RUN  cpanm -nq \
     Carton PGObject::Type::BigFloat \
     PGObject::Composite \
     PGObject::Type::JSON \
