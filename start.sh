@@ -1,11 +1,6 @@
 #!/bin/bash
 
-if [[ -e /tmp/smtpconfig ]]; then
-  echo "smtp configured."
-else
-  update_ssmtp.sh
-  touch /tmp/smtpconfig
-fi
+update_ssmtp.sh
 
 
 if [[ ! -f ledgersmb.conf ]]; then
