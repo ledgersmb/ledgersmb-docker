@@ -2,7 +2,7 @@ FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION master
+ENV LSMB_VERSION 1.5.0-beta3
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
