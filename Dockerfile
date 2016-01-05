@@ -54,12 +54,12 @@ ENV SSMTP_FROMLINE_OVERRIDE YES
 
 ENV POSTGRES_HOST postgres
 
-COPY start.sh /usr/bin/start.sh
-COPY update_ssmtp.sh /usr/bin/update_ssmtp.sh
+COPY start.sh /usr/local/bin/start.sh
+COPY update_ssmtp.sh /usr/local/bin/update_ssmtp.sh
 
 
 RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
-  chmod +x /usr/bin/update_ssmtp.sh /usr/bin/start.sh && \
+  chmod +x /usr/local/bin/update_ssmtp.sh /usr/local/bin/start.sh && \
   mkdir -p /var/www
 
 # 1.5 requirements
@@ -69,7 +69,8 @@ RUN apt-get install -y \
     libpgobject-simple-role-perl \
     libpgobject-util-dbmethod-perl
 RUN  cpanm -nq \
-    Carton PGObject::Type::BigFloat \
+    Carton \
+    PGObject::Type::BigFloat \
     PGObject::Composite \
     PGObject::Type::JSON \
     PGObject::Type::Composite \
