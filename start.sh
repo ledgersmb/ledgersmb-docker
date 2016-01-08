@@ -1,10 +1,10 @@
 #!/bin/bash
 
 update_ssmtp.sh
-
+cd /srv/ledgersmb
 
 if [[ ! -f ledgersmb.conf ]]; then
-  cp ledgersmb.conf.default ledgersmb.conf
+  cp conf/ledgersmb.conf.default ledgersmb.conf
   sed -i \
     -e "s/\(cache_templates = \).*\$/cache_templates = 1/g" \
     -e "s/\(host = \).*\$/\1$POSTGRES_HOST/g" \
