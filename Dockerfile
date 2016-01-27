@@ -1,10 +1,6 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
-# Build time variables
-ENV LSMB_VERSION 1.5.0-beta3
-
-
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
   apt-get update && apt-get -y install \
@@ -25,7 +21,23 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   postgresql-client-9.4 \
   ssmtp
 
-# Install LedgerSMB
+# 1.5 requirements
+RUN apt-get install -y \
+    libpgobject-perl \
+    libpgobject-simple-perl \
+    libpgobject-simple-role-perl \
+    libpgobject-util-dbmethod-perl \
+    && cpanm -nq \
+    Carton \
+    PGObject::Type::BigFloat \
+    PGObject::Composite \
+    PGObject::Type::JSON \
+    PGObject::Type::Composite \
+    PGObject::Type::DateTime \
+    App::LedgerSMB::Admin
+
+# Build time variables
+ENV LSMB_VERSION 1.5.0-beta3
 
 RUN cd /srv && \
   git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
@@ -57,25 +69,9 @@ ENV POSTGRES_HOST postgres
 COPY start.sh /usr/local/bin/start.sh
 COPY update_ssmtp.sh /usr/local/bin/update_ssmtp.sh
 
-
 RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
   chmod +x /usr/local/bin/update_ssmtp.sh /usr/local/bin/start.sh && \
   mkdir -p /var/www
-
-# 1.5 requirements
-RUN apt-get install -y \
-    libpgobject-perl \
-    libpgobject-simple-perl \
-    libpgobject-simple-role-perl \
-    libpgobject-util-dbmethod-perl
-RUN  cpanm -nq \
-    Carton \
-    PGObject::Type::BigFloat \
-    PGObject::Composite \
-    PGObject::Type::JSON \
-    PGObject::Type::Composite \
-    PGObject::Type::DateTime \
-    App::LedgerSMB::Admin
 
 # Not sure why this is not set correctly, and also why
 # it gets overridden here -- moved to start.sh.
