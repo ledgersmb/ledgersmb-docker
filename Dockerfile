@@ -1,6 +1,8 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
+ENV 
+
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
   apt-get update && apt-get -y install \
@@ -36,21 +38,34 @@ RUN apt-get install -y \
     PGObject::Type::DateTime \
     App::LedgerSMB::Admin
 
+# Install LedgerSMB
+WORKDIR /srv 
+# update the following label to force docker to cache the latest git clone:
+LABEL lsmb_docker_git_clone_cachebreak=2016-01-28
+RUN git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+
 # Set LedgerSMB version (git tag/branch/commit)
 # Change the following line or set arg on docker build commandline;
 # eg:
 # docker build --build-arg LSMB_VERSION=1.4.0 ./
 # docker build --build-arg LSMB_VERSION=1c00d61 ./
+# NOTE: if you use a branch name (or a reused tag name) instead of a commit checksum
+#       then docker's caching will see nothing new and you'll end up with stale files
+#       if that branch/tag has already been cached.
+#
+#       As a hack to reliably use a branch (eg, master), try the following:
+#        docker build --build-arg CACHEBREAK=$(date) LSMB_VERSION=master ./
+ARG CACHEBREAK
 ARG LSMB_VERSION=1.5.0-beta3
 ENV LSMB_VERSION ${LSMB_VERSION}
 
-# Install LedgerSMB
-RUN cd /srv && \
-  git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
-
 WORKDIR /srv/ledgersmb
-
-RUN git checkout $LSMB_VERSION
+# fetch changes to repo since possibly cached git clone above.
+# checkout specified tag/branch/commit (**NOTE above)
+# merge changes to current checked out branch
+RUN git fetch \
+ && git checkout $LSMB_VERSION
+ && git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch"
 
 #RUN sed -i \
 #  -e "s/short_open_tag = Off/short_open_tag = On/g" \
