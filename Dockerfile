@@ -62,7 +62,7 @@ WORKDIR /srv/ledgersmb
 # checkout specified tag/branch/commit (**NOTE above)
 # merge changes to current checked out branch
 RUN git fetch \
- && git checkout $LSMB_VERSION
+ && git checkout $LSMB_VERSION \
  && git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch"
 
 #RUN sed -i \
