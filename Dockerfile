@@ -36,9 +36,15 @@ RUN apt-get install -y \
     PGObject::Type::DateTime \
     App::LedgerSMB::Admin
 
-# Build time variables
-ENV LSMB_VERSION 1.5.0-beta3
+# Set LedgerSMB version (git tag/branch/commit)
+# Change the following line or set arg on docker build commandline;
+# eg:
+# docker build --build-arg LSMB_VERSION=1.4.0 ./
+# docker build --build-arg LSMB_VERSION=1c00d61 ./
+ARG LSMB_VERSION=1.5.0-beta3
+ENV LSMB_VERSION ${LSMB_VERSION}
 
+# Install LedgerSMB
 RUN cd /srv && \
   git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
