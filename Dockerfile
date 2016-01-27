@@ -52,7 +52,7 @@ RUN git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 #       if that branch/tag has already been cached.
 #
 #       As a hack to reliably use a branch (eg, master), try the following:
-#        docker build --build-arg CACHEBREAK="$(date)" LSMB_VERSION=master ./
+#        docker build --build-arg CACHEBREAK="$(date)" --build-arg LSMB_VERSION=master ./
 ARG CACHEBREAK
 ARG LSMB_VERSION=1.5.0-beta3
 ENV LSMB_VERSION ${LSMB_VERSION}
