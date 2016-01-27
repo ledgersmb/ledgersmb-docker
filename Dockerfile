@@ -39,6 +39,7 @@ RUN apt-get install -y \
 # Build time variables
 ENV LSMB_VERSION 1.5.0-beta3
 
+# Install LedgerSMB
 RUN cd /srv && \
   git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
