@@ -62,7 +62,7 @@ ENV LSMB_VERSION ${LSMB_VERSION}
 RUN cd /srv/ledgersmb \ 
  && git fetch \
  && git checkout $LSMB_VERSION \
- && git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch"
+ && (git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch")
 
 #RUN sed -i \
 #  -e "s/short_open_tag = Off/short_open_tag = On/g" \
