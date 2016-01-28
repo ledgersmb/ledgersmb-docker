@@ -56,11 +56,11 @@ ARG CACHEBREAK
 ARG LSMB_VERSION=1.5.0-beta3
 ENV LSMB_VERSION ${LSMB_VERSION}
 
-WORKDIR /srv/ledgersmb
 # fetch changes to repo since possibly cached git clone above.
 # checkout specified tag/branch/commit (**NOTE above)
 # merge changes to current checked out branch
-RUN git fetch \
+RUN cd /srv/ledgersmb \ 
+ && git fetch \
  && git checkout $LSMB_VERSION \
  && git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch"
 
