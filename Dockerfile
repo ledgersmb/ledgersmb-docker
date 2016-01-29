@@ -37,8 +37,6 @@ RUN apt-get install -y \
     App::LedgerSMB::Admin
 
 # Install LedgerSMB
-
-# Install LedgerSMB
 RUN cd /srv && \
   git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
