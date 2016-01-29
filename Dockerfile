@@ -37,8 +37,9 @@ RUN apt-get install -y \
     App::LedgerSMB::Admin
 
 # Install LedgerSMB
+ENV LSMB_REPO_UPSTREAM=https://github.com/ledgersmb/LedgerSMB.git
 RUN cd /srv && \
-  git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+  git clone $LSMB_REPO_UPSTREAM ledgersmb
 
 # Set LedgerSMB version (git tag/branch/commit)
 # Change LSMB_VERSION or use --build-arg on docker build commandline;
@@ -55,15 +56,17 @@ ARG CACHEBREAK
 ARG LSMB_VERSION=1.5.0-beta3
 ENV LSMB_VERSION ${LSMB_VERSION}
 
-# fetch changes to repo since possibly cached git clone above.
-# checkout specified tag/branch/commit (**NOTE above)
-# merge changes to current checked out branch
+# Set git remote source, eg: --build-arg LSMB_REPO=https://github.com/ehuelsmann/LedgerSMB.git 
+ARG LSMB_REPO=${LSMB_REPO_UPSTREAM}
 
 WORKDIR /srv/ledgersmb
 
-RUN git fetch \
- && git checkout $LSMB_VERSION \
- && (git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch")
+# add remote repo as alt
+# fetch alt (fetches differences between the initial git clone and current alt remote)
+# checkout specified tag/branch/commit from alt; no need for merge because it's detached
+RUN git remote add alt ${LSMB_REPO} \
+ && git fetch alt \
+ && git checkout alt/$LSMB_VERSION 
 
 #RUN sed -i \
 #  -e "s/short_open_tag = Off/short_open_tag = On/g" \
