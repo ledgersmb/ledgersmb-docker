@@ -37,9 +37,18 @@ RUN apt-get install -y \
     App::LedgerSMB::Admin
 
 # Install LedgerSMB
+
+# Clone upstream git repository:
 ENV LSMB_REPO_UPSTREAM=https://github.com/ledgersmb/LedgerSMB.git
 RUN cd /srv && \
   git clone $LSMB_REPO_UPSTREAM ledgersmb
+
+# Set git remote source, eg: --build-arg LSMB_REPO=https://github.com/ehuelsmann/LedgerSMB.git 
+ARG LSMB_REPO=${LSMB_REPO_UPSTREAM}
+WORKDIR /srv/ledgersmb
+# add remote repo as alt
+RUN git remote add alt ${LSMB_REPO} \
+ && git fetch alt
 
 # Set LedgerSMB version (git tag/branch/commit)
 # Change LSMB_VERSION or use --build-arg on docker build commandline;
@@ -50,22 +59,16 @@ RUN cd /srv && \
 #       then docker's caching will see nothing new and you'll end up with stale files
 #       if that branch/tag has already been cached.
 #
-# As a hack to reliably update a branch (eg, master), --build-arg CACHEBREAK="$(date)":
-#  eg: docker build --build-arg CACHEBREAK="$(date)" --build-arg LSMB_VERSION=master .
-ARG CACHEBREAK
 ARG LSMB_VERSION=1.5.0-beta3
 ENV LSMB_VERSION ${LSMB_VERSION}
 
-# Set git remote source, eg: --build-arg LSMB_REPO=https://github.com/ehuelsmann/LedgerSMB.git 
-ARG LSMB_REPO=${LSMB_REPO_UPSTREAM}
+# As a hack to reliably update a branch (eg, master), --build-arg CACHEBREAK="$(date)":
+#  eg: docker build --build-arg CACHEBREAK="$(date)" --build-arg LSMB_VERSION=master .
+ARG CACHEBREAK
 
-WORKDIR /srv/ledgersmb
-
-# add remote repo as alt
-# fetch alt (fetches differences between the initial git clone and current alt remote)
+# fetch alt (fetches changes since the last fetch)
 # checkout specified tag/branch/commit from alt; no need for merge because it's detached
-RUN git remote add alt ${LSMB_REPO} \
- && git fetch alt \
+RUN git fetch alt \
  && git checkout alt/$LSMB_VERSION 
 
 #RUN sed -i \
