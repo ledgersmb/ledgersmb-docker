@@ -36,9 +36,10 @@ RUN apt-get install -y \
     PGObject::Type::DateTime \
     App::LedgerSMB::Admin
 
-WORKDIR /srv 
+# Install LedgerSMB
 
-RUN git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+RUN cd /srv && \
+  git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
 # Set LedgerSMB version (git tag/branch/commit)
 # Change LSMB_VERSION or use --build-arg on docker build commandline;
@@ -58,8 +59,10 @@ ENV LSMB_VERSION ${LSMB_VERSION}
 # fetch changes to repo since possibly cached git clone above.
 # checkout specified tag/branch/commit (**NOTE above)
 # merge changes to current checked out branch
-RUN cd /srv/ledgersmb \ 
- && git fetch \
+
+WORKDIR /srv/ledgersmb
+
+RUN git fetch \
  && git checkout $LSMB_VERSION \
  && (git merge || echo "git merge failed - this is expected if [$LSMB_VERSION] isn't a branch")
 
