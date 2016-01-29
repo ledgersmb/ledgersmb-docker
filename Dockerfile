@@ -36,7 +36,6 @@ RUN apt-get install -y \
     PGObject::Type::DateTime \
     App::LedgerSMB::Admin
 
-# Install LedgerSMB
 WORKDIR /srv 
 
 RUN git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
