@@ -19,7 +19,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libconfig-inifiles-perl libnamespace-autoclean-perl \
   libcarp-always-perl libjson-perl \
   libtemplate-plugin-latex-perl texlive-latex-recommended \
-  texlive-latex-base texlive-latex-extra texlive-latex-recommends \
+  texlive-latex-base texlive-latex-extra \
   libxml-twig-perl \
   libtex-encode-perl \
   libdevel-trace-perl \
