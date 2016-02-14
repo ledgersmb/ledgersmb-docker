@@ -20,6 +20,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libcarp-always-perl libjson-perl \
   libtemplate-plugin-latex-perl texlive-latex-recommended \
   texlive-latex-base texlive-latex-extra \
+  texlive-xetex \
   libxml-twig-perl \
   libtex-encode-perl \
   libdevel-trace-perl \
