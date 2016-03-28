@@ -37,7 +37,7 @@ RUN apt-get install -y \
     App::LedgerSMB::Admin
 
 # Build time variables
-ENV LSMB_VERSION 1.5.0-beta3
+ENV LSMB_VERSION 1.5.0-beta4
 
 # Install LedgerSMB
 RUN cd /srv && \
