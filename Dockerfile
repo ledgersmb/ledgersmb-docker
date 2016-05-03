@@ -28,6 +28,12 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   postgresql-client-9.4 \
   ssmtp
 
+<<<<<<< HEAD
+=======
+# Cpan requirements
+RUN cpanm -nq \
+    LaTeX::Driver \
+
 # Install LedgerSMB
 
 RUN cd /srv && \
