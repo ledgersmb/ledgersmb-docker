@@ -28,7 +28,7 @@ RUN apt-get install -y \
     libpgobject-simple-role-perl \
     libpgobject-util-dbmethod-perl \
     && cpanm -nq \
-    Carton \
+    LaTeX::Driver \
     PGObject::Type::BigFloat \
     PGObject::Composite \
     PGObject::Type::JSON \
