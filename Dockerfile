@@ -21,23 +21,8 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   postgresql-client-9.4 \
   ssmtp
 
-# 1.5 requirements
-RUN apt-get install -y \
-    libpgobject-perl \
-    libpgobject-simple-perl \
-    libpgobject-simple-role-perl \
-    libpgobject-util-dbmethod-perl \
-    && cpanm -nq \
-    LaTeX::Driver \
-    PGObject::Type::BigFloat \
-    PGObject::Composite \
-    PGObject::Type::JSON \
-    PGObject::Type::Composite \
-    PGObject::Type::DateTime \
-    App::LedgerSMB::Admin
-
 # Build time variables
-ENV LSMB_VERSION 1.5.0-beta4
+ENV LSMB_VERSION 1.5.0-beta5
 
 # Install LedgerSMB
 RUN cd /srv && \
@@ -45,20 +30,23 @@ RUN cd /srv && \
 
 WORKDIR /srv/ledgersmb
 
-RUN git checkout $LSMB_VERSION
+RUN git checkout master
+#RUN git checkout $LSMB_VERSION
 
-#RUN sed -i \
-#  -e "s/short_open_tag = Off/short_open_tag = On/g" \
-#  -e "s/post_max_size = 8M/post_max_size = 20M/g" \
-#  -e "s!^;sendmail_path =.*\$!sendmail_path = /usr/sbin/ssmtp -t!g" \
-#  /etc/php5/fpm/php.ini && \
+# 1.5 requirements
+RUN cpanm --quiet --notest \
+  --with-feature=starman \
+  --with-feature=latex-pdf-ps \
+  --with-feature=openoffice \
+  --installdeps .
+
 
 # Configure outgoing mail to use host, other run time variable defaults
 
 ## sSMTP
 ENV SSMTP_ROOT ar@example.com
-ENV SSMTP_MAILHUB 172.17.42.1
-ENV SSMTP_HOSTNAME 172.17.42.1
+ENV SSMTP_MAILHUB 172.17.0.1
+ENV SSMTP_HOSTNAME 172.17.0.1
 #ENV SSMTP_USE_STARTTLS
 #ENV SSMTP_AUTH_USER
 #ENV SSMTP_AUTH_PASS
@@ -74,9 +62,6 @@ RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
   chmod +x /usr/local/bin/update_ssmtp.sh /usr/local/bin/start.sh && \
   mkdir -p /var/www
 
-# Not sure why this is not set correctly, and also why
-# it gets overridden here -- moved to start.sh.
-# ENV PERL5LIB /usr/local/lib/perl5/site_perl/5.22.0
 
 # Internal Port Expose
 EXPOSE 5000

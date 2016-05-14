@@ -87,7 +87,7 @@ Currently the LedgerSMB installation is in /srv/ledgersmb, and the startup/confi
 
 # Supported Docker versions
 
-This image is officially supported on Docker version 1.7.0.
+This image is officially supported on Docker version 1.11.1.
 
 Support for older versions is provided on a best-effort basis.
 
@@ -101,7 +101,7 @@ This is a brand new effort, and we will be adding documentation to the http://le
 
 If you have any problems with or questions about this image or LedgerSMB, please contact us on the [mailing list](http://ledgersmb.org/topic/support/mailing-lists-rss-and-nntp-feeds) or through a [GitHub issue](https://github.com/ledgersmb/ledgersmb-docker/issues).
 
-You can also reach some of the official LedgerSMB maintainers via the `#ledgersmb` IRC channel on [Freenode](https://freenode.net).
+You can also reach some of the official LedgerSMB maintainers via the `#ledgersmb` IRC channel on [Freenode](https://freenode.net), or on the bridged [Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org). The [Vector.im](https://vector.im/beta/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
 
 1.4/latest: CREATE_DATABASE env variable currently does not provision a test company.
 
