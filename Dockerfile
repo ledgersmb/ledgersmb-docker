@@ -1,9 +1,6 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
-# Build time variables
-ENV LSMB_VERSION 1.4.28
-
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
@@ -28,20 +25,23 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   postgresql-client-9.4 \
   ssmtp
 
-<<<<<<< HEAD
-=======
-# Cpan requirements
-RUN cpanm -nq \
-    LaTeX::Driver \
+# Build time variables
+ENV LSMB_VERSION 1.4.29
 
 # Install LedgerSMB
 
 RUN cd /srv && \
-  git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+  git clone -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
 WORKDIR /srv/ledgersmb
 
-RUN git checkout $LSMB_VERSION
+
+# 1.4.29+ requirements
+RUN cpanm --quiet --notest \
+  --with-feature=starman \
+  --with-feature=latex-pdf-ps \
+  --with-feature=openoffice \
+  --installdeps .
 
 #RUN sed -i \
 #  -e "s/short_open_tag = Off/short_open_tag = On/g" \
