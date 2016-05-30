@@ -21,17 +21,21 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   postgresql-client-9.4 \
   ssmtp
 
+# Nodejs for doing Dojo build
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    apt-get install -y nodejs
+
+# Java is required for closure compiler in Dojo build
+RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
+
 # Build time variables
-ENV LSMB_VERSION 1.5.0-beta5
+ENV LSMB_VERSION 1.5.0-beta-5
 
 # Install LedgerSMB
 RUN cd /srv && \
-  git clone https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+  git clone --recursive -b master https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
 WORKDIR /srv/ledgersmb
-
-RUN git checkout master
-#RUN git checkout $LSMB_VERSION
 
 # 1.5 requirements
 RUN cpanm --quiet --notest \
@@ -40,6 +44,8 @@ RUN cpanm --quiet --notest \
   --with-feature=openoffice \
   --installdeps .
 
+# Build dojo
+RUN make dojo
 
 # Configure outgoing mail to use host, other run time variable defaults
 
@@ -64,7 +70,7 @@ RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
 
 
 # Internal Port Expose
-EXPOSE 5000
+EXPOSE 5762
 #USER www-data
 
 CMD ["start.sh"]

@@ -5,9 +5,9 @@ This is a work in progress to make a docker image for running LedgerSMB. It shou
 
 # Supported tags and respective `Dockerfile` links
 
--	`1.5`, `dev-master` - Master branch, unstable
-- `1.4`, `latest` - Tip of git 1.4 branch
-- `1.3` - Latest 1.3.x release
+-	`dev-master` - Master branch from git, unstable
+- `1.5`, `1.5.x` - Latest release tarball from 1.5 branch
+- `1.4`, `latest` - Latest tagged release of git 1.4 branch
 
 
 # What is LedgerSMB?
@@ -18,7 +18,7 @@ The LedgerSMB project's priority is to provide an extremely capable yet user-fri
 
 This Docker image is built to provide a self-contained LedgerSMB instance. To be functional, you need to connect it to a running Postgres installation. The official Postgres container will work as is, if you link it to the LedgerSMB instance at startup, or you can provide environment variables to an appropriate Postgres server.
 
-LedgerSMB provides an http interface built on Starman out of the box, listening on port 5000. We do not recommend exposing this port, because we strongly recommend encrypting all connections using SSL/TLS. For production use, we recommend running a web server configured with SSL, such as Nginx or Apache, and proxying connections to LedgerSMB.
+LedgerSMB provides an http interface built on Starman out of the box, listening on port 5762. We do not recommend exposing this port, because we strongly recommend encrypting all connections using SSL/TLS. For production use, we recommend running a web server configured with SSL, such as Nginx or Apache, and proxying connections to LedgerSMB.
 
 The other services you will need to put this in production are an SMTP gateway (set environment variables for SSMTP at container startup) and optionally a local print server (e.g. CUPS) installation. The print service is not currently supported in this Docker image, but pull requests are welcomed ;-)
 
@@ -40,13 +40,13 @@ This image includes `EXPOSE 5432` (the postgres port), so standard container lin
 
 ## Set up LedgerSMB
 
-Visit http://myledger:5000/setup.pl (you can forward port 5000 to the host machine, or lookup the IP address for the "myledger" container if running on localhost)
+Visit http://myledger:5762/setup.pl (you can forward port 5762 to the host machine, or lookup the IP address for the "myledger" container if running on localhost)
 
 Log in with the "postgres" user and the password you set when starting up the Postgres container, and provide the name of a company database you want to create.
 
 Once you have completed the setup, you have a fully functional LedgerSMB instance running!
 
-Visit http://localhost:5000/login.pl to log in and get started.
+Visit http://myledger:5762/login.pl to log in and get started.
 
 # Updating the LedgerSMB container
 
@@ -67,12 +67,6 @@ If you set this to another hostname, LedgerSMB will attempt to connect to that h
 These variables are used to set outgoing SMTP defaults. To set the outgoing email address, set SSMTP_ROOT, and SSMTP_HOSTNAME at a minimum -- SSMTP_MAILHUB defaults to the default docker0 interface, so if your host is already configured to relay mail, this should relay successfully with only those two set.
 
 Use the other environment variables to relay mail through another host.
-
-### `CREATE_DATABASE` `POSTGRES_PASS`
-
-If `CREATE_DATABASE` is set, the tools/dbsetup.pl is called with the database name, and the postgres host and password. Currently this is failing with 'Can't locate object method "process_roles" via package "LedgerSMB::Database" at tools/dbsetup.pl line 203.'
-
-Once this is working, this will provision a new database in the existing server. After the first run, we recommend stopping/removing the LedgerSMB container and starting a new one without these variables -- the previous database should remain present.
 
 # Troubleshooting/Developing
 
@@ -103,9 +97,6 @@ If you have any problems with or questions about this image or LedgerSMB, please
 
 You can also reach some of the official LedgerSMB maintainers via the `#ledgersmb` IRC channel on [Freenode](https://freenode.net), or on the bridged [Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org). The [Vector.im](https://vector.im/beta/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
 
-1.4/latest: CREATE_DATABASE env variable currently does not provision a test company.
-
-1.5/dev-master: Currently no way to get a working database. Bugs are filed, blocking 3 different approaches: New database, Upgrade from 1.4, Test company
 
 ## Contributing
 

@@ -12,11 +12,12 @@ if [[ ! -f ledgersmb.conf ]]; then
     /srv/ledgersmb/ledgersmb.conf
 fi
 
-if [ ! -z ${CREATE_DATABASE+x} ]; then
-  perl tools/dbsetup.pl --company $CREATE_DATABASE \
-  --host $POSTGRES_HOST \
-  --postgres_password "$POSTGRES_PASS"
-fi
+# Currently unmaintained/untested
+# if [ ! -z ${CREATE_DATABASE+x} ]; then
+#   perl tools/dbsetup.pl --company $CREATE_DATABASE \
+#   --host $POSTGRES_HOST \
+#   --postgres_password "$POSTGRES_PASS"
+#fi
 
 # Needed for modules loaded by cpanm
 export PERL5LIB
@@ -29,4 +30,4 @@ done ;
 echo "Selected PERL5LIB=$PERL5LIB";
 
 # start ledgersmb
-exec starman tools/starman.psgi
+exec starman --port 5762 tools/starman.psgi
