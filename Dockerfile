@@ -4,36 +4,31 @@ MAINTAINER  Freelock john@freelock.com
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
   apt-get update && apt-get -y install \
-  git \
-  libdatetime-perl libdbi-perl libdbd-pg-perl \
-  libcgi-simple-perl libtemplate-perl libmime-lite-perl \
-  liblocale-maketext-lexicon-perl libtest-exception-perl \
-  libtest-trap-perl liblog-log4perl-perl libmath-bigint-gmp-perl \
-  libfile-mimeinfo-perl libtemplate-plugin-number-format-perl \
-  libdatetime-format-strptime-perl libconfig-general-perl \
-  libdatetime-format-strptime-perl libio-stringy-perl libmoose-perl \
-  libconfig-inifiles-perl libnamespace-autoclean-perl \
-  libcarp-always-perl libjson-perl \
-  libtemplate-plugin-latex-perl texlive-latex-recommended \
-  libnet-tclink-perl \
-  libxml-twig-perl \
+  libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
+  libdbd-pg-perl libdbi-perl libdatetime-perl \
+  libdatetime-format-strptime-perl libdigest-md5-perl \
+  libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+  liblocale-maketext-perl liblocale-maketext-lexicon-perl \
+  liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
+  libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
+  libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
+  libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
+  libnamespace-autoclean-perl \
+  libtemplate-plugin-latex-perl libtex-encode-perl \
+  texlive-latex-recommended \
+  texlive-xetex \
   starman \
-  postgresql-client-9.4 \
+  libopenoffice-oodoc-perl \
+  postgresql-client \
   ssmtp
 
-# Nodejs for doing Dojo build
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs
-
-# Java is required for closure compiler in Dojo build
-RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
-
 # Build time variables
-ENV LSMB_VERSION 1.5.0-beta-5
+ENV LSMB_VERSION 1.5.0-beta6
 
 # Install LedgerSMB
 RUN cd /srv && \
-  git clone --recursive -b master https://github.com/ledgersmb/LedgerSMB.git ledgersmb
+  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz https://sourceforge.net/projects/ledger-smb/files/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz/download && \
+  tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz
 
 WORKDIR /srv/ledgersmb
 
@@ -43,9 +38,6 @@ RUN cpanm --quiet --notest \
   --with-feature=latex-pdf-ps \
   --with-feature=openoffice \
   --installdeps .
-
-# Build dojo
-RUN make dojo
 
 # Configure outgoing mail to use host, other run time variable defaults
 
