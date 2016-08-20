@@ -62,6 +62,8 @@ ENV SSMTP_FROMLINE_OVERRIDE YES
 #ENV SSMTP_AUTH_METHOD
 
 ENV POSTGRES_HOST postgres
+ENV POSTGRES_PORT 5432
+ENV DEFAULT_DB lsmb
 
 COPY start.sh /usr/bin/start.sh
 COPY update_ssmtp.sh /usr/bin/update_ssmtp.sh

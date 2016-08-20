@@ -62,6 +62,14 @@ This environment variable is used to specify the hostname of the Postgres server
 
 If you set this to another hostname, LedgerSMB will attempt to connect to that hostname instead.
 
+## `POSTGRES_PORT` = 5432
+
+Port to connect to Postgres on. Use to connect to a Postgres server running on an alternate port.
+
+## `DEFAULT_DB` = lsmb
+
+Set this if you want to automatically log in to a particular LSMB database.
+
 ### `SSMTP_ROOT` `SSMTP_MAILHUB` `SSMTP_HOSTNAME` `SSMTP_USE_STARTTLS` `SSMTP_AUTH_USER` `SSMTP_AUTH_PASS` `SSMTP_METHOD` `SSMTP_FROMLINE_OVERRIDE`
 
 These variables are used to set outgoing SMTP defaults. To set the outgoing email address, set SSMTP_ROOT, and SSMTP_HOSTNAME at a minimum -- SSMTP_MAILHUB defaults to the default docker0 interface, so if your host is already configured to relay mail, this should relay successfully with only those two set.
