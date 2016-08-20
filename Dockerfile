@@ -33,6 +33,7 @@ RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
 
 # Build time variables
 ENV LSMB_VERSION master
+ARG CACHEBUST
 
 # Install LedgerSMB
 RUN cd /srv && \
@@ -63,6 +64,8 @@ ENV SSMTP_FROMLINE_OVERRIDE YES
 #ENV SSMTP_AUTH_METHOD
 
 ENV POSTGRES_HOST postgres
+ENV POSTGRES_PORT 5432
+ENV DEFAULT_DB lsmb
 
 COPY start.sh /usr/local/bin/start.sh
 COPY update_ssmtp.sh /usr/local/bin/update_ssmtp.sh
