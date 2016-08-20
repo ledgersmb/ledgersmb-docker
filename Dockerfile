@@ -28,8 +28,9 @@ ENV LSMB_VERSION 1.5.0-rc2
 
 # Install LedgerSMB
 RUN cd /srv && \
-  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz https://sourceforge.net/projects/ledger-smb/files/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz/download && \
+  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz http://downloads.sourceforge.net/project/ledger-smb/Beta%20Releases/1.5.0-rc2/ledgersmb-1.5.0-rc2.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fledger-smb%2Ffiles%2FBeta%2520Releases%2F1.5.0-rc2%2F&ts=1471709449&use_mirror=heanet \
   tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz
+  # https://sourceforge.net/projects/ledger-smb/files/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz/download && \
 
 WORKDIR /srv/ledgersmb
 
