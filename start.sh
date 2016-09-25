@@ -10,7 +10,7 @@ if [[ ! -f ledgersmb.conf ]]; then
     -e "s/\(host = \).*\$/\1$POSTGRES_HOST/g" \
     -e "s/\(port = \).*\$/\1$POSTGRES_PORT/g" \
     -e "s/\(default_db = \).*\$/\1$DEFAULT_DB/g" \
-    -e "s%\(sendmail   = \).*%\1/usr/bin/ssmtp%g" \
+    -e "s%\(sendmail   = \).*%\1/usr/sbin/ssmtp%g" \
     /srv/ledgersmb/ledgersmb.conf
 fi
 
