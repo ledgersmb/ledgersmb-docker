@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   starman \
   libopenoffice-oodoc-perl \
   postgresql-client \
+  lpr \
   ssmtp
 
 # Build time variables
