@@ -1,4 +1,4 @@
-# ledgersmb-docker - EXPERIMENTAL
+# ledgersmb-docker
 Dockerfile for LedgerSMB Docker image
 
 This is a work in progress to make a docker image for running LedgerSMB. It should not be relied upon for production use!
