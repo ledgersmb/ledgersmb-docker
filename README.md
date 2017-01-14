@@ -6,8 +6,8 @@ This is a work in progress to make a docker image for running LedgerSMB. It shou
 # Supported tags and respective `Dockerfile` links
 
 -	`dev-master` - Master branch from git, unstable
-- `1.5`, `1.5.x` - Latest release tarball from 1.5 branch
-- `1.4`, `latest` - Latest tagged release of git 1.4 branch
+- `1.5`, `1.5.x`, `latest` - Latest release tarball from 1.5 branch
+- `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
 
 
 # What is LedgerSMB?
