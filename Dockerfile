@@ -71,6 +71,8 @@ RUN mkdir -p /tmp && \
 
 # Internal Port Expose
 EXPOSE 5762
-#USER www-data
+# If ledgersmb.conf does not exist, www-data user needs to be able to create it.
+RUN chown www-data /srv/ledgersmb
+USER www-data
 
 CMD ["start.sh"]
