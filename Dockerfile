@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   ssmtp
 
 # Build time variables
-ENV LSMB_VERSION 1.5.2
+ENV LSMB_VERSION 1.5.3
 
 # Install LedgerSMB
 RUN cd /srv && \
