@@ -1,9 +1,13 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
+# Use postgres repository to get newer pg_dump and postgres client
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+  echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main 9.6" |tee /etc/apt/sources.list.d/postgres.list
+
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
-  apt-get update && apt-get -y install \
+  apt-get update && apt-get dist-upgrade -y && apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -20,7 +24,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   texlive-xetex \
   starman \
   libopenoffice-oodoc-perl \
-  postgresql-client \
+  postgresql-client-9.6 \
   lpr \
   ssmtp
 
