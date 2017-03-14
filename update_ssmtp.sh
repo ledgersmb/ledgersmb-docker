@@ -1,6 +1,6 @@
 #!/bin/bash
 ConfiguredComment='# install script update_ssmtp.sh has configured ssmtp'
-grep -qc "$ConfiguredComment" /etc/ssmtp.conf && {
+grep -qc "$ConfiguredComment" /etc/ssmtp/ssmtp.conf && {
     echo "smtp configured."
     exit
 }
