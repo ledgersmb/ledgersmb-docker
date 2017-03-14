@@ -14,6 +14,9 @@ if [[ ! -f ledgersmb.conf ]]; then
     /srv/ledgersmb/ledgersmb.conf
 fi
 
+if [ ! -f "/tmp/ledgersmb" ]; then
+  mkdir /tmp/ledgersmb
+fi
 # Currently unmaintained/untested
 # if [ ! -z ${CREATE_DATABASE+x} ]; then
 #   perl tools/dbsetup.pl --company $CREATE_DATABASE \
