@@ -24,7 +24,8 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   ssmtp \
   git
 
-# Nodejs for doing Dojo build
+# Java & Nodejs for doing Dojo build
+RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
 RUN apt-get install -y npm
 RUN npm install uglify-js@">=2.0 <3.0"
 
