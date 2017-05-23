@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   git
 
 # Java & Nodejs for doing Dojo build
-RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
+RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
 RUN apt-get install -y npm
 RUN npm install uglify-js@">=2.0 <3.0"
 
