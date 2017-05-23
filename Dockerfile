@@ -26,7 +26,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
 
 # Nodejs for doing Dojo build
 RUN apt-get install -y npm
-RUN npm uglify-js@">=2.0 <3.0"
+RUN npm install uglify-js@">=2.0 <3.0"
 
 # Build time variables
 ENV LSMB_VERSION master
