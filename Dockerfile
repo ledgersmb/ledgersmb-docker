@@ -27,6 +27,8 @@ RUN DEBIAN_FRONTENT=noninteractive && \
 # Nodejs for doing Dojo build
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get install -y nodejs
+RUN curl https://www.npmjs.com/install.sh | sh
+RUN npm uglify-js@">=2.0 <3.0"
 
 # Java is required for closure compiler in Dojo build
 RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre
