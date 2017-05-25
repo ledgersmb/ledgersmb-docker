@@ -1,9 +1,7 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
-# Use postgres repository to get newer pg_dump and postgres client
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main 9.6" |tee /etc/apt/sources.list.d/postgres.list
+RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
@@ -24,9 +22,14 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   texlive-xetex \
   starman \
   libopenoffice-oodoc-perl \
-  postgresql-client-9.6 \
-  lpr \
-  ssmtp
+  postgresql-client \
+  ssmtp \
+  git
+
+# Java & Nodejs for doing Dojo build
+#RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
+RUN apt-get install -y npm
+RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
 
 # Build time variables
 ENV LSMB_VERSION 1.5.6
@@ -39,12 +42,19 @@ RUN cd /srv && \
 
 WORKDIR /srv/ledgersmb
 
-# 1.5 requirements
+# master requirements
 RUN cpanm --quiet --notest \
   --with-feature=starman \
   --with-feature=latex-pdf-ps \
   --with-feature=openoffice \
   --installdeps .
+
+# Uglify needs to be installed right before 'make dojo'?!
+RUN npm install -g uglify-js@">=2.0 <3.0"
+ENV NODE_PATH /usr/local/lib/node_modules
+
+# Build dojo
+RUN make dojo
 
 # Configure outgoing mail to use host, other run time variable defaults
 
