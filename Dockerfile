@@ -1,6 +1,9 @@
 FROM        perl:5
 MAINTAINER  Freelock john@freelock.com
 
+RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+
+
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTENT=noninteractive && \
   apt-get update && apt-get -y install \
@@ -27,7 +30,6 @@ RUN DEBIAN_FRONTENT=noninteractive && \
 # Java & Nodejs for doing Dojo build
 #RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
 RUN apt-get install -y npm
-RUN npm install uglify-js@">=2.0 <3.0"
 RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
 
 # Build time variables
@@ -40,12 +42,16 @@ RUN cd /srv && \
 
 WORKDIR /srv/ledgersmb
 
-# 1.5 requirements
+# master requirements
 RUN cpanm --quiet --notest \
   --with-feature=starman \
   --with-feature=latex-pdf-ps \
   --with-feature=openoffice \
   --installdeps .
+
+# Uglify needs to be installed right before 'make dojo'?!
+RUN npm install -g uglify-js@">=2.0 <3.0"
+ENV NODE_PATH /usr/local/lib/node_modules
 
 # Build dojo
 RUN make dojo
