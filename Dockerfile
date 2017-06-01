@@ -26,11 +26,6 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   ssmtp \
   git cpanminus make gcc libperl-dev lsb-release
 
-# Java & Nodejs for doing Dojo build
-#RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
-RUN apt-get install -y npm
-RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
-
 # Build time variables
 ENV LSMB_VERSION 1.5.6
 
@@ -48,13 +43,6 @@ RUN cpanm --quiet --notest \
   --with-feature=latex-pdf-ps \
   --with-feature=openoffice \
   --installdeps .
-
-# Uglify needs to be installed right before 'make dojo'?!
-RUN npm install -g uglify-js@">=2.0 <3.0"
-ENV NODE_PATH /usr/local/lib/node_modules
-
-# Build dojo
-RUN make dojo
 
 # Configure outgoing mail to use host, other run time variable defaults
 
