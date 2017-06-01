@@ -1,4 +1,4 @@
-FROM        perl:5
+FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libopenoffice-oodoc-perl \
   postgresql-client \
   ssmtp \
-  git
+  git cpanminus make gcc libperl-dev lsb-release
 
 # Java & Nodejs for doing Dojo build
 #RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
