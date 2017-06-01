@@ -27,13 +27,12 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   git cpanminus make gcc libperl-dev lsb-release
 
 # Build time variables
-ENV LSMB_VERSION 1.5.6
+ENV LSMB_VERSION 1.5.7
 
 # Install LedgerSMB
 RUN cd /srv && \
-  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "http://downloads.sourceforge.net/project/ledger-smb/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fledger-smb%2Ffiles%2FReleases%2F$LSMB_VERSION%2F&ts=1483124209&use_mirror=superb-sea2" && \
+  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "https://github.com/ledgersmb/LedgerSMB/releases/download/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz
-  # https://sourceforge.net/projects/ledger-smb/files/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz/download && \
 
 WORKDIR /srv/ledgersmb
 
