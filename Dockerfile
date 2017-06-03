@@ -44,6 +44,7 @@ WORKDIR /srv/ledgersmb
 
 # master requirements
 RUN cpanm --quiet --notest \
+  --with-develop \
   --with-feature=starman \
   --with-feature=latex-pdf-ps \
   --with-feature=openoffice \
