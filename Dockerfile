@@ -54,7 +54,8 @@ RUN apt-get -y install git make gcc libperl-dev npm curl && \
     apt-get purge -y npm git make gcc libperl-dev nodejs curl && \
     rm -rf /usr/local/lib/node_modules && \
     apt-get autoremove -y && \
-    apt-get autoclean   
+    apt-get autoclean && \
+    rm -rf ~/.cpanm
 
 # Configure outgoing mail to use host, other run time variable defaults
 
