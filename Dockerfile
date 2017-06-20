@@ -43,7 +43,8 @@ RUN apt-get -y install git cpanminus make gcc libperl-dev && \
       --installdeps . && \
     apt-get purge -y git cpanminus make gcc libperl-dev && \
     apt-get autoremove -y && \
-    apt-get autoclean
+    apt-get autoclean && \
+    rm -rf ~/.cpanm/
    
 
 WORKDIR /srv/ledgersmb
