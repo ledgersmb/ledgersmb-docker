@@ -35,6 +35,7 @@ RUN apt-get -y install git cpanminus make gcc libperl-dev && \
     cd /srv && \
     curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "https://github.com/ledgersmb/LedgerSMB/releases/download/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz && \
+    rm -f ledgersmb-$LSMB_VERSION.tar.gz && \
     cd ledgersmb && \
     cpanm --quiet --notest \
       --with-feature=starman \
