@@ -2,46 +2,53 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN DEBIAN_FRONTENT=noninteractive && \
-  apt-get update && apt-get dist-upgrade -y && apt-get -y install \
-  libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
-  libdbd-pg-perl libdbi-perl libdatetime-perl \
-  libdatetime-format-strptime-perl libdigest-md5-perl \
-  libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
-  liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-  liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
-  libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
-  libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-  libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
-  libnamespace-autoclean-perl \
-  libtemplate-plugin-latex-perl libtex-encode-perl \
-  libmoosex-nonmoose-perl \
-  texlive-latex-recommended \
-  texlive-xetex \
-  starman \
-  libopenoffice-oodoc-perl \
-  postgresql-client \
-  ssmtp \
-  git cpanminus make gcc libperl-dev lsb-release
+RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
+    libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
+    libdbd-pg-perl libdbi-perl libdatetime-perl \
+    libdatetime-format-strptime-perl libdigest-md5-perl \
+    libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+    liblocale-maketext-perl liblocale-maketext-lexicon-perl \
+    liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
+    libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
+    libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
+    libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
+    libnamespace-autoclean-perl \
+    libtemplate-plugin-latex-perl libtex-encode-perl \
+    libmoosex-nonmoose-perl \
+    texlive-latex-recommended \
+    texlive-xetex \
+    starman \
+    libopenoffice-oodoc-perl \
+    postgresql-client \
+    ssmtp \
+    lsb-release
+
 
 # Build time variables
 ENV LSMB_VERSION 1.5.7
 
 # Install LedgerSMB
-RUN cd /srv && \
-  curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "https://github.com/ledgersmb/LedgerSMB/releases/download/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
-  tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz
+RUN apt-get -y install git cpanminus make gcc libperl-dev && \
+    cd /srv && \
+    curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "https://github.com/ledgersmb/LedgerSMB/releases/download/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+    tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz && \
+    cd ledgersmb && \
+    cpanm --quiet --notest \
+      --with-feature=starman \
+      --with-feature=latex-pdf-ps \
+      --with-feature=openoffice \
+      --installdeps . && \
+    apt-get purge -y git cpanminus make gcc libperl-dev && \
+    apt-get autoremove -y && \
+    apt-get autoclean
+   
 
 WORKDIR /srv/ledgersmb
 
 # master requirements
-RUN cpanm --quiet --notest \
-  --with-feature=starman \
-  --with-feature=latex-pdf-ps \
-  --with-feature=openoffice \
-  --installdeps .
 
 # Configure outgoing mail to use host, other run time variable defaults
 
