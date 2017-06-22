@@ -32,4 +32,4 @@ done ;
 echo "Selected PERL5LIB=$PERL5LIB";
 
 # start ledgersmb
-exec starman --port 5762 tools/starman.psgi
+exec starman --port 5000 tools/starman.psgi
