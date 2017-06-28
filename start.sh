@@ -32,4 +32,6 @@ done ;
 echo "Selected PERL5LIB=$PERL5LIB";
 
 # start ledgersmb
-exec starman --port 5000 tools/starman.psgi
+exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman.psgi \
+    --Reload "lib, old/lib, xt/lib"
+

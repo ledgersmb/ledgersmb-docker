@@ -21,7 +21,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libmoosex-nonmoose-perl \
   texlive-latex-recommended \
   texlive-xetex \
-  starman \
+  curl \
   libopenoffice-oodoc-perl \
   postgresql-client \
   ssmtp \
@@ -85,9 +85,11 @@ RUN mkdir -p /tmp && \
   chmod 1777 /tmp
 
 # Internal Port Expose
-EXPOSE 5000
+EXPOSE 5001
+
 # If ledgersmb.conf does not exist, www-data user needs to be able to create it.
 RUN chown www-data /srv/ledgersmb
+
 USER www-data
 
 CMD ["start.sh"]
