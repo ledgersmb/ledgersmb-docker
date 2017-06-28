@@ -23,9 +23,10 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   texlive-xetex \
   curl \
   libopenoffice-oodoc-perl \
-  postgresql-client \
+  postgresql-client libtap-parser-sourcehandler-pgtap-perl pgtap postgresql-pgtap \
   ssmtp \
   git cpanminus make gcc libperl-dev lsb-release
+
 
 # Java & Nodejs for doing Dojo build
 #RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
