@@ -74,19 +74,19 @@ ENV POSTGRES_HOST postgres
 ENV POSTGRES_PORT 5432
 ENV DEFAULT_DB lsmb
 
-COPY start.sh /usr/local/bin/start.sh
-COPY update_ssmtp.sh /usr/local/bin/update_ssmtp.sh
-
-RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
-  chmod +x /usr/local/bin/update_ssmtp.sh /usr/local/bin/start.sh && \
-  mkdir -p /var/www && chown www-data /var/www
-
 # Work around an aufs bug related to directory permissions:
 RUN mkdir -p /tmp && \
   chmod 1777 /tmp
 
 # Internal Port Expose
 EXPOSE 5001
+
+COPY start.sh /usr/local/bin/start.sh
+COPY update_ssmtp.sh /usr/local/bin/update_ssmtp.sh
+
+RUN chown www-data /etc/ssmtp /etc/ssmtp/ssmtp.conf && \
+  chmod +x /usr/local/bin/update_ssmtp.sh /usr/local/bin/start.sh && \
+  mkdir -p /var/www && chown www-data /var/www
 
 # If ledgersmb.conf does not exist, www-data user needs to be able to create it.
 RUN chown www-data /srv/ledgersmb
