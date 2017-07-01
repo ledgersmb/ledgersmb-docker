@@ -4,14 +4,20 @@ update_ssmtp.sh
 cd /srv/ledgersmb
 
 if [[ ! -f ledgersmb.conf ]]; then
-  cp conf/ledgersmb.conf.default ledgersmb.conf
-  sed -i \
-    -e "s/\(cache_templates = \).*\$/cache_templates = 1/g" \
-    -e "s/\(host = \).*\$/\1$POSTGRES_HOST/g" \
-    -e "s/\(port = \).*\$/\1$POSTGRES_PORT/g" \
-    -e "s/\(default_db = \).*\$/\1$DEFAULT_DB/g" \
-    -e "s%\(sendmail   = \).*%\1/usr/sbin/ssmtp%g" \
-    /srv/ledgersmb/ledgersmb.conf
+  cat <<EOF >/tmp/ledgersmb.conf
+[main]
+cache_templates = 1
+
+[database]
+host = $POSTGRES_HOST
+port = $POSTGRES_PORT
+default_db = $DEFAULT_DB
+
+[mail]
+sendmail   = /usr/sbin/ssmtp
+
+EOF
+  export LSMB_CONFIG_FILE='/tmp/ledgersmb.conf'
 fi
 
 if [ ! -f "/tmp/ledgersmb" ]; then
@@ -26,6 +32,7 @@ fi
 
 # Needed for modules loaded by cpanm
 export PERL5LIB
+
 for PerlLib in /usr/lib/perl5* /usr/local/lib/perl5*/site_perl/* ; do
     [[ -d "$PerlLib" ]] && {
         PERL5LIB="$PerlLib";
