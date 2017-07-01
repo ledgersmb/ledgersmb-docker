@@ -1,8 +1,11 @@
-FROM        perl:5
+FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
+RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+
+
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN DEBIAN_FRONTENT=noninteractive && \
+RUN DEBIAN_FRONTEND=noninteractive && \
   apt-get update && apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
@@ -22,33 +25,37 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libopenoffice-oodoc-perl \
   postgresql-client \
   ssmtp \
-  git
+  lsb-release
 
-# Java & Nodejs for doing Dojo build
-#RUN DEBIAN_FRONTENT=noninteractive && apt-get install -y openjdk-7-jre-headless
-RUN apt-get install -y npm
-RUN npm install uglify-js@">=2.0 <3.0"
-RUN update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100
 
 # Build time variables
 ENV LSMB_VERSION master
+ENV NODE_PATH /usr/local/lib/node_modules
+ENV DEBIAN_FRONTEND=noninteractive
+
 ARG CACHEBUST
 
-# Install LedgerSMB
-RUN cd /srv && \
-  git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb
 
-WORKDIR /srv/ledgersmb
-
-# 1.5 requirements
-RUN cpanm --quiet --notest \
-  --with-feature=starman \
-  --with-feature=latex-pdf-ps \
-  --with-feature=openoffice \
-  --installdeps .
-
-# Build dojo
-RUN make dojo
+# Java & Nodejs for doing Dojo build
+# Uglify needs to be installed right before 'make dojo'?!
+RUN apt-get -y install git make gcc libperl-dev npm curl && \
+    update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
+    cd /srv && \
+    git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
+    cd ledgersmb && \
+    curl -L https://cpanmin.us | perl - App::cpanminus && \
+    cpanm --quiet --notest \
+      --with-feature=starman \
+      --with-feature=latex-pdf-ps \
+      --with-feature=openoffice \
+      --installdeps .  && \
+    npm install -g uglify-js@">=2.0 <3.0" && \
+    make dojo && \
+    apt-get purge -y npm git make gcc libperl-dev nodejs curl && \
+    rm -rf /usr/local/lib/node_modules && \
+    apt-get autoremove -y && \
+    apt-get autoclean && \
+    rm -rf ~/.cpanm
 
 # Configure outgoing mail to use host, other run time variable defaults
 
