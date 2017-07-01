@@ -3,10 +3,10 @@ MAINTAINER  Freelock john@freelock.com
 
 RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends
 
-ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
+RUN DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && apt-get dist-upgrade -y && apt-get -y install \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
     libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -30,6 +30,7 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
 
 # Build time variables
 ENV LSMB_VERSION 1.5.8
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install LedgerSMB
 RUN apt-get -y install git cpanminus make gcc libperl-dev && \
