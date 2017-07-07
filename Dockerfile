@@ -5,8 +5,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN DEBIAN_FRONTEND=noninteractive && \
-  apt-get update && apt-get -y install \
+RUN apt-get update && apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -31,7 +30,6 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 # Build time variables
 ENV LSMB_VERSION master
 ENV NODE_PATH /usr/local/lib/node_modules
-ENV DEBIAN_FRONTEND=noninteractive
 
 ARG CACHEBUST
 
