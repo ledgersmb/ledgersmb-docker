@@ -1,11 +1,9 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
-RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
-
-
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN apt-get update && apt-get -y install \
+RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
+  apt-get update && apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -24,7 +22,8 @@ RUN apt-get update && apt-get -y install \
   libopenoffice-oodoc-perl \
   postgresql-client \
   ssmtp \
-  lsb-release
+  lsb-release \
+  && rm -rf /var/lib/apt/lists/*
 
 
 # Build time variables
@@ -36,8 +35,10 @@ ARG CACHEBUST
 
 # Java & Nodejs for doing Dojo build
 # Uglify needs to be installed right before 'make dojo'?!
-RUN apt-get -y install git make gcc libperl-dev npm curl && \
+RUN apt-get update && \
+    apt-get -y install git make gcc libperl-dev npm curl && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
+    rm -rf /var/lib/apt/lists/* && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
@@ -53,7 +54,8 @@ RUN apt-get -y install git make gcc libperl-dev npm curl && \
     rm -rf /usr/local/lib/node_modules && \
     apt-get autoremove -y && \
     apt-get autoclean && \
-    rm -rf ~/.cpanm
+    rm -rf ~/.cpanm && \
+    rm -rf /var/lib/apt/lists/*
 
 # Configure outgoing mail to use host, other run time variable defaults
 
