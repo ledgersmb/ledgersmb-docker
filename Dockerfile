@@ -2,8 +2,8 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
-  apt-get update && apt-get -y install \
+RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf && \
+  apt-get update DEBIAN_FRONTEND="noninteractive" apt-get -y install && \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -23,6 +23,8 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   postgresql-client \
   ssmtp \
   lsb-release \
+  && apt-get autoremove -y \
+  && apt-get autoclean \
   && rm -rf /var/lib/apt/lists/*
 
 
@@ -33,12 +35,18 @@ ENV NODE_PATH /usr/local/lib/node_modules
 ARG CACHEBUST
 
 
+###########################################################
 # Java & Nodejs for doing Dojo build
 # Uglify needs to be installed right before 'make dojo'?!
+
+# These packages are only needed during the dojo build
+ENV DOJO_Build_Deps git make gcc libperl-dev npm curl
+# These packages can be removed after the dojo build
+ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
+
 RUN apt-get update && \
-    apt-get -y install git make gcc libperl-dev npm curl && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
-    rm -rf /var/lib/apt/lists/* && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
@@ -50,13 +58,14 @@ RUN apt-get update && \
       --installdeps .  && \
     npm install -g uglify-js@">=2.0 <3.0" && \
     make dojo && \
-    apt-get purge -y npm git make gcc libperl-dev nodejs curl && \
+    apt-get purge -y ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
     apt-get autoremove -y && \
     apt-get autoclean && \
     rm -rf ~/.cpanm && \
     rm -rf /var/lib/apt/lists/*
 
+ENV DOJO_Build_Deps
 # Configure outgoing mail to use host, other run time variable defaults
 
 ## sSMTP
