@@ -1,9 +1,12 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
+ENV APT_cmd DEBIAN_FRONTEND="noninteractive" apt-get -y
+
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
-  apt-get update DEBIAN_FRONTEND="noninteractive" apt-get -y install && \
+  ${APT_cmd} update && \
+  ${APT_cmd} install && \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -23,8 +26,8 @@ RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\"
   postgresql-client \
   ssmtp \
   lsb-release \
-  && apt-get autoremove -y \
-  && apt-get autoclean \
+  && ${APT_cmd} autoremove \
+  && ${APT_cmd} autoclean \
   && rm -rf /var/lib/apt/lists/*
 
 
@@ -44,8 +47,8 @@ ENV DOJO_Build_Deps git make gcc libperl-dev npm curl
 # These packages can be removed after the dojo build
 ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
+RUN ${APT_cmd} update && \
+    ${APT_cmd} install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
@@ -58,10 +61,10 @@ RUN apt-get update && \
       --installdeps .  && \
     npm install -g uglify-js@">=2.0 <3.0" && \
     make dojo && \
-    apt-get purge -y ${DOJO_Build_Deps_removal} && \
+    ${APT_cmd} purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
-    apt-get autoremove -y && \
-    apt-get autoclean && \
+    ${APT_cmd} autoremove && \
+    ${APT_cmd} autoclean && \
     rm -rf ~/.cpanm && \
     rm -rf /var/lib/apt/lists/*
 
@@ -96,4 +99,5 @@ RUN mkdir -p /tmp && \
 # Internal Port Expose
 EXPOSE 5762
 
+USER www-data
 CMD ["start.sh"]
