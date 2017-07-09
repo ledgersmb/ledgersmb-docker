@@ -1,7 +1,7 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
-RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
