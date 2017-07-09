@@ -33,8 +33,6 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
 ENV LSMB_VERSION master
 ENV NODE_PATH /usr/local/lib/node_modules
 
-ARG CACHEBUST
-
 
 ###########################################################
 # Java & Nodejs for doing Dojo build
