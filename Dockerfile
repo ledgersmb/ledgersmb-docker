@@ -2,7 +2,7 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf && \
+RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
   apt-get update DEBIAN_FRONTEND="noninteractive" apt-get -y install && \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
@@ -95,8 +95,5 @@ RUN mkdir -p /tmp && \
 
 # Internal Port Expose
 EXPOSE 5762
-# If ledgersmb.conf does not exist, www-data user needs to be able to create it.
-RUN chown www-data /srv/ledgersmb
-USER www-data
 
 CMD ["start.sh"]
