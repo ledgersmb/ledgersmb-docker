@@ -4,7 +4,7 @@ MAINTAINER  Freelock john@freelock.com
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
