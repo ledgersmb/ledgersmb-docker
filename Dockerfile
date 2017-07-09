@@ -1,12 +1,10 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
-ENV APT_cmd DEBIAN_FRONTEND="noninteractive" apt-get -y
-
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
-  ${APT_cmd} update && \
-  ${APT_cmd} install && \
+RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install && \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -26,8 +24,8 @@ RUN echo -e "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\"
   postgresql-client \
   ssmtp \
   lsb-release \
-  && ${APT_cmd} autoremove \
-  && ${APT_cmd} autoclean \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean \
   && rm -rf /var/lib/apt/lists/*
 
 
@@ -47,8 +45,8 @@ ENV DOJO_Build_Deps git make gcc libperl-dev npm curl
 # These packages can be removed after the dojo build
 ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
 
-RUN ${APT_cmd} update && \
-    ${APT_cmd} install ${DOJO_Build_Deps} && \
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
@@ -61,14 +59,18 @@ RUN ${APT_cmd} update && \
       --installdeps .  && \
     npm install -g uglify-js@">=2.0 <3.0" && \
     make dojo && \
-    ${APT_cmd} purge ${DOJO_Build_Deps_removal} && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
-    ${APT_cmd} autoremove && \
-    ${APT_cmd} autoclean && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean && \
     rm -rf ~/.cpanm && \
     rm -rf /var/lib/apt/lists/*
 
-ENV DOJO_Build_Deps
+# Cleanup args that are for internal use
+ENV DOJO_Build_Deps=
+ENV DOJO_Build_Deps_removal=
+ENV NODE_PATH=
+
 # Configure outgoing mail to use host, other run time variable defaults
 
 ## sSMTP
