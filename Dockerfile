@@ -1,12 +1,10 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
-RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends
-
-
 # Install Perl, Tex, Starman, psql client, and all dependencies
-RUN DEBIAN_FRONTEND=noninteractive && \
-  apt-get update && apt-get -y install \
+RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -25,20 +23,28 @@ RUN DEBIAN_FRONTEND=noninteractive && \
   libopenoffice-oodoc-perl \
   postgresql-client \
   ssmtp \
-  lsb-release
+  lsb-release \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean \
+  && rm -rf /var/lib/apt/lists/*
 
 
 # Build time variables
 ENV LSMB_VERSION master
 ENV NODE_PATH /usr/local/lib/node_modules
-ENV DEBIAN_FRONTEND=noninteractive
-
-ARG CACHEBUST
 
 
+###########################################################
 # Java & Nodejs for doing Dojo build
 # Uglify needs to be installed right before 'make dojo'?!
-RUN apt-get -y install git make gcc libperl-dev npm curl && \
+
+# These packages are only needed during the dojo build
+ENV DOJO_Build_Deps git make gcc libperl-dev npm curl
+# These packages can be removed after the dojo build
+ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
+
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
@@ -51,11 +57,17 @@ RUN apt-get -y install git make gcc libperl-dev npm curl && \
       --installdeps .  && \
     npm install -g uglify-js@">=2.0 <3.0" && \
     make dojo && \
-    apt-get purge -y npm git make gcc libperl-dev nodejs curl && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
-    apt-get autoremove -y && \
-    apt-get autoclean && \
-    rm -rf ~/.cpanm
+    DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean && \
+    rm -rf ~/.cpanm && \
+    rm -rf /var/lib/apt/lists/*
+
+# Cleanup args that are for internal use
+ENV DOJO_Build_Deps=
+ENV DOJO_Build_Deps_removal=
+ENV NODE_PATH=
 
 # Configure outgoing mail to use host, other run time variable defaults
 
@@ -87,4 +99,5 @@ RUN mkdir -p /tmp && \
 # Internal Port Expose
 EXPOSE 5762
 
+USER www-data
 CMD ["start.sh"]
