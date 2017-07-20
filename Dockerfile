@@ -33,7 +33,7 @@ ENV LSMB_VERSION 1.5.8
 # Install LedgerSMB
 RUN apt-get -y install git cpanminus make gcc libperl-dev && \
     cd /srv && \
-    curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "https://github.com/ledgersmb/LedgerSMB/releases/download/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+    curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "http://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz && \
     rm -f ledgersmb-$LSMB_VERSION.tar.gz && \
     cd ledgersmb && \
@@ -46,7 +46,6 @@ RUN apt-get -y install git cpanminus make gcc libperl-dev && \
     apt-get autoremove -y && \
     apt-get autoclean && \
     rm -rf ~/.cpanm/
-   
 
 WORKDIR /srv/ledgersmb
 
