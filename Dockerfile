@@ -28,7 +28,7 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
 
 
 # Build time variables
-ENV LSMB_VERSION 1.5.8
+ENV LSMB_VERSION 1.5.9
 
 # Install LedgerSMB
 RUN apt-get -y install git cpanminus make gcc libperl-dev && \
