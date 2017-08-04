@@ -5,6 +5,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
+# Without libclass-c3-xs-perl, performance is terribly slow...
 RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
@@ -17,7 +18,7 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
     libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
     libnamespace-autoclean-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
-    libmoosex-nonmoose-perl \
+    libmoosex-nonmoose-perl libclass-c3-xs-perl \
     texlive-latex-recommended \
     texlive-xetex \
     starman \
