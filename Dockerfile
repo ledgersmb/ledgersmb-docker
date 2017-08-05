@@ -2,6 +2,9 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
+# Without libclass-c3-xs-perl, everything grinds to a halt;
+# add it, because it's a 'recommends' it the dep tree, which
+# we're skipping, normally
 RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
@@ -16,7 +19,7 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
   libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
   libnamespace-autoclean-perl \
   libtemplate-plugin-latex-perl libtex-encode-perl \
-  libmoosex-nonmoose-perl \
+  libmoosex-nonmoose-perl libclass-c3-xs-perl \
   texlive-latex-recommended \
   texlive-xetex \
   starman \
