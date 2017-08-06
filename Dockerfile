@@ -82,4 +82,5 @@ RUN mkdir -p /tmp && \
 # Internal Port Expose
 EXPOSE 5762
 
+USER www-data
 CMD ["start.sh"]
