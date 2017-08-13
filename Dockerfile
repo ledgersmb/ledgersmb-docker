@@ -2,11 +2,11 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
-ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
-RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get dist-upgrade -y && apt-get -y install \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
     libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -33,7 +33,8 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
 ENV LSMB_VERSION 1.5.9
 
 # Install LedgerSMB
-RUN apt-get -y install git cpanminus make gcc libperl-dev && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get -y install git cpanminus make gcc libperl-dev && \
     cd /srv && \
     curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "http://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz && \
