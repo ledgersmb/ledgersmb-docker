@@ -25,7 +25,8 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install \
     libopenoffice-oodoc-perl \
     postgresql-client \
     ssmtp \
-    lsb-release
+    lsb-release \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # Build time variables
@@ -46,7 +47,8 @@ RUN apt-get -y install git cpanminus make gcc libperl-dev && \
     apt-get purge -y git cpanminus make gcc libperl-dev && \
     apt-get autoremove -y && \
     apt-get autoclean && \
-    rm -rf ~/.cpanm/
+    rm -rf ~/.cpanm/ && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /srv/ledgersmb
 
