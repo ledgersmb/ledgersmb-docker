@@ -27,16 +27,5 @@ fi
 #   --postgres_password "$POSTGRES_PASS"
 #fi
 
-# Needed for modules loaded by cpanm
-export PERL5LIB
-
-for PerlLib in /usr/lib/perl5* /usr/local/lib/perl5*/site_perl/* ; do
-    [[ -d "$PerlLib" ]] && {
-        PERL5LIB="$PerlLib";
-        echo -e "\tmaybe: $PerlLib";
-    }
-done ;
-echo "Selected PERL5LIB=$PERL5LIB";
-
 # start ledgersmb
 exec starman --port 5762 tools/starman.psgi
