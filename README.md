@@ -76,6 +76,68 @@ These variables are used to set outgoing SMTP defaults. To set the outgoing emai
 
 Use the other environment variables to relay mail through another host.
 
+# Integration with docker-compose
+
+Here is a suggested file for docker integration
+
+	version: "3"
+	
+	services:
+	  postgres:
+	    image: ylavoie/postgres-pgtap
+	    container_name: postgres
+	    networks:
+	      - internal
+	    environment:
+	      - POSTGRES_PASSWORD=test
+	    build:
+	      context: ./postgres-pgtap
+	
+	  lsmb:
+	    image: ylavoie/ledgersmb
+	    container_name: lsmb
+	    networks:
+	      - default
+	      - internal
+	    environment:
+	      - PGHOST=postgres
+	    volumes:
+	      - /tmp:/tmp
+	      - ./LedgerSMB:/srv/ledgersmb:rw
+	    ports:
+	      - 5001:5001
+	    depends_on:
+	      - postgres
+	    build:
+	      context: ./ledgersmb-docker
+	
+	  nginx:
+	    image: ylavoie/nginx
+	    container_name: nginx
+	    hostname: dockerlsmb
+	    volumes:
+	      - ./LedgerSMB/UI:/srv/ledgersmb/UI:ro
+	    ports:
+	      - 5000:5000
+	    networks:
+	      - default
+	      - internal
+	    depends_on:
+	      - lsmb
+	    build:
+	      context: ./ledgersmb-nginx-docker
+	
+	networks:
+	  internal:
+	    driver: bridge
+	    internal: true
+	  default:
+	    driver: bridge
+	    ipam:
+	      driver: default
+	      config:
+	      - subnet: 192.168.35.0/24
+
 # Troubleshooting/Developing
 
 You can connect to a running container using:

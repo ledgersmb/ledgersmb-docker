@@ -1,0 +1,62 @@
+# See the following for docker compose version 3 example
+# https://github.com/aanand/compose-file/blob/master/loader/full-example.yml
+
+version: "3"  # version matters, see https://docs.docker.com/compose/networking/
+
+networks:
+  lsmb_internal:
+    driver: bridge
+    internal: true
+
+services:
+
+  postgres:
+    image: ylavoie/postgres-pgtap
+    container_name: postgres
+    networks:
+      - lsmb_internal
+    build:
+      context: ./postgres-pgtap
+      dockerfile: Dockerfile-alpine
+    environment:
+      - POSTGRES_PASSWORD=test
+#      - PGDATA=/tmp/docker-postgresql
+#    volumes:
+#      # We'll mount the 'pgdata' volume into the location Postgres stores it's data:
+#      - pgdata:/var/lib/postgresql/data
+
+  lsmb:
+    image: ylavoie/ledgersmb
+    container_name: lsmb
+    networks:
+      - default
+      - lsmb_internal
+    build:
+      context: ./ledgersmb-docker
+    #dns_opt: # V2 only ;-(
+    #  - ndots:1
+    environment:
+      - PGHOST=postgres
+    volumes:
+      - /tmp:/tmp
+      - ./ledgersmb-docker:/srv/ledgersmb-docker
+      - ./LedgerSMB:/srv/ledgersmb:rw
+    ports:
+      - 5001:5001
+    depends_on:
+      - postgres
+
+  nginx:
+    image: ylavoie/nginx
+    container_name: nginx
+    volumes:
+      - ./LedgerSMB/UI:/srv/ledgersmb/UI:ro
+    ports:
+      - 5000:5000
+    networks:
+      - default
+      - lsmb_internal
+    depends_on:
+      - lsmb
+    build:
+      context: ./ledgersmb-nginx-docker

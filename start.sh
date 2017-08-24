@@ -1,7 +1,18 @@
 #!/bin/bash
 
+pushd ~
+  mkdir -p .config/mc
+  tar Jxf mcthemes.tar.xz
+  ./mcthemes/mc_change_theme.sh mcthemes/puthre.theme
+popd
+
 update_ssmtp.sh
 cd /srv/ledgersmb
+
+# Revalidate the required CPAN packages in case the
+# source tree is bind mounted and has changed since Docker build.
+#cpanm --local-lib=~/perl5 local::lib && eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+#cpanm --with-develop HTTP::AcceptLanguage
 
 if [[ ! -f ledgersmb.conf ]]; then
   cp conf/ledgersmb.conf.default ledgersmb.conf
@@ -21,17 +32,14 @@ fi
 #   --postgres_password "$POSTGRES_PASS"
 #fi
 
-# Needed for modules loaded by cpanm
-export PERL5LIB
-for PerlLib in /usr/lib/perl5* /usr/local/lib/perl5*/site_perl/* ; do
-    [[ -d "$PerlLib" ]] && {
-        PERL5LIB="$PerlLib";
-        echo -e "\tmaybe: $PerlLib";
-    }
-done ;
-echo "Selected PERL5LIB=$PERL5LIB";
-
 # start ledgersmb
-exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman.psgi \
-    --Reload "lib, old/lib, xt/lib"
+if [[ ! -f DEVELOPMENT ]]; then
+#  exec plackup --port 5001 --server Starman tools/starman.psgi \
+  exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman.psgi \
+      --Reload "lib, old/lib, xt/lib, /usr/local/share/perl, /usr/share/perl, /usr/share/perl5"
+else
+  exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman-development.psgi \
+      --workers 1 --env development \
+      --Reload "lib, old/lib, xt/lib, /usr/local/share/perl, /usr/share/perl, /usr/share/perl5"
+fi
 

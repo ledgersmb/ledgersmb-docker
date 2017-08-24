@@ -1,0 +1,16 @@
+# .gitignore for LedgerSMB-Docker
+#
+# Vim swap files
+*.swp
+#
+# LedgerSMB rebuild flag file
+ledgersmb.rebuild
+
+# /bin/custom/
+/bin/custom/*
+
+# test output:
+/screens/*
+
+# Patches
+/patch/*
