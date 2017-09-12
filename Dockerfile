@@ -30,7 +30,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 
 
 # Build time variables
-ENV LSMB_VERSION 1.5.10
+ENV LSMB_VERSION 1.5.11
 
 # Install LedgerSMB
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
