@@ -35,16 +35,14 @@ ENV LSMB_VERSION 1.5.12
 # Install LedgerSMB
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get -y install git cpanminus make gcc libperl-dev && \
-    cd /srv && \
-    curl -Lo ledgersmb-$LSMB_VERSION.tar.gz "http://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
-    tar -xvzf ledgersmb-$LSMB_VERSION.tar.gz && \
-    rm -f ledgersmb-$LSMB_VERSION.tar.gz && \
-    cd ledgersmb && \
+    curl -Lo /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+    tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
+    rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
     cpanm --quiet --notest \
       --with-feature=starman \
       --with-feature=latex-pdf-ps \
       --with-feature=openoffice \
-      --installdeps . && \
+      --installdeps /srv/ledgersmb/ && \
     apt-get purge -y git cpanminus make gcc libperl-dev && \
     apt-get autoremove -y && \
     apt-get autoclean && \
