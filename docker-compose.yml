@@ -26,7 +26,9 @@ services:
 #      - pgdata:/var/lib/postgresql/data
 
   lsmb:
-    image: ylavoie/ledgersmb
+    env_file:
+      - variables.env
+    image: "ylavoie/ledgersmb:${TAG}"
     container_name: lsmb
     networks:
       - default
@@ -37,12 +39,14 @@ services:
     #  - ndots:1
     environment:
       - PGHOST=postgres
+      - DEVELOPMENT=1
     volumes:
       - /tmp:/tmp
       - ./ledgersmb-docker:/srv/ledgersmb-docker
       - ./LedgerSMB:/srv/ledgersmb:rw
     ports:
       - 5001:5001
+      - 8080:8080
     depends_on:
       - postgres
 
