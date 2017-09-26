@@ -3,10 +3,6 @@ MAINTAINER  Freelock john@freelock.com
 
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
 
-RUN apt-get update && \
-    apt-get -y install software-properties-common wget && \
-    add-apt-repository ppa:ledgersmb/main
-
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTEND=noninteractive && \
   apt-get update && apt-get -y install \
