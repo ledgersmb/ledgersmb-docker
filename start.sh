@@ -26,13 +26,17 @@ sudo chmod 666 /etc/resolv.conf
 echo "options ndots:1" >>/etc/resolv.conf
 sudo chmod 644 /etc/resolv.conf
 
-# start ledgersmb
-if [[ ! -f DEVELOPMENT ]]; then
-#  exec plackup --port 5001 --server Starman tools/starman.psgi \
-  exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman.psgi \
-      --Reload "lib, old/lib, xt/lib, t, xt, /usr/local/share/perl, /usr/share/perl, /usr/share/perl5"
+if [[ ! -v DEVELOPMENT || "$DEVELOPMENT" != "1" ]]; then
+  #SERVER=Starman
+  SERVER=HTTP::Server::PSGI
+  PSGI=tools/starman.psgi
 else
-  exec plackup --port 5001 --server HTTP::Server::PSGI tools/starman-development.psgi \
-      --workers 1 --env development \
-      --Reload "lib, old/lib, xt/lib, t, xt, /usr/local/share/perl, /usr/share/perl, /usr/share/perl5"
+  SERVER=HTTP::Server::PSGI
+  PSGI=tools/starman-development.psgi
+  OPT="--workers 1 --env development"
 fi
+
+set -x
+# start ledgersmb
+exec plackup --port 5001 --server $SERVER $PSGI $OPT \
+      --Reload "lib, old/lib, xt/lib, t, xt, /usr/local/share/perl, /usr/share/perl, /usr/share/perl5"
