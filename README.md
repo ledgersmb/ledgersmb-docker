@@ -1,103 +1,149 @@
 # ledgersmb-docker
 Dockerfile for LedgerSMB Docker image
 
-This is a work in progress to make a docker image for running LedgerSMB. It should not be relied upon for production use!
+# Supported tags
 
-# Supported tags and respective `Dockerfile` links
-
--	`dev-master` - Master branch from git, unstable
+- `dev-master` - Master branch from git, unstable
 - `1.5`, `1.5.x`, `latest` - Latest release tarball from 1.5 branch
 - `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
 
 
 # What is LedgerSMB?
-The LedgerSMB project's priority is to provide an extremely capable yet user-friendly accounting and ERP solution to small to mid-size businesses in all locales where there is interest in using the software. The focus on small to mid-size businesses offers an opportunity to provide a positive user experience in ways which are not present in larger organizations. LedgerSMB ought to strive to be both the ideal SMB accounting/ERP package and also a solution that a start-up will never outgrow. The goals mentioned above will help us provide this ideal solution by allowing us to focus both on technical architecture and on user experience.
+
+LedgerSMB is a user-friendly accounting and ERP solution for small to
+mid-size businesses. It comes with support for many languages and support
+for different locales.
+
+The project aims to be the solution a start-up never outgrows.
 
 
 # How is this image designed to be used?
 
-This Docker image is built to provide a self-contained LedgerSMB instance. To be functional, you need to connect it to a running Postgres installation. The official Postgres container will work as is, if you link it to the LedgerSMB instance at startup, or you can provide environment variables to an appropriate Postgres server.
+This image is designed to be used in conjunction with a running PostgreSQL
+instance (such as may be provided through a separate image).
 
-LedgerSMB provides an http interface built on Starman out of the box, listening on port 5762. We do not recommend exposing this port, because we strongly recommend encrypting all connections using SSL/TLS. For production use, we recommend running a web server configured with SSL, such as Nginx or Apache, and proxying connections to LedgerSMB.
+This image exposes port 5762 running a Starman HTTP application server. We
+do not recommend exposing this port publicly, because
 
-The other services you will need to put this in production are an SMTP gateway (set environment variables for SSMTP at container startup) and optionally a local print server (e.g. CUPS) installation. The print service is not currently supported in this Docker image, but pull requests are welcomed ;-)
+1. The Starman author recommends it
+2. We strongly recommend TLS encryption of all application traffic
 
+While the exposed port can be used for quick evaluation, it's recommended
+to add the TLS layer by applying Nginx or Apache as reverse proxy.
+
+Enabling optional functionalities such as outgoing e-mail and printing
+could require additional setup of a mail service or CUPS printer service.
 
 # How to use this image
 
 ## Start a postgres instance
 
-	docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+```plain
+ $ docker run -d --name postgres \
+              -e POSTGRES_PASSWORD=mysecretpassword \
+              postgres:latest
+```
 
-This image includes `EXPOSE 5432` (the postgres port), so standard container linking will make it automatically available to the linked containers. The default `postgres` user and database are created in the entrypoint with `initdb`.
+BEWARE: The command above creates a container with the database data stored
+*inside* the container. Upon removal of the container, the database data will
+be removed too!
 
-> The postgres database is a default database meant for use by users, utilities and third party applications.  
-> [postgresql.org/docs](http://www.postgresql.org/docs/9.3/interactive/app-initdb.html)
+To prevent destruction of the database data upon replacement of the container,
+please use these commands instead:
+
+```plain
+ $ docker volume create dbdata
+ $ docker run -d --name postgres \
+              -e POSTGRES_PASSWORD=mysecretpassword \
+              -e PGDATA=/var/lib/postgresql/data/pgdata \
+              -v dbdata:/var/lib/postgresql/data \
+              postgres:latest
+```
 
 ## Start LedgerSMB
 
-	docker run --name myledger --link some-postgres:postgres -d ledgersmb/ledgersmb
+```plain
+ $ docker run -d -p 5762:5762 --name myledger \
+              ledgersmb/ledgersmb:latest
+```
+
+This command maps port 5762 of your container to port 5762 in your host. The
+web application inside the container should now be accessible through
+http://localhost:5762/setup.pl.
 
 ## Set up LedgerSMB
 
-Visit http://myledger:5762/setup.pl (you can forward port 5762 to the host machine, or lookup the IP address for the "myledger" container if running on localhost)
+ * Visit http://myledger:5762/setup.pl.
+ * Log in with the "postgres" user and the password `mysecretpassword`
+   and provide the name of a company (= database name) you want to create.
+ * Go over the steps presented in the browser
 
-Log in with the "postgres" user and the password you set when starting up the Postgres container, and provide the name of a company database you want to create.
+Once you have completed the setup steps, you have a fully functional
+LedgerSMB instance running!
 
-Once you have completed the setup, you have a fully functional LedgerSMB instance running!
-
-Visit http://myledger:5762/login.pl to log in and get started.
+Visit http://localhost:5762/login.pl to log in and get started.
 
 # Updating the LedgerSMB container
 
-No persistant data is stored in the LedgerSMB container. All LedgerSMB data is stored in Postgres, so you can stop/destroy/run a new LedgerSMB container, and as long as you link it to the Postgres database, you should be able to pick up where you left off.
+No persistant data is stored in the LedgerSMB container.
+
+All LedgerSMB data is stored in Postgres, so you can stop/destroy/run a
+new LedgerSMB container as often as you want.
 
 # Environment Variables
 
-The LedgerSMB image uses several environment variables which are easy to miss. While none of the variables are required, they may significantly aid you in using the image.
+The LedgerSMB image uses several environment variables. They are all optional.
 
-### `POSTGRES_HOST` = 'postgres'
 
-This environment variable is used to specify the hostname of the Postgres server. The default is "postgres", which will find the container linked in.
+## `POSTGRES_HOST`
 
-If you set this to another hostname, LedgerSMB will attempt to connect to that hostname instead.
+Default: postgres
+
+Specifies the hostname of the PostgreSQL server to connect to. If you use
+a PostgreSQL image, set it to the name of that image.
 
 ## `POSTGRES_PORT` = 5432
 
-Port to connect to Postgres on. Use to connect to a Postgres server running on an alternate port.
+Default: 5432
 
-## `DEFAULT_DB` = lsmb
+Port on which the PostgreSQL server is running.
 
-Set this if you want to automatically log in to a particular LSMB database.
+## `DEFAULT_DB`
 
-### `SSMTP_ROOT` `SSMTP_MAILHUB` `SSMTP_HOSTNAME` `SSMTP_USE_STARTTLS` `SSMTP_AUTH_USER` `SSMTP_AUTH_PASS` `SSMTP_METHOD` `SSMTP_FROMLINE_OVERRIDE`
+Default: lsmb
 
-These variables are used to set outgoing SMTP defaults. To set the outgoing email address, set SSMTP_ROOT, and SSMTP_HOSTNAME at a minimum -- SSMTP_MAILHUB defaults to the default docker0 interface, so if your host is already configured to relay mail, this should relay successfully with only those two set.
+Set this if you want to automatically log in to a particular LedgerSMB database
+without needing to enter the name of that database on the login.pl login screen.
 
-Use the other environment variables to relay mail through another host.
+## Mail configuration
+
+* `SSMTP_ROOT`
+* `SSMTP_MAILHUB`
+* `SSMTP_HOSTNAME`
+* `SSMTP_USE_STARTTLS`
+* `SSMTP_AUTH_USER`
+* `SSMTP_AUTH_PASS`
+* `SSMTP_METHOD`
+* `SSMTP_FROMLINE_OVERRIDE`
+
+These variables are used to set outgoing SMTP defaults.
+
+To set the outgoing email address, set `SSMTP_ROOT` and `SSMTP_HOSTNAME` at
+a minimum.
+
+`SSMTP_MAILHUB` defaults to the default docker0 interface, so if your host is
+already configured to relay mail, this should relay successfully with only
+the root and hostname set.
+
+Use the other environment variables to relay mail through a different host.
 
 # Troubleshooting/Developing
 
-You can connect to a running container using:
+Currently the LedgerSMB installation is in /srv/ledgersmb
+and the startup & config script is /usr/bin/start.sh.
 
-> docker exec -ti myledger /bin/bash
-
-... this will give you a shell inside the container where you can inspect/troubleshoot the installation.
-
-Currently the LedgerSMB installation is in /srv/ledgersmb, and the startup/config script is /usr/bin/start.sh.
-
-
-# Supported Docker versions
-
-This image is officially supported on Docker version 1.11.1.
-
-Support for older versions is provided on a best-effort basis.
 
 # User Feedback
-
-## Documentation
-
-This is a brand new effort, and we will be adding documentation to the http://ledgersmb.org site when we get a chance.
 
 ## Issues
 
