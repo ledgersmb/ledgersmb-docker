@@ -3,9 +3,9 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
-- `dev-master` - Master branch from git, unstable
 - `1.5`, `1.5.x`, `latest` - Latest release tarball from 1.5 branch
-- `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
+- `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch (end-of-life)
+- `master` - Master branch from git, unstable
 
 
 # What is LedgerSMB?
@@ -102,7 +102,7 @@ Default: postgres
 Specifies the hostname of the PostgreSQL server to connect to. If you use
 a PostgreSQL image, set it to the name of that image.
 
-## `POSTGRES_PORT` = 5432
+## `POSTGRES_PORT`
 
 Default: 5432
 
