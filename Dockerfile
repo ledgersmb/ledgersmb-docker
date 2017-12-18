@@ -2,6 +2,8 @@ FROM        ubuntu:xenial
 MAINTAINER  Freelock john@freelock.com
 
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+RUN echo 'options ndots:2' >>/etc/resolv.conf
+RUN echo 'Acquire::http { Proxy "http://nameserver:3142"; };' >> /etc/apt/apt.conf.d/02proxy
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 RUN DEBIAN_FRONTEND=noninteractive && \
@@ -9,7 +11,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
-  libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+  libfile-mimeinfo-perl libhtml-tidy-perl libjson-xs-perl libjson-perl \
   liblocale-maketext-perl liblocale-maketext-lexicon-perl \
   liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
   libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
@@ -71,9 +73,9 @@ ENV DEFAULT_DB lsmb
 
 # Make sure www-data share the uid/gid of the container owner on the host
 #RUN groupmod --gid $HOST_GID www-data
-#RUN usermod --uid $HOST_UID --gid $HOST_GID www-data
+#RUN usermod --uid $HOST_UID --gid $HOST_GID --shell /bin/bash www-data
 RUN groupmod --gid 1000 www-data
-RUN usermod --uid 1000 --gid 1000 www-data
+RUN usermod --uid 1000 --gid 1000 --shell /bin/bash www-data
 
 WORKDIR /srv/ledgersmb
 
@@ -97,8 +99,10 @@ RUN cpanm Data::Printer \
 	Devel::NYTProf \
     Plack::Middleware::Debug::DBIProfile \
     Plack::Middleware::Debug::DBITrace \
+    Plack::Middleware::Debug::LazyLoadModules \
     Plack::Middleware::Debug::Log4perl \
     Plack::Middleware::Debug::Profiler::NYTProf \
+    Plack::Middleware::Debug::TraceENV \
     Plack::Middleware::Debug::W3CValidate \
 	Plack::Middleware::InteractiveDebugger \
     WebService::Validator::HTML::W3C && \
@@ -114,7 +118,8 @@ EXPOSE 5001
 RUN cpanm --quiet --notest --force \
     HTTP::Exception Module::Versions \
     MooseX::Constructor::AllErrors TryCatch \
-    Text::PO::Parser Class::Std::Utils IO::File Devel::hdb Devel::Trepan && \
+    Text::PO::Parser Class::Std::Utils IO::File Devel::hdb Devel::Trepan \
+    Test::Pod Test::Pod::Coverage && \
     rm -r ~/.cpanm
 
 COPY start.sh /usr/local/bin/start.sh
@@ -133,8 +138,8 @@ COPY ledgersmb.rebuild /var/www/ledgersmb.rebuild
 COPY git-colordiff.sh /var/www/git-colordiff.sh
 
 # Add temporary patches
-#COPY patch/patches.tar /tmp
-#RUN cd / && tar xvf /tmp/patches.tar && rm /tmp/patches.tar
+COPY patch/patches.tar /tmp
+RUN cd / && tar xvf /tmp/patches.tar && rm /tmp/patches.tar
 ENV LANG=C.UTF-8
 
 RUN mkdir -p /usr/share/sql-ledger/users
