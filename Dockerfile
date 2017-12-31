@@ -1,11 +1,14 @@
 FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
-RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf
+# Build time variables
+ENV LSMB_VERSION 1.5.14
+
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
+  DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get dist-upgrade -y && apt-get -y install \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
@@ -25,15 +28,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     libopenoffice-oodoc-perl \
     postgresql-client \
     ssmtp \
-    lsb-release \
-    && rm -rf /var/lib/apt/lists/*
-
-
-# Build time variables
-ENV LSMB_VERSION 1.5.14
-
-# Install LedgerSMB
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    lsb-release && \
+  DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get -y install git cpanminus make gcc libperl-dev && \
     curl -Lo /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
