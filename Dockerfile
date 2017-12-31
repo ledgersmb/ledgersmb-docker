@@ -1,4 +1,4 @@
-FROM        debian:jessie
+FROM        debian:jessie-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
