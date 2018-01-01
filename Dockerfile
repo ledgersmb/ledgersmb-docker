@@ -8,7 +8,7 @@ ENV LSMB_VERSION 1.5.14
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
-  mkdir -p /usr/share/man/man1/ && \
+  mkdir -p /usr/share/man/man{1,2,3,4,5,6,7}/ && \
   DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get dist-upgrade -y && apt-get -y install \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
