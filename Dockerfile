@@ -50,7 +50,8 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     apt-get autoremove -y && \
     apt-get autoclean && \
     rm -rf ~/.cpanm/ && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /usr/share/man/*
+
 
 WORKDIR /srv/ledgersmb
 
