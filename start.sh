@@ -28,4 +28,4 @@ fi
 #fi
 
 # start ledgersmb
-exec starman --port 5762 tools/starman.psgi
+exec starman --port 5762 --preload-app tools/starman.psgi
