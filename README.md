@@ -118,14 +118,14 @@ without needing to enter the name of that database on the login.pl login screen.
 
 ## Mail configuration
 
-* `SSMTP_ROOT`
-* `SSMTP_MAILHUB`
-* `SSMTP_HOSTNAME`
-* `SSMTP_USE_STARTTLS`
-* `SSMTP_AUTH_USER`
-* `SSMTP_AUTH_PASS`
-* `SSMTP_METHOD`
-* `SSMTP_FROMLINE_OVERRIDE`
+* `SSMTP_ROOT` (config: `Root`)
+* `SSMTP_MAILHUB` (config: `Mailhub`)
+* `SSMTP_HOSTNAME` (config: `Hostname`)
+* `SSMTP_USE_STARTTLS` (config: `UseSTARTTLS`)
+* `SSMTP_AUTH_USER` (config: `AuthUser`)
+* `SSMTP_AUTH_PASS` (config: `AuthPass`)
+* `SSMTP_AUTH_METHOD` (config: `AuthMethod`)
+* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride`)
 
 These variables are used to set outgoing SMTP defaults.
 
@@ -137,6 +137,9 @@ already configured to relay mail, this should relay successfully with only
 the root and hostname set.
 
 Use the other environment variables to relay mail through a different host.
+Use the [ssmtp.conf man
+page](https://www.systutorials.com/docs/linux/man/5-ssmtp.conf/) to look up
+the meaning and function of each of the mail configuration keys.
 
 # Troubleshooting/Developing
 
