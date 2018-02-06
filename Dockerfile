@@ -7,6 +7,10 @@ ENV LSMB_VERSION 1.5.16
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
+
+# Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
+# That mitigates issues where the PG instance is running a newer version than this container
+
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
   mkdir -p /usr/share/man/man2/ && \
@@ -17,6 +21,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   mkdir -p /usr/share/man/man7/ && \
   DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get dist-upgrade -y && apt-get -y install \
+    wget ca-certificates \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
     libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -36,8 +41,11 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     postgresql-client \
     ssmtp \
     lsb-release && \
-  DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get -y install git cpanminus make gcc libperl-dev && \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y update  \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client \
+  && DEBIAN_FRONTEND=noninteractive apt-get -y install git cpanminus make gcc libperl-dev && \
     curl -Lo /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
     rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
