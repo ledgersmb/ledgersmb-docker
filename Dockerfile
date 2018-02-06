@@ -2,13 +2,20 @@ FROM        debian:jessie
 MAINTAINER  Freelock john@freelock.com
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
+#
 # Without libclass-c3-xs-perl, everything grinds to a halt;
 # add it, because it's a 'recommends' it the dep tree, which
 # we're skipping, normally
+#
+# Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
+# That mitigates issues where the PG instance is running a newer version than this container
+
 RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
+  DEBIAN_FRONTEND="noninteractive" apt-mark hold sensible-utils && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
+  wget ca-certificates \
   libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
   libdbd-pg-perl libdbi-perl libdatetime-perl \
   libdatetime-format-strptime-perl libdigest-md5-perl \
@@ -25,9 +32,12 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
   texlive-xetex \
   starman \
   libopenoffice-oodoc-perl \
-  postgresql-client \
   ssmtp \
   lsb-release \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y update  \
+  && DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client \
   && DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove \
   && DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean \
   && rm -rf /var/lib/apt/lists/*
