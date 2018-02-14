@@ -15,32 +15,32 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
-  wget ca-certificates \
-  libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
-  libdbd-pg-perl libdbi-perl libdatetime-perl \
-  libdatetime-format-strptime-perl libdigest-md5-perl \
-  libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
-  liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-  liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
-  libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
-  libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-  libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
-  libnamespace-autoclean-perl \
-  libtemplate-plugin-latex-perl libtex-encode-perl \
-  libmoosex-nonmoose-perl libclass-c3-xs-perl \
-  texlive-latex-recommended \
-  texlive-xetex \
-  starman \
-  libopenoffice-oodoc-perl \
-  ssmtp \
-  lsb-release \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y update  \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean \
-  && rm -rf /var/lib/apt/lists/*
+    wget ca-certificates \
+    libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
+    libdbd-pg-perl libdbi-perl libdatetime-perl \
+    libdatetime-format-strptime-perl libdigest-md5-perl \
+    libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+    liblocale-maketext-perl liblocale-maketext-lexicon-perl \
+    liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
+    libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
+    libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
+    libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
+    libnamespace-autoclean-perl \
+    libtemplate-plugin-latex-perl libtex-encode-perl \
+    libmoosex-nonmoose-perl libclass-c3-xs-perl \
+    texlive-latex-recommended \
+    texlive-xetex \
+    starman \
+    libopenoffice-oodoc-perl \
+    ssmtp \
+    lsb-release && \
+  echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+  (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y autoclean && \
+  rm -rf /var/lib/apt/lists/*
 
 
 # Build time variables
@@ -63,7 +63,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
-    curl -L https://cpanmin.us | perl - App::cpanminus && \
+    (curl -L https://cpanmin.us | perl - App::cpanminus) && \
     cpanm --quiet --notest \
       --with-feature=starman \
       --with-feature=latex-pdf-ps \
