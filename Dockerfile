@@ -21,7 +21,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   mkdir -p /usr/share/man/man7/ && \
   DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get dist-upgrade -y && apt-get -y install \
-    wget ca-certificates \
+    curl wget ca-certificates \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdatetime-perl \
     libdatetime-format-strptime-perl libdigest-md5-perl \
