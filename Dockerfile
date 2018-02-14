@@ -41,11 +41,11 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     postgresql-client \
     ssmtp \
     lsb-release && \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y update  \
-  && DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client \
-  && DEBIAN_FRONTEND=noninteractive apt-get -y install git cpanminus make gcc libperl-dev && \
+  echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+  (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
+  DEBIAN_FRONTEND=noninteractive apt-get -y install git cpanminus make gcc libperl-dev && \
     curl -Lo /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
     tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
     rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
