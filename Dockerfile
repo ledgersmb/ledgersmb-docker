@@ -29,7 +29,7 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libmoosex-nonmoose-perl libclass-c3-xs-perl \
     texlive-latex-recommended \
-    texlive-xetex \
+    texlive-xetex fonts-liberation2 \
     starman \
     libopenoffice-oodoc-perl \
     ssmtp \
