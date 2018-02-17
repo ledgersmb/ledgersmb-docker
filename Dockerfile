@@ -35,7 +35,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libmoosex-nonmoose-perl libclass-c3-xs-perl \
     texlive-latex-recommended \
-    texlive-xetex fonts-liberation2 \
+    texlive-xetex fonts-liberation \
     starman \
     libopenoffice-oodoc-perl \
     postgresql-client \
