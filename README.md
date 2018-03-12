@@ -35,6 +35,19 @@ to add the TLS layer by applying Nginx or Apache as reverse proxy.
 Enabling optional functionalities such as outgoing e-mail and printing
 could require additional setup of a mail service or CUPS printer service.
 
+# Quickstart
+
+The quickest way to get this image up and running is by using the
+`docker-compose` file available through the GitHub repository at:
+
+  https://github.com/ledgersmb/ledgersmb-docker/blob/1.5/docker-compose.yml
+
+which sets up both this image and a supporting database image for
+production purposes (i.e. with persistent (database) data, with the
+exception of one thing: setting up an Nginx or Apache reverse proxy
+with TLS 1.2 support -- a requirement if you want to access your
+installation over any type of network.
+
 # How to use this image
 
 ## Start a postgres instance
@@ -117,6 +130,8 @@ Set this if you want to automatically log in to a particular LedgerSMB database
 without needing to enter the name of that database on the login.pl login screen.
 
 ## Mail configuration
+
+The docker image uses `ssmtp` to send mail. 
 
 * `SSMTP_ROOT` (config: `Root`)
 * `SSMTP_MAILHUB` (config: `Mailhub`)
