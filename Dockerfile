@@ -1,4 +1,4 @@
-FROM        debian:jessie
+FROM        debian:stretch
 MAINTAINER  Freelock john@freelock.com
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
@@ -17,17 +17,24 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
     wget ca-certificates \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
-    libdbd-pg-perl libdbi-perl libdatetime-perl \
-    libdatetime-format-strptime-perl libdigest-md5-perl \
-    libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+    libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
+    libdatetime-format-strptime-perl libio-stringy-perl \
+    libjson-xs-perl libcpanel-json-xs-perl liblist-moreutils-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-    liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
-    libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
+    liblog-log4perl-perl libmime-lite-perl libmime-types-perl \
+    libmath-bigint-gmp-perl libmodule-runtime-perl libmoose-perl \
+    libmoosex-nonmoose-perl libnumber-format-perl \
     libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-    libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
+    libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
+    libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
+    libpgobject-util-dbadmin libplack-perl \
+    libplack-middleware-reverseproxy-perl \
+    libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
+    libtext-markdown-perl libxml-simple-perl \
     libnamespace-autoclean-perl \
+    libimage-size-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
-    libmoosex-nonmoose-perl libclass-c3-xs-perl \
+    libclass-c3-xs-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     starman \
