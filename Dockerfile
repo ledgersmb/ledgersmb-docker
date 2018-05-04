@@ -67,7 +67,6 @@ ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
 RUN wget --quiet -O - https://deb.nodesource.com/setup_8.x | bash -
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
-    update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
     cd /srv && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
