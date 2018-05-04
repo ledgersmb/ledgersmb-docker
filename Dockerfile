@@ -60,10 +60,11 @@ ENV NODE_PATH /usr/local/lib/node_modules
 # Uglify needs to be installed right before 'make dojo'?!
 
 # These packages are only needed during the dojo build
-ENV DOJO_Build_Deps git make gcc libperl-dev npm curl
+ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs
 # These packages can be removed after the dojo build
 ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
 
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
