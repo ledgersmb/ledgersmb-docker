@@ -64,7 +64,7 @@ ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs
 # These packages can be removed after the dojo build
 ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN wget --quiet -O - https://deb.nodesource.com/setup_8.x | bash -
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     update-alternatives --install /usr/bin/node nodejs /usr/bin/nodejs 100 && \
