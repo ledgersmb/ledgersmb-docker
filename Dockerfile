@@ -1,8 +1,8 @@
-FROM        debian:jessie-slim
+FROM        debian:stretch-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.5.18
+ENV LSMB_VERSION 1.6.0-beta1
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
@@ -19,46 +19,52 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   mkdir -p /usr/share/man/man5/ && \
   mkdir -p /usr/share/man/man6/ && \
   mkdir -p /usr/share/man/man7/ && \
-  DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get dist-upgrade -y && apt-get -y install \
-    curl wget ca-certificates \
+  DEBIAN_FRONTEND="noninteractive" apt-get update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get dist-upgrade -y && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install \
+    wget ca-certificates gnupg \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
-    libdbd-pg-perl libdbi-perl libdatetime-perl \
-    libdatetime-format-strptime-perl libdigest-md5-perl \
-    libfile-mimeinfo-perl libjson-xs-perl libjson-perl \
+    libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
+    libdatetime-format-strptime-perl libio-stringy-perl \
+    libjson-xs-perl libcpanel-json-xs-perl liblist-moreutils-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-    liblog-log4perl-perl libmime-base64-perl libmime-lite-perl \
-    libmath-bigint-gmp-perl libmoose-perl libnumber-format-perl \
+    liblog-log4perl-perl libmime-lite-perl libmime-types-perl \
+    libmath-bigint-gmp-perl libmodule-runtime-perl libmoose-perl \
+    libmoosex-nonmoose-perl libnumber-format-perl \
     libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-    libpgobject-util-dbmethod-perl libplack-perl libtemplate-perl \
+    libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
+    libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
+    libpgobject-util-dbadmin-perl libplack-perl \
+    libplack-middleware-reverseproxy-perl \
+    libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
+    libtext-markdown-perl libxml-simple-perl \
     libnamespace-autoclean-perl \
+    libimage-size-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
-    libmoosex-nonmoose-perl libclass-c3-xs-perl \
+    libclass-c3-xs-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     starman \
     libopenoffice-oodoc-perl \
-    postgresql-client \
     ssmtp \
     lsb-release && \
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
   (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
-  DEBIAN_FRONTEND=noninteractive apt-get -y install git cpanminus make gcc libperl-dev && \
-    curl -Lo /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
-    tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
-    rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-    cpanm --quiet --notest \
-      --with-feature=starman \
-      --with-feature=latex-pdf-ps \
-      --with-feature=openoffice \
-      --installdeps /srv/ledgersmb/ && \
-    apt-get purge -y git cpanminus make gcc libperl-dev && \
-    apt-get autoremove -y && \
-    apt-get autoclean && \
-    rm -rf ~/.cpanm/ && \
-    rm -rf /var/lib/apt/lists/* /usr/share/man/*
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install git cpanminus make gcc libperl-dev && \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Beta%20Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+  tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
+  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
+  cpanm --quiet --notest \
+    --with-feature=starman \
+    --with-feature=latex-pdf-ps \
+    --with-feature=openoffice \
+    --installdeps /srv/ledgersmb/ && \
+  apt-get purge -y git cpanminus make gcc libperl-dev && \
+  apt-get autoremove -y && \
+  apt-get autoclean && \
+  rm -rf ~/.cpanm/ && \
+  rm -rf /var/lib/apt/lists/* /usr/share/man/*
 
 
 WORKDIR /srv/ledgersmb
