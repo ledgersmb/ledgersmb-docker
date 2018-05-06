@@ -8,6 +8,10 @@ ENV LSMB_VERSION 1.6.0-beta1
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
 # Without libclass-accessor-lite-perl, HTML::Entities won't build from CPAN
+# libnet-cidr-lite-perl is a dependency for Plack::Builder::Conditionals
+#   which is being installed from CPAN
+# libtest-requires-perl is a dependency of Module-Build-Pluggable-PPPort
+#   on which HTML::Entities depends
 
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
@@ -43,6 +47,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libimage-size-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libclass-c3-xs-perl libclass-accessor-lite-perl \
+    libnet-cidr-lite-perl libtest-requires-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     starman \
