@@ -11,7 +11,7 @@ ENV LSMB_VERSION 1.6.0-beta1
 # libnet-cidr-lite-perl is a dependency for Plack::Builder::Conditionals
 #   which is being installed from CPAN
 # libtest-requires-perl is a dependency of Module-Build-Pluggable-PPPort
-#   on which HTML::Entities depends
+#   on which HTML::Escape depends
 
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
