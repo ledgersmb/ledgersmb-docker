@@ -7,6 +7,7 @@ ENV LSMB_VERSION 1.6.0-beta1
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
+# Without libclass-accessor-lite-perl, HTML::Entities won't build from CPAN
 
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
@@ -41,7 +42,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libnamespace-autoclean-perl \
     libimage-size-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
-    libclass-c3-xs-perl \
+    libclass-c3-xs-perl libclass-accessor-lite-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     starman \
@@ -55,7 +56,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Beta%20Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cpanm --quiet --notest \
+  cpanm --notest \
     --with-feature=starman \
     --with-feature=latex-pdf-ps \
     --with-feature=openoffice \
