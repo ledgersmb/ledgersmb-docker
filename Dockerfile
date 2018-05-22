@@ -24,9 +24,9 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   mkdir -p /usr/share/man/man5/ && \
   mkdir -p /usr/share/man/man6/ && \
   mkdir -p /usr/share/man/man7/ && \
-  DEBIAN_FRONTEND="noninteractive" apt-get update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get dist-upgrade -y && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install \
+  DEBIAN_FRONTEND="noninteractive" apt-get update -q && \
+  DEBIAN_FRONTEND="noninteractive" apt-get dist-upgrade -y -q && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y -q install \
     wget ca-certificates gnupg \
     libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
@@ -55,20 +55,20 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     ssmtp \
     lsb-release && \
   (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install git cpanminus make gcc libperl-dev && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
+  DEBIAN_FRONTEND="noninteractive" apt-get --q y install git cpanminus make gcc libperl-dev && \
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Beta%20Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
-  tar -xvzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
+  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
   cpanm --notest \
     --with-feature=starman \
     --with-feature=latex-pdf-ps \
     --with-feature=openoffice \
     --installdeps /srv/ledgersmb/ && \
-  apt-get purge -y git cpanminus make gcc libperl-dev && \
-  apt-get autoremove -y && \
-  apt-get autoclean && \
+  apt-get purge -q -y git cpanminus make gcc libperl-dev && \
+  apt-get autoremove -q -y && \
+  apt-get autoclean -q && \
   rm -rf ~/.cpanm/ && \
   rm -rf /var/lib/apt/lists/* /usr/share/man/*
 
