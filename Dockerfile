@@ -57,7 +57,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -q y install git cpanminus make gcc libperl-dev && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Beta%20Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
