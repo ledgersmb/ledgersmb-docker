@@ -129,6 +129,14 @@ Default: lsmb
 Set this if you want to automatically log in to a particular LedgerSMB database
 without needing to enter the name of that database on the login.pl login screen.
 
+## `LSMB_WORKERS`
+
+Default: 5
+
+Set this if you want to run in a memory-constrained environment. E.g. set it to
+2 when running in a 1 GB memory setup. Please do note that this may adversely
+affect the performance experience of users.
+
 ## Mail configuration
 
 The docker image uses `ssmtp` to send mail. 

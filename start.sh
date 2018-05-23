@@ -45,4 +45,5 @@ echo "Selected PERL5LIB=$PERL5LIB";
 # --preload-app allows application initialization to kill the entire
 # starman instance (instead of just the worker, which will immediately
 # get restarted); it also has a positive effect on memory use
-exec starman --port 5762 --preload-app bin/ledgersmb-server.psgi
+
+exec starman --port 5762 --workers ${LSMB_WORKERS:-5} --preload-app bin/ledgersmb-server.psgi
