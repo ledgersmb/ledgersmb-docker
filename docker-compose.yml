@@ -32,7 +32,7 @@ services:
     networks:
       - internal
       - default
-    # The PORTS section below maps the LedgerSMB container port (5762)
+    # Uncomment the 'ports' section to map the LedgerSMB container port (5762)
     #  to the host's port of the same number, thus making LedgerSMB
     #  available on http://<host-dns-or-ip>:5762/
     #     SECURITY NOTE: Do this for evaluation purposes only!
@@ -40,7 +40,16 @@ services:
     #       and other sensitive data
     # ports:
     #   - "5762:5762"
-    # environment:
+    environment:
+      # The LSMB_WORKERS environment variable lets you select the number
+      # of processes serving HTTP requests. The default number of 2 workers
+      # is geared toward limited-memory situations (1 GB). In order to
+      # improve the performance experience, increase memory and the
+      # number of workers
+      #
+      LSMB_WORKERS: 2
+      #
+      #
       # SSMTP_ROOT:
       # SSMTP_HOSTNAME:
       # SSMTP_MAILHUB:
