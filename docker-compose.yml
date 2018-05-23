@@ -1,0 +1,63 @@
+# This docker-compose file creates one
+# compose 'project' consisting of two containers
+#
+#  1. The PostgreSQL data  container
+#  2. The LedgerSMB application container
+#
+# LedgerSMB persists all its data in the database,
+# so no special care needs to be taken on
+# container upgrades.  With PostgreSQL, data is
+# persisted across upgrades by the use of a
+# special 'dbdata' volume
+
+version: "3.2"
+services:
+  # Note that the container needs to be named "postgres" here,
+  # because that allows us to use the default hostname ("postgres")
+  # from the LedgerSMB configuration
+  postgres:
+    image: postgres:9.6-alpine
+    environment:
+      # Replace the password below for a secure setup
+      POSTGRES_PASSWORD: abc
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - internal
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+  lsmb:
+    depends_on:
+      - postgres
+    image: ledgersmb/ledgersmb:1.6
+    networks:
+      - internal
+      - default
+    # The PORTS section below maps the LedgerSMB container port (5762)
+    #  to the host's port of the same number, thus making LedgerSMB
+    #  available on http://<host-dns-or-ip>:5762/
+    #     SECURITY NOTE: Do this for evaluation purposes only!
+    #       In production, be sure to use SSL/TLS to protect user's passwords
+    #       and other sensitive data
+    # ports:
+    #   - "5762:5762"
+    # environment:
+      # SSMTP_ROOT:
+      # SSMTP_HOSTNAME:
+      # SSMTP_MAILHUB:
+      # SSMTP_AUTH_USER:
+      # SSMTP_AUTH_PASS:
+      # SSMTP_AUTH_METHOD:
+      # SSMTP_USE_STARTTLS:
+      # SSMTP_FROMLINE_OVERRIDE:
+
+# having the dbdata volume is required to persist our
+# data between PostgreSQL container updates; without
+# that, the data is contained in the same volume as
+# the rest of the image and on update/upgrade, the
+# data will be lost.
+volumes:
+  pgdata:
+
+
+networks:
+  internal:
