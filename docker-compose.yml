@@ -12,7 +12,10 @@
 
 version: "3.2"
 services:
-  db:
+  # Note that the container needs to be named "postgres" here,
+  # because that allows us to use the default hostname ("postgres")
+  # from the LedgerSMB configuration
+  postgres:
     image: postgres:9.6-alpine
     environment:
       # Replace the password below for a secure setup
@@ -21,10 +24,10 @@ services:
     networks:
       - internal
     volumes:
-      - "dbdata:/var/lib/postgresql/data"
+      - "pgdata:/var/lib/postgresql/data"
   lsmb:
     depends_on:
-      - db
+      - postgres
     image: ledgersmb/ledgersmb:1.5
     networks:
       - internal
@@ -53,7 +56,7 @@ services:
 # the rest of the image and on update/upgrade, the
 # data will be lost.
 volumes:
-  dbdata:
+  pgdata:
 
 
 networks:
