@@ -29,6 +29,14 @@ services:
     networks:
       - internal
       - default
+    # The PORTS section below maps the LedgerSMB container port (5762)
+    #  to the host's port of the same number, thus making LedgerSMB
+    #  available on http://<host-dns-or-ip>:5762/
+    #     SECURITY NOTE: Do this for evaluation purposes only!
+    #       In production, be sure to use SSL/TLS to protect user's passwords
+    #       and other sensitive data
+    # ports:
+    #   - "5762:5762"
     # environment:
       # SSMTP_ROOT:
       # SSMTP_HOSTNAME:
