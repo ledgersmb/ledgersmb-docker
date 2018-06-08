@@ -37,7 +37,12 @@ could require additional setup of a mail service or CUPS printer service.
 
 # How to use this image
 
-## Start a postgres instance
+This image can be installed either manually by following the steps below or
+automatically with the Docker compose file.
+
+## Manual installation
+
+### Start a postgres instance
 
 ```plain
  $ docker run -d --name postgres \
@@ -61,7 +66,7 @@ please use these commands instead:
               postgres:latest
 ```
 
-## Start LedgerSMB
+### Start LedgerSMB
 
 ```plain
  $ docker run -d -p 5762:5762 --name myledger \
@@ -72,7 +77,21 @@ This command maps port 5762 of your container to port 5762 in your host. The
 web application inside the container should now be accessible through
 http://localhost:5762/setup.pl.
 
-## Set up LedgerSMB
+## Docker-Compose installation and start
+
+This image provides `docker-compose.yml` which can be used to pull related
+images, install them, establish an internal network for their communications,
+adjust environment variables, start and stop LedgerSMB. The only instructions
+required, after the optional edition of the file to adjust the environment
+variables, are:
+
+```plain
+ $ docker-compose build
+ $ docker-compose up
+```
+
+
+# Set up LedgerSMB
 
  * Visit http://myledger:5762/setup.pl.
  * Log in with the "postgres" user and the password `mysecretpassword`
