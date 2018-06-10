@@ -58,7 +58,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Beta%20Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
   cpanm --notest \
