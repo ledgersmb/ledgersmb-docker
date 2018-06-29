@@ -3,10 +3,9 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
-- `1.5`, `1.5.x`, `latest` - Latest release tarball from 1.5 branch
+- `1.6`, `1.6.x`, `latest` - Latest release tarball from 1.6 branch
+- `1.5`, `1.5.x` - Latest release tarball from 1.5 branch
 - `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
-- `master` - Master branch from git, unstable
-- `master-dev`, `1.5-dev` - Containers to kick off a development setup
 
 
 # What is LedgerSMB?
@@ -40,12 +39,12 @@ could require additional setup of a mail service or CUPS printer service.
 The quickest way to get this image up and running is by using the
 `docker-compose` file available through the GitHub repository at:
 
-  https://github.com/ledgersmb/ledgersmb-docker/blob/1.5/docker-compose.yml
+  https://github.com/ledgersmb/ledgersmb-docker/blob/1.6/docker-compose.yml
 
 which sets up both this image and a supporting database image for
 production purposes (i.e. with persistent (database) data, with the
 exception of one thing: setting up an Nginx or Apache reverse proxy
-with TLS 1.2 support -- a requirement if you want to access your
+with TLS 1.2/1.3 support -- a requirement if you want to access your
 installation over any type of network.
 
 # How to use this image
@@ -139,7 +138,7 @@ affect the performance experience of users.
 
 ## Mail configuration
 
-The docker image uses `ssmtp` to send mail. 
+The docker image uses `ssmtp` to send mail.
 
 * `SSMTP_ROOT` (config: `Root`)
 * `SSMTP_MAILHUB` (config: `Mailhub`)
