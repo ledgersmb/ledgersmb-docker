@@ -51,7 +51,7 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
 
 
 # Build time variables
-ENV LSMB_VERSION master
+ENV LSMB_VERSION 1.7.0-alpha1
 ENV NODE_PATH /usr/local/lib/node_modules
 
 
