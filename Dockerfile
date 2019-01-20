@@ -27,7 +27,7 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
     libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
     libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
     libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
-    libpgobject-util-dbadmin-perl libplack-perl \
+    libpgobject-util-dbadmin-perl libplack-perl libfile-find-rule-perl \
     libplack-middleware-reverseproxy-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
     libtext-markdown-perl libxml-simple-perl \
