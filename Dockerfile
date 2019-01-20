@@ -76,7 +76,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
       --with-feature=latex-pdf-ps \
       --with-feature=openoffice \
       --installdeps .  && \
-    npm install -g uglify-js@">=2.0 <3.0" && \
+    npm install uglify-js@">=2.0 <3.0" && \
     make dojo && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
