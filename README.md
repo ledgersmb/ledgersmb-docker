@@ -9,6 +9,8 @@ Dockerfile for LedgerSMB Docker image
 - `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
 - `master` - Master branch from git, unstable
 
+Containers supporting the development process are provided
+through the ledgersmb-dev-docker project. See https://github.com/ledgersmb/ledgersmb-dev-docker/blob/master/README.md#getting-started.
 
 # What is LedgerSMB?
 
