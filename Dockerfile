@@ -1,8 +1,8 @@
-FROM        debian:stretch-slim
+FROM        debian:buster-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.6.4
+ENV LSMB_VERSION 1.7.0-beta1
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
@@ -28,10 +28,10 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   DEBIAN_FRONTEND="noninteractive" apt-get dist-upgrade -y -q && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y -q install \
     wget ca-certificates gnupg \
-    libcgi-emulate-psgi-perl libcgi-simple-perl libconfig-inifiles-perl \
+    libcgi-emulate-psgi-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
     libdatetime-format-strptime-perl libio-stringy-perl \
-    libjson-xs-perl libcpanel-json-xs-perl liblist-moreutils-perl \
+    libcpanel-json-xs-perl liblist-moreutils-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
     liblog-log4perl-perl libmime-lite-perl libmime-types-perl \
     libmath-bigint-gmp-perl libmodule-runtime-perl libmoose-perl \
@@ -41,13 +41,15 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
     libpgobject-util-dbadmin-perl libplack-perl \
     libplack-middleware-reverseproxy-perl \
+    libplack-middleware-builder-conditionals-perl \
+    libplack-request-withencoding-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl libxml-simple-perl \
+    libtext-markdown-perl libversion-compare-perl libxml-simple-perl \
     libnamespace-autoclean-perl \
-    libimage-size-perl \
+    libfile-find-rule-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libclass-c3-xs-perl libclass-accessor-lite-perl \
-    libnet-cidr-lite-perl libtest-requires-perl \
+    libnet-cidr-lite-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     starman \
