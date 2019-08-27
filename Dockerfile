@@ -30,7 +30,9 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     wget ca-certificates gnupg \
     libcgi-emulate-psgi-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
-    libdatetime-format-strptime-perl libio-stringy-perl \
+    libdatetime-format-strptime-perl \
+    libhtml-escape-perl \
+    libio-stringy-perl \
     libcpanel-json-xs-perl liblist-moreutils-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
     liblog-log4perl-perl libmime-lite-perl libmime-types-perl \
