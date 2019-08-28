@@ -1,4 +1,4 @@
-FROM        debian:buster-slim
+FROM        debian:stretch-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
