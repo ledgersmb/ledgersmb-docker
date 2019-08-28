@@ -2,8 +2,8 @@ FROM        debian:stretch-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.7.0-beta1
-
+ARG LSMB_VERSION="1.7.0-beta1"
+ARG LSMB_DL_DIR="Beta Releases"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
@@ -16,6 +16,11 @@ ENV LSMB_VERSION 1.7.0-beta1
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
+# for Buster, add:
+#    libhtml-escape-perl \
+#    libplack-middleware-builder-conditionals-perl \
+#    libplack-request-withencoding-perl \
+#libversion-compare-perl
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
   mkdir -p /usr/share/man/man2/ && \
@@ -31,7 +36,6 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libcgi-emulate-psgi-perl libconfig-inifiles-perl \
     libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
     libdatetime-format-strptime-perl \
-    libhtml-escape-perl \
     libio-stringy-perl \
     libcpanel-json-xs-perl liblist-moreutils-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
@@ -43,10 +47,8 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
     libpgobject-util-dbadmin-perl libplack-perl \
     libplack-middleware-reverseproxy-perl \
-    libplack-middleware-builder-conditionals-perl \
-    libplack-request-withencoding-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl libversion-compare-perl libxml-simple-perl \
+    libtext-markdown-perl  libxml-simple-perl \
     libnamespace-autoclean-perl \
     libfile-find-rule-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
@@ -63,7 +65,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
   cpanm --notest \
