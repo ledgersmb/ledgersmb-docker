@@ -154,8 +154,8 @@ affect the performance experience of users.
 * `SSMTP_USE_STARTTLS` (config: `UseSTARTTLS`)
 * `SSMTP_AUTH_USER` (config: `AuthUser`)
 * `SSMTP_AUTH_PASS` (config: `AuthPass`)
-* `SSMTP_AUTH_METHOD` (config: `AuthMethod`)
-* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride`)
+* `SSMTP_AUTH_METHOD` (config: `AuthMethod` -- DEPRECATED)
+* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride` -- DEPRECATED)
 
 These variables are used to set outgoing SMTP defaults.
 
@@ -170,6 +170,10 @@ Use the other environment variables to relay mail through a different host.
 Use the [ssmtp.conf man
 page](https://www.systutorials.com/docs/linux/man/5-ssmtp.conf/) to look up
 the meaning and function of each of the mail configuration keys.
+
+The deprecated configuration keys won't be available as of the docker images
+for LedgerSMB 1.8 -- which will feature a new built-in mail handling library
+to compensate for the fact that Debian Buster no longer includes `ssmtp`.
 
 # Troubleshooting/Developing
 

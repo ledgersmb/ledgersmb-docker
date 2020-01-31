@@ -5,6 +5,10 @@ grep -qc "$ConfiguredComment" /etc/ssmtp.conf && {
     exit
 }
 
+[ -z "$SSMTP_FROMLINE_OVERRIDE" ] || echo "SSMTP_FROMLINE_OVERRIDE (DEPRECATED) won't be supported as of the LedgerSMB 1.8 Docker images"
+[ -z "$SSMTP_AUTH_METHOD" ] || echo "SSMTP_AUTH_METHOD (DEPRECATED) won't be supported as of the LedgerSMB 1.8 Docker images"
+
+
 sed -i \
     -e "s/\(root=\).*\$/\1$SSMTP_ROOT/g" \
     -e "s/\(mailhub=\).*\$/\1$SSMTP_MAILHUB/g" \
