@@ -4,9 +4,10 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
-- `1.6`, `1.6.x`, `latest` - Latest official release from 1.6 branch 
-- `1.5`, `1.5.x` - Latest official release from 1.5 branch
-- `1.4`, `1.4.x` - Latest tagged release of git 1.4 branch
+- `1.7`, `1.7.x`, `latest` - Latest official release from 1.7 branch
+- `1.6`, `1.6.x` - Latest official release from 1.6 branch 
+- `1.5`, `1.5.30` - Last official release from 1.5 branch
+- `1.4`, `1.4.42` - Last official release from 1.4 branch
 - `master` - Master branch from git, unstable
 
 Containers supporting the development process are provided
