@@ -64,9 +64,10 @@ server.
 
 The database username and password are:
 
+```plain
    username: postgres
    password: abc
-
+```
 
 ## Manual installation
 
