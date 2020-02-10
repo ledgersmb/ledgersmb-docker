@@ -39,56 +39,46 @@ could require additional setup of a mail service or CUPS printer service.
 The quickest way to get this image up and running is by using the
 `docker-compose` file available through the GitHub repository at:
 
-  https://github.com/ledgersmb/ledgersmb-docker/blob/1.6/docker-compose.yml
+  https://github.com/ledgersmb/ledgersmb-docker/blob/1.7/docker-compose.yml
 
 which sets up both this image and a supporting database image for
-production purposes (i.e. with persistent (database) data, with the
-exception of one thing: setting up an Nginx or Apache reverse proxy
+production purposes (i.e. with persistent (database) data. The database
+username and password are:
+
+   username: postgres
+   password: abc
+
+The docker-compose file does *not* set up an Nginx or Apache reverse proxy
 with TLS 1.2/1.3 support -- a requirement if you want to access your
-installation over any type of network.
+installation over any type of network (and especially the internet).
 
-# How to use this image
 
-## Start a postgres instance
+## Manual installation
 
-```plain
- $ docker run -d --name postgres \
-              -e POSTGRES_PASSWORD=mysecretpassword \
-              postgres:latest
-```
-
-BEWARE: The command above creates a container with the database data stored
-*inside* the container. Upon removal of the container, the database data will
-be removed too!
-
-To prevent destruction of the database data upon replacement of the container,
-please use these commands instead:
-
-```plain
- $ docker volume create dbdata
- $ docker run -d --name postgres \
-              -e POSTGRES_PASSWORD=mysecretpassword \
-              -e PGDATA=/var/lib/postgresql/data/pgdata \
-              -v dbdata:/var/lib/postgresql/data \
-              postgres:latest
-```
+This section assumes availability of a PostgreSQL server to attach to the
+LedgerSMB image as the database server.
 
 ## Start LedgerSMB
 
 ```plain
  $ docker run -d -p 5762:5762 --name myledger \
-              ledgersmb/ledgersmb:latest
+              -e POSTGRES_HOST=<ip/hostname> ledgersmb/ledgersmb:latest
 ```
 
 This command maps port 5762 of your container to port 5762 in your host. The
 web application inside the container should now be accessible through
-http://localhost:5762/setup.pl.
+http://localhost:5762/setup.pl and http://localhost:5762/login.pl.
+
+Below are more variables which determine container configuration,
+like `POSTGRES_HOST` above.
 
 ## Set up LedgerSMB
 
  * Visit http://myledger:5762/setup.pl.
- * Log in with the "postgres" user and the password `mysecretpassword`
-   and provide the name of a company (= database name) you want to create.
+ * Log in with the "postgres" user and the password `abc` as given above -
+   or with the credentials of your own database server in case of a manual
+   setup - and provide the name of a company (= database name) you want to
+   create.
  * Go over the steps presented in the browser
 
 Once you have completed the setup steps, you have a fully functional
@@ -173,11 +163,18 @@ and the startup & config script is /usr/bin/start.sh.
 
 ## Issues
 
-If you have any problems with or questions about this image or LedgerSMB, please contact us on the [mailing list](http://ledgersmb.org/topic/support/mailing-lists-rss-and-nntp-feeds) or through a [GitHub issue](https://github.com/ledgersmb/ledgersmb-docker/issues).
+If you have any problems with or questions about this image or LedgerSMB,
+please contact us on the [mailing list](http://ledgersmb.org/topic/support/mailing-lists-rss-and-nntp-feeds)
+or through a [GitHub issue](https://github.com/ledgersmb/ledgersmb-docker/issues).
 
-You can also reach some of the official LedgerSMB maintainers via the `#ledgersmb` IRC channel on [Freenode](https://freenode.net), or on the bridged [Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org). The [Riot.im](https://riot.im/app/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
+You can also reach some of the official LedgerSMB maintainers via the
+`#ledgersmb` IRC channel on [Freenode](https://freenode.net), or on the
+bridged [Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org).
+The [Riot.im](https://riot.im/app/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
 
 
 ## Contributing
 
-You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
+You are invited to contribute new features, fixes, or updates, large or small;
+we are always thrilled to receive pull requests, and do our best to process
+them as fast as we can.
