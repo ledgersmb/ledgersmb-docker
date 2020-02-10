@@ -45,8 +45,10 @@ which sets up both this image and a supporting database image for
 production purposes (i.e. with persistent (database) data. The database
 username and password are:
 
+```plain
    username: postgres
    password: abc
+```
 
 The docker-compose file does *not* set up an Nginx or Apache reverse proxy
 with TLS 1.2/1.3 support -- a requirement if you want to access your
