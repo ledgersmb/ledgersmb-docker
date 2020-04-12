@@ -144,7 +144,11 @@ affect the performance experience of users.
 
 ## Mail configuration
 
-* `SSMTP_ROOT` (config: `Root`)
+### Before 1.8.0
+
+These variables are used to set outgoing SMTP defaults.
+
+* `SSMTP_ROOT` (config: `Root` -- DEPRECATED)
 * `SSMTP_MAILHUB` (config: `Mailhub`)
 * `SSMTP_HOSTNAME` (config: `Hostname`)
 * `SSMTP_USE_STARTTLS` (config: `UseSTARTTLS`)
@@ -152,11 +156,6 @@ affect the performance experience of users.
 * `SSMTP_AUTH_PASS` (config: `AuthPass`)
 * `SSMTP_AUTH_METHOD` (config: `AuthMethod` -- DEPRECATED)
 * `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride` -- DEPRECATED)
-
-These variables are used to set outgoing SMTP defaults.
-
-To set the outgoing email address, set `SSMTP_ROOT` and `SSMTP_HOSTNAME` at
-a minimum.
 
 `SSMTP_MAILHUB` defaults to the default docker0 interface, so if your host is
 already configured to relay mail, this should relay successfully with only
@@ -167,9 +166,24 @@ Use the [ssmtp.conf man
 page](https://www.systutorials.com/docs/linux/man/5-ssmtp.conf/) to look up
 the meaning and function of each of the mail configuration keys.
 
-The deprecated configuration keys won't be available as of the docker images
-for LedgerSMB 1.8 -- which will feature a new built-in mail handling library
-to compensate for the fact that Debian Buster no longer includes `ssmtp`.
+### 1.8.0 and higher (under development)
+
+As of 1.8.0, the image is based on Debian Buster instead of Debian Stretch;
+with Buster, the `ssmtp` program has been removed from Debian, this image
+had to change strategy. The main application always came with built-in e-mail
+yet with the deprecation, the abilities have expanded.
+
+The following parameters are now supported to set mail preferences:
+
+* `LSMB_MAIL_SMTPHOST`
+* `LSMB_MAIL_SMTPPORT`
+* `LSMB_MAIL_SMTPTLS`
+* `LSMB_MAIL_SMTPSENDER_HOSTNAME`
+* `LSMB_MAIL_SMTPUSER`
+* `LSMB_MAIL_SMTPPASS`
+* `LSMB_MAIL_SMTPAUTHMECH`
+
+
 
 # Troubleshooting/Developing
 
