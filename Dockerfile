@@ -11,6 +11,9 @@ ARG LSMB_DL_DIR="Beta Releases"
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
+# Install Locale::Codes Locale::Country Locale::Language from CPAN to suppress
+# deprecation-as-core-module warning
+
 RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
   mkdir -p /usr/share/man/man2/ && \
@@ -61,6 +64,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
+  cpanm --reinstall --notest Locale::Country Locale::Codes Locale::Language && \
   cpanm --notest \
     --with-feature=starman \
     --with-feature=latex-pdf-ps \
