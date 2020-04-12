@@ -1,14 +1,17 @@
 # ledgersmb-docker
+
 Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
 - `1.7`, `1.7.x`, `latest` - Latest official release from 1.7 branch
-- `1.6`, `1.6.x` - Latest official release from 1.6 branch
+- `1.6`, `1.6.x` - Latest official release from 1.6 branch 
 - `1.5`, `1.5.30` - Last official release from 1.5 branch
 - `1.4`, `1.4.42` - Last official release from 1.4 branch
 - `master` - Master branch from git, unstable
 
+Containers supporting the development process are provided
+through the ledgersmb-dev-docker project. See https://github.com/ledgersmb/ledgersmb-dev-docker/blob/master/README.md#getting-started.
 
 # What is LedgerSMB?
 
@@ -36,33 +39,42 @@ to add the TLS layer by applying Nginx or Apache as reverse proxy.
 Enabling optional functionalities such as outgoing e-mail and printing
 could require additional setup of a mail service or CUPS printer service.
 
-# Quickstart
+# How to use this image
 
-The quickest way to get this image up and running is by using the
-`docker-compose` file available through the GitHub repository at:
+This image can be installed either automatically with the Docker compose file
+manually with docker only.
 
-  https://github.com/ledgersmb/ledgersmb-docker/blob/1.7/docker-compose.yml
+## Docker-Compose installation and start
 
-which sets up both this image and a supporting database image for
-production purposes (i.e. with persistent (database) data. The database
-username and password are:
+This image provides `docker-compose.yml` which can be used to pull related
+images, install them, establish an internal network for their communications,
+adjust environment variables, start and stop LedgerSMB. The only instructions
+required, after the optional edition of the file to adjust the environment
+variables, are:
+
+```plain
+ $ docker-compose pull
+ $ docker-compose up
+```
+
+This will set up two containers: (1) a PostgreSQL container with persistent
+storage which is retained between container updates and (2) a LedgerSMB
+container configured to connect to the PostgreSQL container as its database
+server.
+
+The database username and password are:
 
 ```plain
    username: postgres
    password: abc
 ```
 
-The docker-compose file does *not* set up an Nginx or Apache reverse proxy
-with TLS 1.2/1.3 support -- a requirement if you want to access your
-installation over any type of network (and especially the internet).
-
-
 ## Manual installation
 
 This section assumes availability of a PostgreSQL server to attach to the
 LedgerSMB image as the database server.
 
-## Start LedgerSMB
+### Start LedgerSMB
 
 ```plain
  $ docker run -d -p 5762:5762 --name myledger \
@@ -76,7 +88,7 @@ http://localhost:5762/setup.pl and http://localhost:5762/login.pl.
 Below are more variables which determine container configuration,
 like `POSTGRES_HOST` above.
 
-## Set up LedgerSMB
+# Set up LedgerSMB
 
  * Visit http://myledger:5762/setup.pl.
  * Log in with the "postgres" user and the password `abc` as given above -
@@ -132,21 +144,18 @@ affect the performance experience of users.
 
 ## Mail configuration
 
-The docker image uses `ssmtp` to send mail.
+### Before 1.8.0
 
-* `SSMTP_ROOT` (config: `Root`)
+These variables are used to set outgoing SMTP defaults.
+
+* `SSMTP_ROOT` (config: `Root` -- DEPRECATED)
 * `SSMTP_MAILHUB` (config: `Mailhub`)
 * `SSMTP_HOSTNAME` (config: `Hostname`)
 * `SSMTP_USE_STARTTLS` (config: `UseSTARTTLS`)
 * `SSMTP_AUTH_USER` (config: `AuthUser`)
 * `SSMTP_AUTH_PASS` (config: `AuthPass`)
-* `SSMTP_AUTH_METHOD` (config: `AuthMethod`)
-* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride`)
-
-These variables are used to set outgoing SMTP defaults.
-
-To set the outgoing email address, set `SSMTP_ROOT` and `SSMTP_HOSTNAME` at
-a minimum.
+* `SSMTP_AUTH_METHOD` (config: `AuthMethod` -- DEPRECATED)
+* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride` -- DEPRECATED)
 
 `SSMTP_MAILHUB` defaults to the default docker0 interface, so if your host is
 already configured to relay mail, this should relay successfully with only
@@ -156,6 +165,25 @@ Use the other environment variables to relay mail through a different host.
 Use the [ssmtp.conf man
 page](https://www.systutorials.com/docs/linux/man/5-ssmtp.conf/) to look up
 the meaning and function of each of the mail configuration keys.
+
+### 1.8.0 and higher (under development)
+
+As of 1.8.0, the image is based on Debian Buster instead of Debian Stretch;
+with Buster, the `ssmtp` program has been removed from Debian, this image
+had to change strategy. The main application always came with built-in e-mail
+yet with the deprecation, the abilities have expanded.
+
+The following parameters are now supported to set mail preferences:
+
+* `LSMB_MAIL_SMTPHOST`
+* `LSMB_MAIL_SMTPPORT`
+* `LSMB_MAIL_SMTPTLS`
+* `LSMB_MAIL_SMTPSENDER_HOSTNAME`
+* `LSMB_MAIL_SMTPUSER`
+* `LSMB_MAIL_SMTPPASS`
+* `LSMB_MAIL_SMTPAUTHMECH`
+
+
 
 # Troubleshooting/Developing
 
