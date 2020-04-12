@@ -15,7 +15,7 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" 
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
     wget ca-certificates gnupg \
-    libcgi-emulate-psgi-perl libconfig-inifiles-perl \
+    libauthen-sasl-perl libcgi-emulate-psgi-perl libconfig-inifiles-perl \
     libcookie-baker-perl libdbd-pg-perl libdbi-perl libdata-uuid-perl \
     libdatetime-perl libdatetime-format-strptime-perl \
     libemail-sender-perl libemail-stuffer-perl libfile-find-rule-perl \
