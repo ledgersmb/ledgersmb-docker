@@ -10,7 +10,6 @@ ARG LSMB_DL_DIR="Beta Releases"
 
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
-
 # Install Locale::Codes Locale::Country Locale::Language from CPAN to suppress
 # deprecation-as-core-module warning
 
@@ -47,7 +46,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libsession-storage-secure-perl libstring-random-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
     libtext-markdown-perl libtry-tiny-perl libversion-compare-perl \
-    libxml-simple-perl libnamespace-autoclean-perl \
+    libxml-libxml-perl libnamespace-autoclean-perl \
     starman starlet libhttp-parser-xs-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libxml-twig-perl libopenoffice-oodoc-perl \
