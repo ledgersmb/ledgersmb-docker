@@ -4,6 +4,7 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
+- `1.8` - Preview version for the 1.8 branch
 - `1.7`, `1.7.x`, `latest` - Latest official release from 1.7 branch
 - `1.6`, `1.6.x` - Latest official release from 1.6 branch 
 - `1.5`, `1.5.30` - Last official release from 1.5 branch
@@ -28,9 +29,9 @@ This image is designed to be used in conjunction with a running PostgreSQL
 instance (such as may be provided through a separate image).
 
 This image exposes port 5762 running a Starman HTTP application server. We
-do not recommend exposing this port publicly, because
+do recommend not exposing this port publicly, because
 
-1. The Starman author recommends it
+1. The Starman author recommends not exposing it
 2. We strongly recommend TLS encryption of all application traffic
 
 While the exposed port can be used for quick evaluation, it's recommended
@@ -42,7 +43,7 @@ could require additional setup of a mail service or CUPS printer service.
 # How to use this image
 
 This image can be installed either automatically with the Docker compose file
-manually with docker only.
+or manually with docker only.
 
 ## Docker-Compose installation and start
 
@@ -68,6 +69,9 @@ The database username and password are:
    username: postgres
    password: abc
 ```
+
+From here, follow the steps as detailed in the instructions for
+[preparing for first use](https://ledgersmb.org/content/preparing-ledgersmb-17-first-use).
 
 ## Manual installation
 
