@@ -71,7 +71,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     --installdeps /srv/ledgersmb/ && \
   apt-get purge -q -y git cpanminus make gcc libperl-dev && \
   apt-get autoremove -q -y && \
-  apt-get autoclean -q && \
+  apt-get clean -q && \
   rm -rf ~/.cpanm/ /var/lib/apt/lists/* /usr/share/man/*
 
 
