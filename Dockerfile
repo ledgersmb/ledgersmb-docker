@@ -2,7 +2,7 @@ FROM        debian:buster-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ARG LSMB_VERSION="1.8.0-beta1"
+ARG LSMB_VERSION="1.8.0-beta2"
 ARG LSMB_DL_DIR="Beta Releases"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
