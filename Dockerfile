@@ -51,7 +51,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libxml-twig-perl libopenoffice-oodoc-perl \
     libexcel-writer-xlsx-perl libspreadsheet-writeexcel-perl \
-    libclass-c3-xs-perl \
+    libclass-c3-xs-perl liblocale-codes-perl \
     texlive-latex-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
