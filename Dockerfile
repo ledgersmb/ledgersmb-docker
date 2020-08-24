@@ -54,7 +54,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libclass-c3-xs-perl libclass-accessor-lite-perl \
     libnet-cidr-lite-perl \
-    texlive-latex-recommended \
+    texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     starman \
     libopenoffice-oodoc-perl \
