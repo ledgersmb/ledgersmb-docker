@@ -2,7 +2,7 @@ FROM        debian:stretch-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ENV LSMB_VERSION 1.6.24
+ENV LSMB_VERSION 1.6.25
 
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
