@@ -10,7 +10,7 @@ MAINTAINER  Freelock john@freelock.com
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
-RUN echo -e -n "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";" > /etc/apt/apt.conf.d/00recommends && \
+RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
@@ -21,7 +21,7 @@ RUN echo -e -n "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"fals
     libemail-sender-perl libemail-stuffer-perl libfile-find-rule-perl \
     libhtml-escape-perl libhttp-headers-fast-perl libio-stringy-perl \
     libjson-maybexs-perl libcpanel-json-xs-perl libjson-pp-perl \
-    liblist-moreutils-perl \
+    liblist-moreutils-perl liblocale-codes-perl \
     liblocale-maketext-perl liblocale-maketext-lexicon-perl \
     liblog-log4perl-perl libmime-types-perl \
     libmath-bigint-gmp-perl libmodule-runtime-perl libmoo-perl \
@@ -41,7 +41,8 @@ RUN echo -e -n "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"fals
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libxml-twig-perl libopenoffice-oodoc-perl \
     libexcel-writer-xlsx-perl libspreadsheet-writeexcel-perl \
-    libclass-c3-xs-perl \
+    libclass-c3-xs-perl liblog-any-perl liblog-any-adapter-log4perl-perl \
+    libyaml-perl libhash-merge-perl libsyntax-keyword-try-perl \
     texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
@@ -61,7 +62,6 @@ ENV NODE_PATH /usr/local/lib/node_modules
 
 ###########################################################
 # Java & Nodejs for doing Dojo build
-# Uglify needs to be installed right before 'make dojo'?!
 
 # These packages are only needed during the dojo build
 ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs
@@ -75,13 +75,11 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
     (curl -L https://cpanmin.us | perl - App::cpanminus) && \
-    cpanm --reinstall --notest Locale::Country Locale::Codes Locale::Language && \
     cpanm --quiet --notest \
       --with-feature=starman \
       --with-feature=latex-pdf-ps \
       --with-feature=openoffice \
       --installdeps .  && \
-    npm install uglify-js@">=2.0 <3.0" && \
     make dojo && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
