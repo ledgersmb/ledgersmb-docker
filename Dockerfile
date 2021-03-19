@@ -2,8 +2,8 @@ FROM        debian:buster-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ARG LSMB_VERSION="1.8.10"
-ARG LSMB_DL_DIR="Releases"
+ARG LSMB_VERSION="1.9.0-alpha1"
+ARG LSMB_DL_DIR="Beta Releases"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
@@ -21,6 +21,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   mkdir -p /usr/share/man/man5/ && \
   mkdir -p /usr/share/man/man6/ && \
   mkdir -p /usr/share/man/man7/ && \
+  mkdir -p /usr/share/man/man8/ && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
@@ -32,10 +33,10 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
     libhtml-escape-perl libhttp-headers-fast-perl libio-stringy-perl \
     libjson-maybexs-perl libcpanel-json-xs-perl libjson-pp-perl \
     liblist-moreutils-perl \
-    liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-    liblog-log4perl-perl libmime-types-perl \
+    liblocale-maketext-perl liblocale-maketext-lexicon-perl liblog-any-perl \
+    liblog-any-adapter-log4perl-perl liblog-log4perl-perl libmime-types-perl \
     libmath-bigint-gmp-perl libmodule-runtime-perl libmoo-perl \
-    libmoox-types-mooselike-perl libmoose-perl \
+    libmoox-types-mooselike-perl libmoose-perl libmoosex-classattribute-perl \
     libmoosex-nonmoose-perl libnumber-format-perl \
     libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
     libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
