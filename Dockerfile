@@ -2,7 +2,7 @@ FROM        debian:stretch-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ARG LSMB_VERSION="1.7.31"
+ARG LSMB_VERSION="1.7.32"
 ARG LSMB_DL_DIR="Releases"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
