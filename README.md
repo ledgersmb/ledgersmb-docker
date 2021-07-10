@@ -6,7 +6,7 @@ Dockerfile for LedgerSMB Docker image
 
 - `1.8` - Preview version for the 1.8 branch
 - `1.7`, `1.7.x`, `latest` - Latest official release from 1.7 branch
-- `1.6`, `1.6.x` - Latest official release from 1.6 branch 
+- `1.6`, `1.6.31` - Last official release from 1.6 branch 
 - `1.5`, `1.5.30` - Last official release from 1.5 branch
 - `1.4`, `1.4.42` - Last official release from 1.4 branch
 - `master` - Master branch from git, unstable
