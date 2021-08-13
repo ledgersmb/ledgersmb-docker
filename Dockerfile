@@ -4,6 +4,7 @@ MAINTAINER  Freelock john@freelock.com
 # Build time variables
 ARG LSMB_VERSION="1.8.17"
 ARG LSMB_DL_DIR="Releases"
+ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 # Without libclass-c3-xs-perl, performance is terribly slow...
@@ -60,7 +61,7 @@ RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> 
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz" && \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
   cpanm --reinstall --notest Locale::Country Locale::Codes Locale::Language && \
