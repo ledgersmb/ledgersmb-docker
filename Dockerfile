@@ -22,7 +22,8 @@ ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSI
 #    libplack-middleware-builder-conditionals-perl \
 #    libplack-request-withencoding-perl \
 #libversion-compare-perl
-RUN echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
+RUN set -x ; \
+  echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
   mkdir -p /usr/share/man/man2/ && \
   mkdir -p /usr/share/man/man3/ && \
