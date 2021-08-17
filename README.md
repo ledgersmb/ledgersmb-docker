@@ -55,13 +55,25 @@ variables, are:
 
 ```plain
  $ docker-compose pull
- $ docker-compose up
+ $ docker-compose up -d
 ```
 
 This will set up two containers: (1) a PostgreSQL container with persistent
 storage which is retained between container updates and (2) a LedgerSMB
 container configured to connect to the PostgreSQL container as its database
-server.
+server. The containers will be running in the background and can be stopped
+and started by running:
+
+```plain
+# Stopping the containers
+$ docker-compose stop
+
+# Starting the containers
+$ docker-compose start
+```
+
+(Check the status of the containers using `docker-compose ps`; when the
+containers are running, the `State` column shows `Up`.)
 
 The database username and password are:
 
