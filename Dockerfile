@@ -2,7 +2,7 @@ FROM        debian:buster-slim
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ARG LSMB_VERSION="1.8.17"
+ARG LSMB_VERSION="1.8.18"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
