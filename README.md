@@ -4,6 +4,7 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
+- `1.9`, `1.9.x` - Latest official release from the 1.9 branch
 - `1.8`, `1.8.x`, `latest` - Latest official release from the 1.8 branch
 - `1.7`, `1.7.x` - Latest official release from 1.7 branch
 - `1.6`, `1.6.33` - Last official release from 1.6 branch 
@@ -71,7 +72,7 @@ The database username and password are:
 ```
 
 From here, follow the steps as detailed in the instructions for
-[preparing for first use](https://ledgersmb.org/content/preparing-ledgersmb-17-first-use).
+[preparing for first use](https://ledgersmb.org/content/preparing-ledgersmb-19-first-use).
 
 ## Manual installation
 
@@ -148,30 +149,6 @@ affect the performance experience of users.
 
 ## Mail configuration
 
-### Before 1.8.0
-
-These variables are used to set outgoing SMTP defaults.
-
-* `SSMTP_ROOT` (config: `Root` -- DEPRECATED)
-* `SSMTP_MAILHUB` (config: `Mailhub`)
-* `SSMTP_HOSTNAME` (config: `Hostname`)
-* `SSMTP_USE_STARTTLS` (config: `UseSTARTTLS`)
-* `SSMTP_AUTH_USER` (config: `AuthUser`)
-* `SSMTP_AUTH_PASS` (config: `AuthPass`)
-* `SSMTP_AUTH_METHOD` (config: `AuthMethod` -- DEPRECATED)
-* `SSMTP_FROMLINE_OVERRIDE` (config: `FromLineOverride` -- DEPRECATED)
-
-`SSMTP_MAILHUB` defaults to the default docker0 interface, so if your host is
-already configured to relay mail, this should relay successfully with only
-the root and hostname set.
-
-Use the other environment variables to relay mail through a different host.
-Use the [ssmtp.conf man
-page](https://www.systutorials.com/docs/linux/man/5-ssmtp.conf/) to look up
-the meaning and function of each of the mail configuration keys.
-
-### 1.8.0 and higher (under development)
-
 As of 1.8.0, the image is based on Debian Buster instead of Debian Stretch;
 with Buster, the `ssmtp` program has been removed from Debian, this image
 had to change strategy. The main application always came with built-in e-mail
@@ -204,9 +181,8 @@ please contact us on the [mailing list](http://ledgersmb.org/topic/support/maili
 or through a [GitHub issue](https://github.com/ledgersmb/ledgersmb-docker/issues).
 
 You can also reach some of the official LedgerSMB maintainers via the
-`#ledgersmb` IRC channel on [Freenode](https://freenode.net), or on the
-bridged [Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org).
-The [Riot.im](https://riot.im/app/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
+[Matrix](https://matrix.org) room in [#ledgersmb:matrix.org](https://matrix.to/#/#ledgersmb:matrix.org).
+The [Element](https://app.element.io/#/room/#ledgersmb:matrix.org) Matrix client is highly recommended.
 
 
 ## Contributing
