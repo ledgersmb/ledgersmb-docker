@@ -5,9 +5,7 @@ ARG SRCIMAGE=debian:bullseye-slim
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.9.0-beta2"
-ARG LSMB_DL_DIR="Beta Releases"
-ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
+ENV LSMB_VERSION master
 
 
 RUN set -x ; \
@@ -17,10 +15,9 @@ RUN set -x ; \
   apt-file update
 
 RUN set -x ; \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
-  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
-  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cd /srv/ledgersmb && \
+  cd /srv && \
+  git clone --depth 1 --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
+  cd ledgersmb && \
   ( ( for lib in $( cpanfile-dump --with-all-features --recommends --no-configure --no-build --no-test ) ; \
     do \
       if dh-make-perl locate "$lib" 2>/dev/null ; \
