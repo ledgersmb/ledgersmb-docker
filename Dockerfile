@@ -77,7 +77,7 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get -y -q install \
     wget ca-certificates gnupg \
     $( cat /tmp/derived-deps ) \
-    libclass-c3-xs-perl \
+    libclass-c3-xs-perl libclass-accessor-lite-perl \
     texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     ssmtp \
