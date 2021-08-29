@@ -1,5 +1,48 @@
-FROM        debian:stretch-slim
+# Build time variables
+
+ARG SRCIMAGE=debian:stretch-slim
+
+
+FROM  $SRCIMAGE AS builder
+
+ARG LSMB_VERSION="1.7.34"
+ARG LSMB_DL_DIR="Releases"
+ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
+
+
+RUN set -x ; \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install dh-make-perl libmodule-cpanfile-perl git wget && \
+  apt-file update
+
+RUN set -x ; \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
+  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
+  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
+  cd /srv/ledgersmb && \
+  ( ( for lib in $( cpanfile-dump --with-all-features --recommends --no-configure --no-build --no-test ) ; \
+    do \
+      if dh-make-perl locate "$lib" 2>/dev/null ; \
+      then  \
+        : \
+      else \
+        echo no : $lib ; \
+      fi ; \
+    done ) | grep -v dh-make-perl | grep -v 'not found' | grep -vi 'is in Perl ' | cut -d' ' -f4 | sort | uniq | tee /srv/derived-deps ) && \
+  cat /srv/derived-deps
+
+
+#
+#
+#  The real image build starts here
+#
+#
+
+
+FROM  $SRCIMAGE
 MAINTAINER  Freelock john@freelock.com
+
 
 # Build time variables
 ARG LSMB_VERSION="1.7.34"
@@ -17,11 +60,9 @@ ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSI
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
-# for Buster, add:
-#    libhtml-escape-perl \
-#    libplack-middleware-builder-conditionals-perl \
-#    libplack-request-withencoding-perl \
-#libversion-compare-perl
+
+COPY --from=builder /srv/derived-deps /tmp/derived-deps
+
 RUN set -x ; \
   echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
@@ -35,31 +76,10 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get dist-upgrade -y -q && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y -q install \
     wget ca-certificates gnupg \
-    libcgi-emulate-psgi-perl libconfig-inifiles-perl \
-    libdbd-pg-perl libdbi-perl libdata-uuid-perl libdatetime-perl \
-    libdatetime-format-strptime-perl \
-    libio-stringy-perl \
-    libcpanel-json-xs-perl liblist-moreutils-perl \
-    liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-    liblog-log4perl-perl libmime-lite-perl libmime-types-perl \
-    libmath-bigint-gmp-perl libmodule-runtime-perl libmoose-perl \
-    libmoosex-nonmoose-perl libnumber-format-perl \
-    libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-    libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
-    libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
-    libpgobject-util-dbadmin-perl libplack-perl \
-    libplack-middleware-reverseproxy-perl \
-    libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl  libxml-simple-perl \
-    libnamespace-autoclean-perl \
-    libfile-find-rule-perl \
-    libtemplate-plugin-latex-perl libtex-encode-perl \
-    libclass-c3-xs-perl libclass-accessor-lite-perl \
-    libnet-cidr-lite-perl \
+    $( cat /tmp/derived-deps ) \
+    libclass-c3-xs-perl \
     texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
-    starman \
-    libopenoffice-oodoc-perl \
     ssmtp \
     lsb-release && \
   echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
