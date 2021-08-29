@@ -48,15 +48,15 @@ RUN set -x ; \
     libplack-request-withencoding-perl libscope-guard-perl \
     libsession-storage-secure-perl libstring-random-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl libtry-tiny-perl libversion-compare-perl \
+    libtext-markdown-perl libversion-compare-perl \
     libxml-libxml-perl libnamespace-autoclean-perl \
     starman starlet libhttp-parser-xs-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libxml-twig-perl libopenoffice-oodoc-perl \
     libexcel-writer-xlsx-perl libspreadsheet-writeexcel-perl \
-    libclass-c3-xs-perl liblocale-codes-perl \
-    texlive-plain-generic texlive-latex-recommended \
-    texlive-fonts-recommended \
+    libclass-c3-xs-perl \
+    libyaml-perl libhash-merge-perl libsyntax-keyword-try-perl \
+    texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
   echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
@@ -67,7 +67,6 @@ RUN set -x ; \
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cpanm --reinstall --notest Locale::Country Locale::Codes Locale::Language && \
   cpanm --notest \
     --with-feature=starman \
     --with-feature=latex-pdf-ps \
