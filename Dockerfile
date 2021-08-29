@@ -1,5 +1,5 @@
-FROM        debian:bullseye-slim
-MAINTAINER  Freelock john@freelock.com
+FROM  debian:bullseye-slim
+LABEL org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
 
 # Build time variables
 ARG LSMB_VERSION="1.9.0-beta2"
