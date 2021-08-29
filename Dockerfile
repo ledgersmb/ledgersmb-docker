@@ -1,5 +1,5 @@
-FROM        debian:buster-slim
-MAINTAINER  Freelock john@freelock.com
+FROM    debian:bullseye-slim
+LABEL   org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
 #
@@ -10,7 +10,8 @@ MAINTAINER  Freelock john@freelock.com
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
-RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
+RUN set -x ; \
+  echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
@@ -21,11 +22,11 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n
     libemail-sender-perl libemail-stuffer-perl libfile-find-rule-perl \
     libhtml-escape-perl libhttp-headers-fast-perl libio-stringy-perl \
     libjson-maybexs-perl libcpanel-json-xs-perl libjson-pp-perl \
-    liblist-moreutils-perl liblocale-codes-perl \
-    liblocale-maketext-perl liblocale-maketext-lexicon-perl \
-    liblog-log4perl-perl libmime-types-perl \
+    liblist-moreutils-perl \
+    liblocale-maketext-perl liblocale-maketext-lexicon-perl liblog-any-perl \
+    liblog-any-adapter-log4perl-perl liblog-log4perl-perl libmime-types-perl \
     libmath-bigint-gmp-perl libmodule-runtime-perl libmoo-perl \
-    libmoox-types-mooselike-perl libmoose-perl \
+    libmoox-types-mooselike-perl libmoose-perl libmoosex-classattribute-perl \
     libmoosex-nonmoose-perl libnumber-format-perl \
     libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
     libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
@@ -35,15 +36,15 @@ RUN echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n
     libplack-request-withencoding-perl libscope-guard-perl \
     libsession-storage-secure-perl libstring-random-perl \
     libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl libtry-tiny-perl libversion-compare-perl \
-    libxml-simple-perl libnamespace-autoclean-perl \
+    libtext-markdown-perl libversion-compare-perl \
+    libxml-libxml-perl libnamespace-autoclean-perl \
     starman starlet libhttp-parser-xs-perl \
     libtemplate-plugin-latex-perl libtex-encode-perl \
     libxml-twig-perl libopenoffice-oodoc-perl \
     libexcel-writer-xlsx-perl libspreadsheet-writeexcel-perl \
-    libclass-c3-xs-perl liblog-any-perl liblog-any-adapter-log4perl-perl \
+    libclass-c3-xs-perl \
     libyaml-perl libhash-merge-perl libsyntax-keyword-try-perl \
-    texlive-latex-recommended texlive-fonts-recommended \
+    texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
   echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
@@ -64,17 +65,16 @@ ENV NODE_PATH /usr/local/lib/node_modules
 # Java & Nodejs for doing Dojo build
 
 # These packages are only needed during the dojo build
-ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs
+ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs cpanminus
 # These packages can be removed after the dojo build
-ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs
+ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs cpanminus
 
-RUN wget --quiet -O - https://deb.nodesource.com/setup_12.x | bash -
+RUN wget --quiet -O - https://deb.nodesource.com/setup_16.x | bash -
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     cd /srv && \
-    git clone --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
+    git clone --depth 1 --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
-    (curl -L https://cpanmin.us | perl - App::cpanminus) && \
     cpanm --quiet --notest \
       --with-feature=starman \
       --with-feature=latex-pdf-ps \
