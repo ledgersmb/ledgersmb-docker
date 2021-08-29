@@ -1,4 +1,46 @@
-FROM    debian:bullseye-slim
+# Build time variables
+
+ARG SRCIMAGE=debian:bullseye-slim
+
+
+FROM  $SRCIMAGE AS builder
+
+ARG LSMB_VERSION="1.9.0-beta2"
+ARG LSMB_DL_DIR="Beta Releases"
+ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
+
+
+RUN set -x ; \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -y install dh-make-perl libmodule-cpanfile-perl git wget && \
+  apt-file update
+
+RUN set -x ; \
+  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
+  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
+  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
+  cd /srv/ledgersmb && \
+  ( ( for lib in $( cpanfile-dump --with-all-features --recommends --no-configure --no-build --no-test ) ; \
+    do \
+      if dh-make-perl locate "$lib" 2>/dev/null ; \
+      then  \
+        : \
+      else \
+        echo no : $lib ; \
+      fi ; \
+    done ) | grep -v dh-make-perl | grep -v 'not found' | grep -vi 'is in Perl ' | cut -d' ' -f4 | sort | uniq | tee /srv/derived-deps ) && \
+  cat /srv/derived-deps
+
+
+#
+#
+#  The real image build starts here
+#
+#
+
+
+FROM  $SRCIMAGE
 LABEL   org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
 
 # Install Perl, Tex, Starman, psql client, and all dependencies
@@ -10,40 +52,16 @@ LABEL   org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgers
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
 
+COPY --from=builder /srv/derived-deps /tmp/derived-deps
+
 RUN set -x ; \
   echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
     wget ca-certificates gnupg \
-    libauthen-sasl-perl libcgi-emulate-psgi-perl libconfig-inifiles-perl \
-    libcookie-baker-perl libdbd-pg-perl libdbi-perl libdata-uuid-perl \
-    libdatetime-perl libdatetime-format-strptime-perl \
-    libemail-sender-perl libemail-stuffer-perl libfile-find-rule-perl \
-    libhtml-escape-perl libhttp-headers-fast-perl libio-stringy-perl \
-    libjson-maybexs-perl libcpanel-json-xs-perl libjson-pp-perl \
-    liblist-moreutils-perl \
-    liblocale-maketext-perl liblocale-maketext-lexicon-perl liblog-any-perl \
-    liblog-any-adapter-log4perl-perl liblog-log4perl-perl libmime-types-perl \
-    libmath-bigint-gmp-perl libmodule-runtime-perl libmoo-perl \
-    libmoox-types-mooselike-perl libmoose-perl libmoosex-classattribute-perl \
-    libmoosex-nonmoose-perl libnumber-format-perl \
-    libpgobject-perl libpgobject-simple-perl libpgobject-simple-role-perl \
-    libpgobject-type-bigfloat-perl libpgobject-type-datetime-perl \
-    libpgobject-type-bytestring-perl libpgobject-util-dbmethod-perl \
-    libpgobject-util-dbadmin-perl libplack-perl \
-    libplack-builder-conditionals-perl libplack-middleware-reverseproxy-perl \
-    libplack-request-withencoding-perl libscope-guard-perl \
-    libsession-storage-secure-perl libstring-random-perl \
-    libtemplate-perl libtext-csv-perl libtext-csv-xs-perl \
-    libtext-markdown-perl libversion-compare-perl \
-    libxml-libxml-perl libnamespace-autoclean-perl \
-    starman starlet libhttp-parser-xs-perl \
-    libtemplate-plugin-latex-perl libtex-encode-perl \
-    libxml-twig-perl libopenoffice-oodoc-perl \
-    libexcel-writer-xlsx-perl libspreadsheet-writeexcel-perl \
+    $( cat /tmp/derived-deps ) \
     libclass-c3-xs-perl \
-    libyaml-perl libhash-merge-perl libsyntax-keyword-try-perl \
     texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
