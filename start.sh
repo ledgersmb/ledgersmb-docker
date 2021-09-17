@@ -101,7 +101,7 @@ ${LSMB_MAIL_SMTPHOST:+smtphost=$LSMB_MAIL_SMTPHOST
 }
 
 [proxy]
-ip=${PROXY_IP:-172.17.0.1/16}
+ip=${PROXY_IP:-172.17.0.1/12}
 EOF
   export LSMB_CONFIG_FILE='/tmp/ledgersmb.conf'
 fi
