@@ -16,6 +16,8 @@ default_db = $DEFAULT_DB
 [mail]
 sendmail   = /usr/sbin/ssmtp
 
+[proxy]
+ip=${PROXY_IP:-172.17.0.1/16}
 EOF
   export LSMB_CONFIG_FILE='/tmp/ledgersmb.conf'
 fi

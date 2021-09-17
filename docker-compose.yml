@@ -52,6 +52,15 @@ services:
       # SSMTP_AUTH_METHOD:
       # SSMTP_USE_STARTTLS:
       # SSMTP_FROMLINE_OVERRIDE:
+      #
+      #
+      # The PROXY_IP environment variable lets you set the IP address
+      # (range) of the reverse proxy used for TLS termination, which forwards
+      # its requests to this container. When this reverse proxy runs on the
+      # Docker host, the default below applies. In case the reverse proxy is
+      # hosted in a separate container, this setting needs to be adjusted.
+      #
+      # PROXY_IP: 172.17.0.1/12
 
 # having the dbdata volume is required to persist our
 # data between PostgreSQL container updates; without
