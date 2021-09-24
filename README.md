@@ -4,8 +4,8 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
-- `1.9`, `1.9.x` - Latest official release from the 1.9 branch
-- `1.8`, `1.8.x`, `latest` - Latest official release from the 1.8 branch
+- `1.9`, `1.9.x`, `latest` - Latest official release from the 1.9 branch
+- `1.8`, `1.8.x` - Latest official release from the 1.8 branch
 - `1.7`, `1.7.x` - Latest official release from 1.7 branch
 - `1.6`, `1.6.33` - Last official release from 1.6 branch 
 - `1.5`, `1.5.30` - Last official release from 1.5 branch
