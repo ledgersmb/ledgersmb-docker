@@ -5,7 +5,7 @@ ARG SRCIMAGE=debian:bullseye-slim
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.9.1"
+ARG LSMB_VERSION="1.9.2"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -43,7 +43,7 @@ RUN set -x ; \
 FROM  $SRCIMAGE
 LABEL org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
 
-ARG LSMB_VERSION="1.9.1"
+ARG LSMB_VERSION="1.9.2"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
