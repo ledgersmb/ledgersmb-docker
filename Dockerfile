@@ -5,7 +5,7 @@ ARG SRCIMAGE=debian:buster-slim
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.8.22"
+ARG LSMB_VERSION="1.8.23"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -44,7 +44,7 @@ FROM  $SRCIMAGE
 MAINTAINER  Freelock john@freelock.com
 
 # Build time variables
-ARG LSMB_VERSION="1.8.22"
+ARG LSMB_VERSION="1.8.23"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
