@@ -50,14 +50,13 @@ services:
       LSMB_WORKERS: 2
       #
       #
-      # SSMTP_ROOT:
-      # SSMTP_HOSTNAME:
-      # SSMTP_MAILHUB:
-      # SSMTP_AUTH_USER:
-      # SSMTP_AUTH_PASS:
-      # SSMTP_AUTH_METHOD:
-      # SSMTP_USE_STARTTLS:
-      # SSMTP_FROMLINE_OVERRIDE:
+      # LSMB_MAIL_SMTPHOST:
+      # LSMB_MAIL_SMTPPORT:
+      # LSMB_MAIL_SMTPTLS:
+      # LSMB_MAIL_SMTPSENDER_HOSTNAME:
+      # LSMB_MAIL_SMTPUSER:
+      # LSMB_MAIL_SMTPPASS:
+      # LSMB_MAIL_SMTPAUTHMECH:
       #
       #
       # The PROXY_IP environment variable lets you set the IP address
