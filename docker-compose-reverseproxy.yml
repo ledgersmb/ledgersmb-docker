@@ -1,0 +1,34 @@
+# Use this docker-compose file as:
+#
+#  docker-compose -f docker-compose.yml -f docker-compose-reverseproxy.yml up -d
+#
+#
+# This command creates one
+# compose 'project' consisting of three containers
+#
+#  1. The PostgreSQL data  container
+#  2. The LedgerSMB application container
+#  3. The Nginx reverse proxy container
+#
+# In addition to publishing LedgerSMB on port 5762 on localhost,
+# this project also publishes Nginx's reverse proxied content on
+# port 8080 on localhost
+
+version: "3.2"
+services:
+  # Note that the container needs to be named "postgres" here,
+  # because that allows us to use the default hostname ("postgres")
+  # from the LedgerSMB configuration
+  proxy:
+    image: nginx:1-alpine
+    volumes:
+      - "lsmbdata:/srv/ledgersmb"
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+    ports:
+      - "8080:8080"
+  lsmb:
+    volumes:
+      - "lsmbdata:/srv/ledgersmb"
+
+volumes:
+  lsmbdata:

@@ -123,8 +123,12 @@ Visit http://localhost:5762/login.pl to log in and get started.
 
 No persistant data is stored in the LedgerSMB container.
 
-All LedgerSMB data is stored in Postgres, so you can stop/destroy/run a
+All LedgerSMB data is stored in PostgreSQL, so you can stop/destroy/run a
 new LedgerSMB container as often as you want.
+
+In case of the Docker Compose setup, all PostgreSQL data is stored on the
+Docker volume with the name ending in `_pgdata`. This volume is not destroyed
+when updating the containers; only explicit removal destroys the data.
 
 # Environment Variables
 
@@ -176,7 +180,51 @@ The following parameters are now supported to set mail preferences:
 * `LSMB_MAIL_SMTPPASS`
 * `LSMB_MAIL_SMTPAUTHMECH`
 
+# Advanced setup
 
+## Docker Compose with reverse proxy
+
+The `docker-compose-reverseproxy.yml` file shows a docker-compose setup
+which adds an Nginx reverse proxy configuration on top of the base
+`docker-compose.yml` configuration file. If the content of this repository
+is cloned into the current directory (`git clone https://github.com/ledgersmb/ledgersmb-docker.git ; cd ledgersmb-docker`), it can be used as:
+
+```plain
+ $ docker-compose \
+    -f docker-compose.yml \
+    -f docker-compose-reverseproxy.yml \
+       up -d
+```
+
+This setup can be used in combination with an image which runs the
+Certbot certificate renewal process *and* Nginx to do TLS termination. The
+default reverse proxy is mostly an example; it publishes on
+[http://localhost:8080/](http://localhost:8080/).
+
+An example of such an image can be found at
+[https://github.com/jonasalfredsson/docker-nginx-certbot](https://github.com/jonasalfredsson/docker-nginx-certbot),
+which is published on Docker Hub as
+[jonasal/nginx-certbot](https://hub.docker.com/r/jonasal/nginx-certbot).
+
+**Upgrade note** When upgrading this setup, please remove the volume ending
+in `_lsmbdata` before starting the upgraded containers. Without that, the
+webcontent won't be upgraded! E.g.:
+
+```plain
+  $ docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose-reverseproxy.yml \
+        rm -s -f -v && \
+    docker volume rm ledgersmb-docker_lsmbdata && \
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose-reverseproxy.yml \
+        pull && \
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose-reverseproxy.yml \
+        up -d
+```
 
 # Troubleshooting/Developing
 
