@@ -16,9 +16,6 @@
 
 version: "3.2"
 services:
-  # Note that the container needs to be named "postgres" here,
-  # because that allows us to use the default hostname ("postgres")
-  # from the LedgerSMB configuration
   proxy:
     image: nginx:1-alpine
     volumes:
