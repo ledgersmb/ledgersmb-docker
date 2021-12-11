@@ -46,7 +46,7 @@ could require additional setup of a mail service or CUPS printer service.
 This image can be installed either automatically with the Docker compose file
 or manually with docker only.
 
-## Docker-Compose installation and start
+## Docker-Compose: Installation and start
 
 This image provides `docker-compose.yml` which can be used to pull related
 images, install them, establish an internal network for their communications,
@@ -56,15 +56,27 @@ variables, are:
 
 ```plain
  $ docker-compose pull
- $ docker-compose up
+ $ docker-compose up -d
+```
+
+Or use the following to set a different password and/or parallel processing
+capacity (so called 'workers'):
+
+```plain
+ $ docker-compose pull
+ $ POSTGRES_PASSWORD=def \
+   LSMB_WORKERS=10 \
+   docker-compose up -d
 ```
 
 This will set up two containers: (1) a PostgreSQL container with persistent
 storage which is retained between container updates and (2) a LedgerSMB
 container configured to connect to the PostgreSQL container as its database
-server.
+server. Your LedgerSMB installation should now be accessible through
+[http://localhost:5762/](http://localhost:5762/).
 
-The database username and password are:
+The default number of workers is 5. The default database username and password
+are:
 
 ```plain
    username: postgres

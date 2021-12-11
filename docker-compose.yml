@@ -19,7 +19,7 @@ services:
     image: postgres:12-alpine
     environment:
       # Replace the password below for a secure setup
-      POSTGRES_PASSWORD: abc
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-abc}
       PGDATA: /var/lib/postgresql/data/pgdata
     networks:
       - internal
@@ -47,7 +47,7 @@ services:
       # improve the performance experience, increase memory and the
       # number of workers
       #
-      LSMB_WORKERS: 2
+      LSMB_WORKERS: ${LSMB_WORKERS:-5}
       #
       #
 
