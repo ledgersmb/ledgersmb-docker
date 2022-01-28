@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTENT=noninteractive && \
   libtex-encode-perl \
   libdevel-trace-perl \
   starman \
-  postgresql-client-9.6 \
+  postgresql-client \
   ssmtp
 
 # Build time variables
