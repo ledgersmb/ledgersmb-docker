@@ -28,7 +28,7 @@ services:
   lsmb:
     depends_on:
       - postgres
-    image: ledgersmb/ledgersmb:1.5
+    image: ghcr.io/ledgersmb/ledgersmb:1.5
     networks:
       - internal
       - default
