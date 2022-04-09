@@ -5,7 +5,7 @@ ARG SRCIMAGE=debian:stretch-slim
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.7.38"
+ARG LSMB_VERSION="1.7.39"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -45,7 +45,7 @@ MAINTAINER  Freelock john@freelock.com
 
 
 # Build time variables
-ARG LSMB_VERSION="1.7.38"
+ARG LSMB_VERSION="1.7.39"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
