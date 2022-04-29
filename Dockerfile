@@ -42,6 +42,14 @@ RUN set -x ; \
 
 FROM  $SRCIMAGE
 LABEL org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
+LABEL org.opencontainers.image.title="LedgerSMB double-entry accounting web-application"
+LABEL org.opencontainers.image.description="LedgerSMB is a full featured double-entry financial accounting and Enterprise\
+ Resource Planning system accessed via a web browser (Perl/JS with a PostgreSQL\
+ backend) which offers 'Accounts Receivable', 'Accounts Payable' and 'General\
+ Ledger' tracking as well as inventory control and fixed assets handling. The\
+ LedgerSMB client can be a web browser or a programmed API call. The goal of\
+ the LedgerSMB project is to bring high quality ERP and accounting capabilities\
+ to Small and Midsize Businesses."
 
 ARG LSMB_VERSION="1.9.14"
 ARG LSMB_DL_DIR="Releases"
