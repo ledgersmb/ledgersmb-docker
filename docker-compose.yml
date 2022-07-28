@@ -16,7 +16,7 @@ services:
   # because that allows us to use the default hostname ("postgres")
   # from the LedgerSMB configuration
   postgres:
-    image: postgres:9.6-alpine
+    image: postgres:14-alpine
     environment:
       # Replace the password below for a secure setup
       POSTGRES_PASSWORD: abc
