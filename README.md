@@ -4,17 +4,19 @@ Dockerfile for LedgerSMB Docker image
 
 # Supported tags
 
-- `1.10`, `1.10.x` - Latest official release from the 1.10 branch (currently in beta)
-- `1.9`, `1.9.x`, `latest` - Latest official release from the 1.9 branch
-- `1.8`, `1.8.x` - Latest official release from the 1.8 branch
-- `1.7`, `1.7.x` - Latest official release from 1.7 branch
-- `1.6`, `1.6.33` - Last official release from 1.6 branch 
-- `1.5`, `1.5.30` - Last official release from 1.5 branch
-- `1.4`, `1.4.42` - Last official release from 1.4 branch
+- `1.10`, `1.10.x`, `latest` - Latest official release from the 1.10 branch
+- `1.9`, `1.9.x` - Latest official release from the 1.9 branch
+- `1.8`, `1.8.31` - Last official release from the 1.8 branch (End-of-Life)
+- `1.7`, `1.7.41` - Last official release from the 1.7 branch (End-of-Life)
+- `1.6`, `1.6.33` - Last official release from the 1.6 branch (End-of-Life)
+- `1.5`, `1.5.30` - Last official release from the 1.5 branch (End-of-Life)
+- `1.4`, `1.4.42` - Last official release from the 1.4 branch (End-of-Life)
 - `master` - Master branch from git, unstable
 
 Containers supporting the development process are provided
-through the ledgersmb-dev-docker project. See https://github.com/ledgersmb/ledgersmb-dev-docker/blob/master/README.md#getting-started.
+through the ledgersmb-dev-docker project. See [the development
+container's README](https://github.com/ledgersmb/ledgersmb-dev-docker/blob/master/README.md#getting-started)
+for more information.
 
 # What is LedgerSMB?
 
@@ -49,11 +51,11 @@ or manually with docker only.
 
 ## Docker-Compose: Installation and start
 
-This image provides `docker-compose.yml` which can be used to pull related
-images, install them, establish an internal network for their communications,
-adjust environment variables, start and stop LedgerSMB. The only instructions
-required, after the optional edition of the file to adjust the environment
-variables, are:
+This image provides a file named `docker-compose.yml` which can be used to
+pull related images, install them, establish an internal network for their
+communications, adjust environment variables, start and stop LedgerSMB. The
+only instructions required, after the optional edition of the file to adjust
+the environment variables, are:
 
 ```plain
  $ docker-compose pull
