@@ -108,7 +108,7 @@ like `POSTGRES_HOST` above.
 
 # Set up LedgerSMB
 
- * Visit http://myledger:5762/setup.pl.
+ * Visit http://localhost:5762/setup.pl.
  * Log in with the "postgres" user and the password `abc` as given above -
    or with the credentials of your own database server in case of a manual
    setup - and provide the name of a company (= database name) you want to
