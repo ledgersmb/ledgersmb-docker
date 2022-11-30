@@ -17,6 +17,8 @@
 version: "3.2"
 services:
   proxy:
+    depends_on:
+      - lsmb
     image: nginx:1-alpine
     volumes:
       - "lsmbdata:/srv/ledgersmb"
