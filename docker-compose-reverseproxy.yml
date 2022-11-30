@@ -25,6 +25,9 @@ services:
       - "./nginx.conf:/etc/nginx/nginx.conf"
     ports:
       - "8080:8080"
+    # Comment the line below to stop the container from restarting on boot
+    # unless it was manually stopped
+    restart: unless-stopped
   lsmb:
     volumes:
       - "lsmbdata:/srv/ledgersmb"

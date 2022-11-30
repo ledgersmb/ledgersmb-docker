@@ -25,6 +25,9 @@ services:
       - internal
     volumes:
       - "pgdata:/var/lib/postgresql/data"
+    # Comment the line below to stop the container from restarting on boot
+    # unless it was manually stopped
+    restart: unless-stopped
   lsmb:
     depends_on:
       - postgres
@@ -67,6 +70,9 @@ services:
       # hosted in a separate container, this setting needs to be adjusted.
       #
       # PROXY_IP: 172.17.0.1/12
+    # Comment the line below to stop the container from restarting on boot
+    # unless it was manually stopped
+    restart: unless-stopped
 
 # having the dbdata volume is required to persist our
 # data between PostgreSQL container updates; without
