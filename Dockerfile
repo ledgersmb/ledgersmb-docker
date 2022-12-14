@@ -5,7 +5,7 @@ ARG SRCIMAGE=debian:bullseye-slim
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.9.20"
+ARG LSMB_VERSION="1.9.21"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -51,7 +51,7 @@ LABEL org.opencontainers.image.description="LedgerSMB is a full featured double-
  the LedgerSMB project is to bring high quality ERP and accounting capabilities\
  to Small and Midsize Businesses."
 
-ARG LSMB_VERSION="1.9.20"
+ARG LSMB_VERSION="1.9.21"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
