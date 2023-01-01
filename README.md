@@ -176,12 +176,29 @@ yet with the deprecation, the abilities have expanded.
 The following parameters are now supported to set mail preferences:
 
 * `LSMB_MAIL_SMTPHOST`
+  * The host name/IP-address of the SMTP server that will forward mail from
+    LedgerSMB to the outside world.
 * `LSMB_MAIL_SMTPPORT`
+  * The port that the SMTP server in `LSMB_MAIL_SMTPHOST` listens to.
 * `LSMB_MAIL_SMTPTLS`
-* `LSMB_MAIL_SMTPSENDER_HOSTNAME`
+  * Can be one of `no` (default), `yes` or `raw`. `yes` indicates to use
+    STARTTLS over a regular SMTP connection; `raw`' indicates an SMTP connection
+    should be established over a TLS connection (a.k.a. smtps).
+* `LSMB_MAIL_SMTPSENDER_HOSTNAME` (optional)
+  * When set, used to identify the host when connecting to an SMTP server. When
+    not set, the host is queried for its host name.
 * `LSMB_MAIL_SMTPUSER`
+  * Username to authenticate to the SMTP host in `LSMB_MAIL_SMTPHOST`.
 * `LSMB_MAIL_SMTPPASS`
+  * Password to authenticate to the SMTP host in `LSMB_MAIL_SMTPHOST` with the
+    user in `LSMB_MAIL_SMTPUSER`.
 * `LSMB_MAIL_SMTPAUTHMECH`
+  * A space separated list of SASL mechanisms to be used for authentication of
+    the smtp connection with the SMTP server. Available mechanisms depend on
+    your installed environment, but the following mechanisms should be available
+    in all of them: `PLAIN` `LOGIN` `CRAM_MD5` & `DIGEST_MD5`. **Note that**
+    `PLAIN` or `LOGIN` send passwords in plain text over the wire to the SMTP
+    server; only use these methods in combination with TLS encryption.
 
 # Advanced setup
 
