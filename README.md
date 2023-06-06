@@ -51,7 +51,7 @@ or manually with docker only.
 
 ## Docker-Compose: Installation and start
 
-This image provides a file named `docker-compose.yml` which can be used to
+This repository provides a file named `docker-compose.yml` which can be used to
 pull related images, install them, establish an internal network for their
 communications, adjust environment variables, start and stop LedgerSMB. The
 only instructions required, after the optional edition of the file to adjust
