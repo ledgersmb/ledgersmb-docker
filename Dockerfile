@@ -1,11 +1,11 @@
 # Build time variables
 
-ARG SRCIMAGE=debian:bullseye-slim
+ARG SRCIMAGE=debian:bookworm-slim
 
 
 FROM  $SRCIMAGE AS builder
 
-ARG LSMB_VERSION="1.10.19"
+ARG LSMB_VERSION="1.11.0"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -51,7 +51,7 @@ LABEL org.opencontainers.image.description="LedgerSMB is a full featured double-
  the LedgerSMB project is to bring high quality ERP and accounting capabilities\
  to Small and Midsize Businesses."
 
-ARG LSMB_VERSION="1.10.19"
+ARG LSMB_VERSION="1.11.0"
 ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
@@ -61,8 +61,6 @@ ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSI
 
 # Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
 # That mitigates issues where the PG instance is running a newer version than this container
-# Install Locale::Codes Locale::Country Locale::Language from CPAN to suppress
-# deprecation-as-core-module warning
 
 
 COPY --from=builder /srv/derived-deps /tmp/derived-deps
