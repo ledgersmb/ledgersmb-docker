@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd /srv/ledgersmb
-
+mkdir ./local/conf/
 if [[ -n "$SSMTP_ROOT" ]]; then
     echo "\$SSMTP_ROOT set; parameter is deprecated and will be ignored"
     LSMB_HAVE_DEPRECATED=1
@@ -68,27 +68,58 @@ if [[ -n "$LSMB_HAVE_DEPRECATED" ]]; then
 fi
 
 
-if [[ ! -f ledgersmb.conf ]]; then
-  cat <<EOF >/tmp/ledgersmb.conf
-[main]
-cache_templates = 1
-[database]
-host = $POSTGRES_HOST
-port = $POSTGRES_PORT
-default_db = $DEFAULT_DB
-[mail]
-${LSMB_MAIL_SMTPHOST:+smtphost=$LSMB_MAIL_SMTPHOST
-}${LSMB_MAIL_SMTPPORT:+smtpport=$LSMB_MAIL_SMTPPORT
-}${LSMB_MAIL_SMTPSENDER_HOSTNAME:+smtpsender_hostname=$LSMB_MAIL_SMTPSENDER_HOSTNAME
-}${LSMB_MAIL_SMTPTLS:+smtptls=$LSMB_MAIL_SMTPTLS
-}${LSMB_MAIL_SMTPUSER:+smtpuser=$LSMB_MAIL_SMTPUSER
-}${LSMB_MAIL_SMTPPASS:+smtppass=$LSMB_MAIL_SMTPPASS
-}${LSMB_MAIL_SMTPAUTHMECH:+smtpauthmech=$LSMB_MAIL_SMTPAUTHMECH
-}
-[proxy]
-ip=${PROXY_IP:-172.17.0.1/12}
+if [[ ! -f ./local/conf/ledgersmb.yaml ]]; then
+  cat <<EOF >./local/conf/ledgersmb.yaml
+paths:
+  $class: Beam::Wire
+  config:
+    UI: ./UI/
+    UI_cache: lsmb_templates/
+
+db:
+  $class: LedgerSMB::Database::Factory
+  connect_data:
+    host: $POSTGRES_HOST
+    port: $POSTGRES_PORT
+
+mail:
+  transport:
+    $class: LedgerSMB::Mailer::TransportSMTP
+    host: $LSMB_MAIL_SMTPHOST
+    port: $LSMB_MAIL_SMTPPORT
+    helo: $LSMB_MAIL_SMTPSENDER_HOSTNAME
+    tls: $LSMB_MAIL_SMTPTLS
+
+miscellaneous:
+  $class: Beam::Wire
+  config:
+    proxy_ip: ${PROXY_IP:-172.17.0.1/12}
+
+ui:
+  class: LedgerSMB::Template::UI
+  method: new_UI
+  lifecycle: eager
+  args:
+    cache:
+      $ref: paths/UI_cache
+    root:
+      $ref: paths/UI
 EOF
-  export LSMB_CONFIG_FILE='/tmp/ledgersmb.conf'
+
+  if [[ -n "" ]]
+  then
+      cat <<EOF >./local/conf/ledgersmb.000.yaml
+mail:
+  transport:
+    sasl_password: ''
+    sasl_username:
+      $class: Authen::SASL
+      mechanism: $LSMB_MAIL_SMTPAUTHMECH
+      callback:
+        user: $LSMB_MAIL_SMTPUSER
+        pass: $LSMB_MAIL_SMTPPASS
+EOF
+  fi
 fi
 
 # start ledgersmb

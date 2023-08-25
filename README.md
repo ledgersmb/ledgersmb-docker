@@ -202,6 +202,47 @@ The following parameters are now supported to set mail preferences:
 
 # Advanced setup
 
+## Changing configuration
+
+The configuration file is stored in /srv/ledgersmb/local/conf/. By mounting
+that directory using a bind-mount to a location outside the container,
+configuration can be changed between container starts:
+
+```plain
+ $ docker run -d -p 5762:5762 --name myledger \
+     --mount 'type=bind,src=/home/ledgersmb/conf,dst=/srv/ledgersmb/local/conf \
+     -e POSTGRES_HOST=<ip/hostname> ledgersmb/ledgersmb:latest
+```
+
+## Overriding or adding configuration
+
+By pre-creating a configuration file in the mounted configuration directory,
+the standard configuration generation process in the container can be overruled:
+
+```plain
+ $ cat <<EOF > /home/ledgersmb/conf/ledgersmb.yaml
+   ... YOUR CONFIG HERE ...
+ EOF
+ $ docker run -d -p 5762:5762 --name myledger \
+     --mount 'type=bind,src=/home/ledgersmb/conf,dst=/srv/ledgersmb/local/conf \
+     -e POSTGRES_HOST=<ip/hostname> ledgersmb/ledgersmb:latest
+```
+
+If you do not want to completely overrule the configuration generated, but instead
+supplement the configuration, you can put incremental configuration snippets in
+files named `ledgersmb.XXX.yaml` in the same folder. E.g.:
+
+```plain
+ $ cat <<EOF > /home/ledgersmb/conf/ledgersmb.001.yaml
+ logging:
+   file: ledgersmb.logging
+ EOF
+```
+
+[Documentation with respect to the available configuration
+keys](https://github.com/ledgersmb/LedgerSMB/blob/master/doc/conf/ledgersmb.yaml)
+is available in the LedgerSMB repository.
+
 ## Docker Compose with reverse proxy
 
 The `docker-compose-reverseproxy.yml` file shows a docker-compose setup

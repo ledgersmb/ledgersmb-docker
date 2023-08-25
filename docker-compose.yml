@@ -32,6 +32,14 @@ services:
     depends_on:
       - postgres
     image: ghcr.io/ledgersmb/ledgersmb:1.10
+    volumes:
+      # In order to store the configuration outside the image, allowing it to
+      # be edited between container restarts, uncomment the section below and
+      # change the 'source' to the directory where you want the configuration
+      # to be stored.
+      # - type: bind
+      # - source: /home/ledgersmb/conf
+      # - target: /srv/ledgersmb/local/conf
     networks:
       - internal
       - default
