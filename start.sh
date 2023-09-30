@@ -71,27 +71,27 @@ fi
 if [[ ! -f ./local/conf/ledgersmb.yaml ]]; then
   cat <<EOF >./local/conf/ledgersmb.yaml
 paths:
-  $class: Beam::Wire
+  \$class: Beam::Wire
   config:
     UI: ./UI/
     UI_cache: lsmb_templates/
 
 db:
-  $class: LedgerSMB::Database::Factory
+  \$class: LedgerSMB::Database::Factory
   connect_data:
-    host: $POSTGRES_HOST
-    port: $POSTGRES_PORT
+    host: ${POSTGRES_HOST:-postgres}
+    port: ${POSTGRES_PORT:-5432}
 
 mail:
   transport:
-    $class: LedgerSMB::Mailer::TransportSMTP
+    \$class: LedgerSMB::Mailer::TransportSMTP
     host: $LSMB_MAIL_SMTPHOST
     port: $LSMB_MAIL_SMTPPORT
     helo: $LSMB_MAIL_SMTPSENDER_HOSTNAME
     tls: $LSMB_MAIL_SMTPTLS
 
 miscellaneous:
-  $class: Beam::Wire
+  \$class: Beam::Wire
   config:
     proxy_ip: ${PROXY_IP:-172.17.0.1/12}
 
@@ -101,9 +101,9 @@ ui:
   lifecycle: eager
   args:
     cache:
-      $ref: paths/UI_cache
+      \$ref: paths/UI_cache
     root:
-      $ref: paths/UI
+      \$ref: paths/UI
 EOF
 
   if [[ -n "" ]]
@@ -113,7 +113,7 @@ mail:
   transport:
     sasl_password: ''
     sasl_username:
-      $class: Authen::SASL
+      \$class: Authen::SASL
       mechanism: $LSMB_MAIL_SMTPAUTHMECH
       callback:
         user: $LSMB_MAIL_SMTPUSER
