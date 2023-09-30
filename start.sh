@@ -127,8 +127,10 @@ fi
 # starman instance (instead of just the worker, which will immediately
 # get restarted) on error; it also has a positive effect on memory use
 
+LSMB_CONFIG_FILE=${LSMB_CONFIG_FILE:-./local/conf/ledgersmb.yaml}
+export LSMB_CONFIG_FILE
 echo '--------- LEDGERSMB CONFIGURATION:  ledgersmb.conf'
-cat ${LSMB_CONFIG_FILE:-ledgersmb.conf}
+cat ${LSMB_CONFIG_FILE}
 echo '--------- LEDGERSMB CONFIGURATION --- END'
 
 # ':5762:' suppresses an uninitialized variable warning in starman
