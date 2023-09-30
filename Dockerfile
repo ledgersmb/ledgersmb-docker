@@ -126,7 +126,9 @@ ENV DEFAULT_DB lsmb
 COPY start.sh /usr/local/bin/start.sh
 
 RUN chmod +x /usr/local/bin/start.sh && \
-  mkdir -p /var/www
+  mkdir -p /var/www && \
+  mkdir -p /srv/ledgersmb/local/conf && \
+  chown -R www-data /srv/ledgersmb/local
 
 # Work around an aufs bug related to directory permissions:
 RUN mkdir -p /tmp && chmod 1777 /tmp
