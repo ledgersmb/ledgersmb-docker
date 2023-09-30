@@ -38,8 +38,8 @@ services:
       # to be stored.
     # volumes:
     #   - type: bind
-    #   - source: /home/ledgersmb/conf
-    #   - target: /srv/ledgersmb/local/conf
+    #     source: /home/ledgersmb/conf
+    #     target: /srv/ledgersmb/local/conf
     networks:
       - internal
       - default
