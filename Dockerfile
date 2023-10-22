@@ -94,7 +94,7 @@ RUN set -x ; \
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
   rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cpanm --cpanmetadb --notest \
+  cpanm --metacpan --notest \
     --with-feature=starman \
     --with-feature=latex-pdf-ps \
     --with-feature=openoffice \
