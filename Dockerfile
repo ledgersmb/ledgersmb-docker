@@ -90,7 +90,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     cd /srv && \
     git clone --depth 1 --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
-    cpanm --quiet --notest \
+    cpanm --metacpan --quiet --notest \
       --with-feature=starman \
       --with-feature=latex-pdf-ps \
       --with-feature=openoffice \
