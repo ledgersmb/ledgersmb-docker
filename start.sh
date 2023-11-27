@@ -106,9 +106,17 @@ ui:
       \$ref: paths/UI
 EOF
 
-  if [[ -n "" ]]
+  if [[ -n "$LSMB_MAIL_SMTPSENDER_HOSTNAME" ]]
   then
       cat <<EOF >./local/conf/ledgersmb.000.yaml
+mail:
+  transport:
+    helo: $LSMB_MAIL_SMTPSENDER_HOSTNAME
+EOF
+
+  if [[ -n "$LSMB_MAIL_SMTPUSER" ]]
+  then
+      cat <<EOF >./local/conf/ledgersmb.001.yaml
 mail:
   transport:
     sasl_password: ''
