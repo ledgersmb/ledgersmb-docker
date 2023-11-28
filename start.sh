@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd /srv/ledgersmb
-mkdir ./local/conf/
+[[ -d ./local/conf/ ]] || mkdir ./local/conf/
 if [[ -n "$SSMTP_ROOT" ]]; then
     echo "\$SSMTP_ROOT set; parameter is deprecated and will be ignored"
     LSMB_HAVE_DEPRECATED=1
@@ -85,9 +85,6 @@ db:
 mail:
   transport:
     \$class: LedgerSMB::Mailer::TransportSMTP
-    host: $LSMB_MAIL_SMTPHOST
-    port: $LSMB_MAIL_SMTPPORT
-    helo: $LSMB_MAIL_SMTPSENDER_HOSTNAME
     tls: $LSMB_MAIL_SMTPTLS
 
 miscellaneous:
@@ -106,17 +103,36 @@ ui:
       \$ref: paths/UI
 EOF
 
-  if [[ -n "$LSMB_MAIL_SMTPSENDER_HOSTNAME" ]]
+  if [[ -n "$LSMB_MAIL_SMTPHOST" ]]
   then
       cat <<EOF >./local/conf/ledgersmb.000.yaml
 mail:
   transport:
+    host: $LSMB_MAIL_SMTPHOST
+EOF
+  fi
+
+  if [[ -n "$LSMB_MAIL_SMTPPORT" ]]
+  then
+      cat <<EOF >./local/conf/ledgersmb.001.yaml
+mail:
+  transport:
+    port: $LSMB_MAIL_SMTPPORT
+EOF
+  fi
+
+  if [[ -n "$LSMB_MAIL_SMTPSENDER_HOSTNAME" ]]
+  then
+      cat <<EOF >./local/conf/ledgersmb.002.yaml
+mail:
+  transport:
     helo: $LSMB_MAIL_SMTPSENDER_HOSTNAME
 EOF
+  fi
 
   if [[ -n "$LSMB_MAIL_SMTPUSER" ]]
   then
-      cat <<EOF >./local/conf/ledgersmb.001.yaml
+      cat <<EOF >./local/conf/ledgersmb.003.yaml
 mail:
   transport:
     sasl_password: ''
