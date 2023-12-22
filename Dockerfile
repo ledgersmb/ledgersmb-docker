@@ -78,7 +78,7 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install \
-    wget ca-certificates gnupg \
+    wget ca-certificates gnupg iproute2 \
     $( cat /tmp/derived-deps ) \
     libclass-c3-xs-perl \
     texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
@@ -110,7 +110,9 @@ WORKDIR /srv/ledgersmb
 # Configure outgoing mail to use host, other run time variable defaults
 
 ## MAIL
-ENV LSMB_MAIL_SMTPHOST 172.17.0.1
+# '__CONTAINER_GATEWAY__' is a magic value which will be substituted
+# with the actual gateway IP address
+ENV LSMB_MAIL_SMTPHOST __CONTAINER_GATEWAY__
 #ENV LSMB_MAIL_SMTPPORT 25
 #ENV LSMB_MAIL_SMTPSENDER_HOSTNAME (container hostname)
 #ENV LSMB_MAIL_SMTPTLS

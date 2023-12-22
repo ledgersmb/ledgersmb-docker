@@ -67,7 +67,6 @@ if [[ -n "$LSMB_HAVE_DEPRECATED" ]]; then
     echo "!!! DEPRECATED \$SSMTP_* PARAMETERS WILL BE REMOVED in the 1.9 image!!!"
 fi
 
-
 if [[ ! -f ./local/conf/ledgersmb.yaml ]]; then
   cat <<EOF >./local/conf/ledgersmb.yaml
 paths:
@@ -105,6 +104,12 @@ EOF
 
   if [[ -n "$LSMB_MAIL_SMTPHOST" ]]
   then
+      if [[ "$LSMB_MAIL_SMTPHOST" == "__CONTAINER_GATEWAY__" ]]
+      then
+         LSMB_MAIL_SMTPHOST="$(ip route | awk '/default/ { print $3 }')"
+         export LSMB_MAIL_SMTPHOST
+      fi
+
       cat <<EOF >./local/conf/ledgersmb.000.yaml
 mail:
   transport:
