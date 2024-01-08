@@ -2,6 +2,18 @@
 
 Dockerfile for LedgerSMB Docker image
 
+## Content
+
+ 1. [Supported tags](#supported-tags)
+ 2. [What is LedgerSMB](#what-is-ledgersmb)
+ 3. [How to use this image](#how-to-use-this-image)
+ 4. [Set up LedgerSMB](#set-up-ledgersmb)
+ 5. [Updating the LedgerSMB container](#updating-the-ledgersmb-container)
+ 6. [Environment Variables](#environment-variables)
+ 7. [Advanced setup](#advanced-setup)
+ 8. [Troubleshooting](#troubleshootingdeveloping)
+ 9. [User feedback](#user-feedback)
+
 # Supported tags
 
 - `1.11`, `1.11.x`, `latest` - Latest official release from the 1.11 branch
