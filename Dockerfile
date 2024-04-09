@@ -1,6 +1,6 @@
 # Build time variables
 
-ARG SRCIMAGE=debian:bullseye-slim
+ARG SRCIMAGE=debian:bookworm-slim
 
 
 FROM  $SRCIMAGE AS builder
@@ -62,8 +62,8 @@ RUN set -x ; \
     texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release && \
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-  (wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -) && \
+  echo "deb [signed-by=/etc/apt/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc > /etc/apt/keyrings/postgresql.asc && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove && \
@@ -80,13 +80,14 @@ ENV NODE_PATH /usr/local/lib/node_modules
 # Java & Nodejs for doing Dojo build
 
 # These packages are only needed during the dojo build
-ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs cpanminus
+ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs npm cpanminus
 # These packages can be removed after the dojo build
-ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs cpanminus
+ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs npm cpanminus
 
-RUN wget --quiet -O - https://deb.nodesource.com/setup_16.x | bash -
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+RUN (wget --quiet -O - https://deb.nodesource.com/setup_22.x | bash -) && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
+    npm i -g --no-save yarn && \
     cd /srv && \
     git clone --depth 1 --recursive -b $LSMB_VERSION https://github.com/ledgersmb/LedgerSMB.git ledgersmb && \
     cd ledgersmb && \
@@ -95,7 +96,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
       --with-feature=latex-pdf-ps \
       --with-feature=openoffice \
       --installdeps .  && \
-    make dojo && \
+    make js && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y purge ${DOJO_Build_Deps_removal} && \
     rm -rf /usr/local/lib/node_modules && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y autoremove && \
