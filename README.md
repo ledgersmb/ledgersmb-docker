@@ -243,10 +243,10 @@ the standard configuration generation process in the container can be overruled:
 
 If you do not want to completely overrule the configuration generated, but instead
 supplement the configuration, you can put incremental configuration snippets in
-files named `ledgersmb.XXX.yaml` in the same folder. E.g.:
+files named `ledgersmb.1XX.yaml` in the same folder. E.g.:
 
 ```plain
- $ cat <<EOF > /home/ledgersmb/conf/ledgersmb.001.yaml
+ $ cat <<EOF > /home/ledgersmb/conf/ledgersmb.100.yaml
  logging:
    file: ledgersmb.logging
  EOF
