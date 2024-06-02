@@ -37,9 +37,14 @@ services:
       # change the 'source' to the directory where you want the configuration
       # to be stored.
     # volumes:
+    #   # Override all configuration:
     #   - type: bind
     #     source: /home/ledgersmb/conf
     #     target: /srv/ledgersmb/local/conf
+    #   # Add a snippet of configuration:
+    #   - type: bind
+    #     source: /home/ledgersmb/conf/ledgersmb.100.yaml
+    #     target: /srv/ledgersmb/local/conf/ledgersmb.100.yaml
     networks:
       - internal
       - default
