@@ -11,9 +11,9 @@ ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSI
 
 
 RUN set -x ; \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install dh-make-perl libmodule-cpanfile-perl git wget && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y dist-upgrade && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install dh-make-perl libmodule-cpanfile-perl git wget && \
   apt-file update
 
 RUN set -x ; \
@@ -75,9 +75,9 @@ RUN set -x ; \
   mkdir -p /usr/share/man/man6/ && \
   mkdir -p /usr/share/man/man7/ && \
   mkdir -p /usr/share/man/man8/ && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y upgrade && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y dist-upgrade && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install \
     wget ca-certificates gnupg iproute2 \
     $( cat /tmp/derived-deps ) \
     libclass-c3-xs-perl \
@@ -86,8 +86,8 @@ RUN set -x ; \
     lsb-release && \
   echo "deb [signed-by=/etc/apt/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc > /etc/apt/keyrings/postgresql.asc && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-client && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
   wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
   tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
@@ -97,9 +97,9 @@ RUN set -x ; \
     --with-feature=latex-pdf-ps \
     --with-feature=openoffice \
     --installdeps /srv/ledgersmb/ && \
-  apt-get purge -q -y git cpanminus make gcc libperl-dev && \
-  apt-get autoremove -q -y && \
-  apt-get clean -q && \
+  DEBIAN_FRONTEND="noninteractive" apt-get purge -q -y git cpanminus make gcc libperl-dev && \
+  DEBIAN_FRONTEND="noninteractive" apt-get autoremove -q -y && \
+  DEBIAN_FRONTEND="noninteractive" apt-get clean -q && \
   rm -rf ~/.cpanm/ /var/lib/apt/lists/* /usr/share/man/*
 
 
