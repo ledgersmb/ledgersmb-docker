@@ -5,7 +5,7 @@ Dockerfile for LedgerSMB Docker image
 # Supported tags
 
 - `1.11`, `1.11.x`, `latest` - Latest official release from the 1.11 branch
-- `1.10`, `1.10.x` - Latest official release from the 1.10 branch
+- `1.10`, `1.10.38` - Last official release from the 1.10 branch (End-of-Life)
 - `1.9`, `1.9.30` - Last official release from 1.9 branch (End-of-Life)
 - `1.8`, `1.8.31` - Last official release from the 1.8 branch (End-of-Life)
 - `1.7`, `1.7.41` - Last official release from the 1.7 branch (End-of-Life)
