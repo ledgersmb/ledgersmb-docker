@@ -1,6 +1,6 @@
 # Build time variables
 
-ARG SRCIMAGE=debian:bookworm-slim
+ARG SRCIMAGE=debian:trixie-slim
 
 
 FROM  $SRCIMAGE AS builder
@@ -51,6 +51,7 @@ LABEL   org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgers
 
 COPY --from=builder /srv/derived-deps /tmp/derived-deps
 
+
 RUN set -x ; \
   echo "APT::Install-Recommends \"false\";\nAPT::Install-Suggests \"false\";\n" > /etc/apt/apt.conf.d/00recommends && \
   DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
@@ -84,8 +85,8 @@ ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs npm cpanminus
 # These packages can be removed after the dojo build
 ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs npm cpanminus
 
-RUN (wget --quiet -O - https://deb.nodesource.com/setup_22.x | bash -) && \
-    DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
+# RUN (wget --quiet -O - https://deb.nodesource.com/setup_22.x | bash -) && \
+RUN    DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install ${DOJO_Build_Deps} && \
     npm i -g --no-save yarn && \
     cd /srv && \
