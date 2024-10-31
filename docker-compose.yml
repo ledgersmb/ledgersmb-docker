@@ -31,7 +31,7 @@ services:
   lsmb:
     depends_on:
       - postgres
-    image: ghcr.io/ledgersmb/ledgersmb:1.11
+    image: ghcr.io/ledgersmb/ledgersmb:1.12
       # In order to store the configuration outside the image, allowing it to
       # be edited between container restarts, uncomment the section below and
       # change the 'source' to the directory where you want the configuration
