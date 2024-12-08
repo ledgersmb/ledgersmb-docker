@@ -83,7 +83,7 @@ db:
 
 mail:
   transport:
-    \$class: LedgerSMB::Mailer::TransportSMTP
+    \$class: Email::Sender::Transport::SMTP
     tls: $LSMB_MAIL_SMTPTLS
 
 miscellaneous:
