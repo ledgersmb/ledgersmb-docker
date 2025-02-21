@@ -140,8 +140,7 @@ EOF
       cat <<EOF >./local/conf/ledgersmb.003.yaml
 mail:
   transport:
-    sasl_password: ''
-    sasl_username:
+    sasl_authenticator:
       \$class: Authen::SASL
       mechanism: $LSMB_MAIL_SMTPAUTHMECH
       callback:
