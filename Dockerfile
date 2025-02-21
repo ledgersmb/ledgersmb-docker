@@ -83,9 +83,8 @@ RUN set -x ; \
     libclass-c3-xs-perl \
     texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
-    lsb-release && \
-  echo "deb [signed-by=/etc/apt/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc > /etc/apt/keyrings/postgresql.asc && \
+    lsb-release postgresql-common && \
+  /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
