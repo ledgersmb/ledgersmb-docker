@@ -68,6 +68,13 @@ if [[ -n "$LSMB_HAVE_DEPRECATED" ]]; then
 fi
 
 if [[ ! -f ./local/conf/ledgersmb.yaml ]]; then
+  if [[ "x$LSMB_MAIL_SMTPTLS" == "xyes" ]]; then
+     tls_mode=starttls
+  elif [[ "x$LSMB_MAIL_SMTPTLS" == "xraw" ]]; then
+     tls_mode=ssl
+  else
+     tls_mode=none
+  fi
   cat <<EOF >./local/conf/ledgersmb.yaml
 paths:
   \$class: Beam::Wire
@@ -84,7 +91,7 @@ db:
 mail:
   transport:
     \$class: Email::Sender::Transport::SMTP
-    tls: $LSMB_MAIL_SMTPTLS
+    ssl: $tls_mode
 
 miscellaneous:
   \$class: Beam::Wire
