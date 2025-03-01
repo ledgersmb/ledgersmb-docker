@@ -1,2 +1,3 @@
 foreground { echo "Running config..." }
-/etc/s6-overlay/s6-rc.d/ledgersmb_config/config
+
+/usr/local/bin/config.sh
