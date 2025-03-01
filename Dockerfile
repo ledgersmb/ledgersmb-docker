@@ -5,7 +5,7 @@ ARG SRCIMAGE=debian:trixie-slim
 
 FROM  $SRCIMAGE AS builder
 
-ENV LSMB_VERSION master
+ENV LSMB_VERSION=master
 
 
 RUN set -x ; \
@@ -73,17 +73,17 @@ RUN set -x ; \
 
 
 # Build time variables
-ENV LSMB_VERSION master
-ENV NODE_PATH /usr/local/lib/node_modules
+ENV LSMB_VERSION=master
+ENV NODE_PATH=/usr/local/lib/node_modules
 
 
 ###########################################################
 # Java & Nodejs for doing Dojo build
 
 # These packages are only needed during the dojo build
-ENV DOJO_Build_Deps git make gcc libperl-dev curl nodejs npm cpanminus
+ENV DOJO_Build_Deps="git make gcc libperl-dev curl nodejs npm cpanminus"
 # These packages can be removed after the dojo build
-ENV DOJO_Build_Deps_removal ${DOJO_Build_Deps} nodejs npm cpanminus
+ENV DOJO_Build_Deps_removal="${DOJO_Build_Deps} nodejs npm cpanminus"
 
 # RUN (wget --quiet -O - https://deb.nodesource.com/setup_22.x | bash -) && \
 RUN    DEBIAN_FRONTEND="noninteractive" apt-get -y update && \
@@ -113,17 +113,17 @@ ENV NODE_PATH=
 # Configure outgoing mail to use host, other run time variable defaults
 
 ## MAIL
-ENV LSMB_MAIL_SMTPHOST 172.17.0.1
-#ENV LSMB_MAIL_SMTPPORT 25
-#ENV LSMB_MAIL_SMTPSENDER_HOSTNAME (container hostname)
-#ENV LSMB_MAIL_SMTPTLS
-#ENV LSMB_MAIL_SMTPUSER
-#ENV LSMB_MAIL_SMTPPASS
-#ENV LSMB_MAIL_SMTPAUTHMECH
+ENV LSMB_MAIL_SMTPHOST=172.17.0.1
+#ENV LSMB_MAIL_SMTPPORT=25
+#ENV LSMB_MAIL_SMTPSENDER_HOSTNAME=(container hostname)
+#ENV LSMB_MAIL_SMTPTLS=
+#ENV LSMB_MAIL_SMTPUSER=
+#ENV LSMB_MAIL_SMTPPASS=
+#ENV LSMB_MAIL_SMTPAUTHMECH=
 
-ENV POSTGRES_HOST postgres
-ENV POSTGRES_PORT 5432
-ENV DEFAULT_DB lsmb
+ENV POSTGRES_HOST=postgres
+ENV POSTGRES_PORT=5432
+ENV DEFAULT_DB=lsmb
 
 COPY start.sh /usr/local/bin/start.sh
 
