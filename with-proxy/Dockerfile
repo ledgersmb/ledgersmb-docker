@@ -1,4 +1,5 @@
-FROM ledgersmb/ledgersmb:1.11.18
+FROM lsmb-split:latest
+#FROM ledgersmb/ledgersmb:1.11.18
 USER root
 
 # Remove inherited start.sh
@@ -10,10 +11,7 @@ RUN set -x && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
     nginx wget xz-utils
-
-RUN set -x && \
-    mkdir -p /var/lib/nginx/body /var/cache/nginx && \
-    chown -R www-data:www-data /var/lib/nginx /var/cache/nginx
+    mkdir -p /var/lib/nginx/body /var/cache/nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
@@ -36,19 +34,16 @@ RUN set -ex && \
 
 # Configure nginx and starman with s6
 COPY services/starman/run /etc/services.d/starman/run
-RUN chmod +x /etc/services.d/starman/run && chown www-data:www-data /etc/services.d/starman/run
+RUN chmod +x /etc/services.d/starman/run
 
 COPY services/nginx/run /etc/services.d/nginx/run
-RUN chmod +x /etc/services.d/nginx/run && chown www-data:www-data /etc/services.d/nginx/run
+RUN chmod +x /etc/services.d/nginx/run
 
 COPY scripts/ledgersmb_config /etc/s6-overlay/s6-rc.d/ledgersmb_config
 RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/ledgersmb_config
-RUN chmod +x /etc/s6-overlay/s6-rc.d/ledgersmb_config/up \
-    /etc/s6-overlay/s6-rc.d/ledgersmb_config/config && \
-    chown -R www-data:www-data /etc/s6-overlay/s6-rc.d/ \
-    /etc/services.d /run
+RUN chmod +x /etc/s6-overlay/s6-rc.d/ledgersmb_config/up
 
 EXPOSE 80
 
-USER www-data
+#USER www-data
 ENTRYPOINT ["/init"]
