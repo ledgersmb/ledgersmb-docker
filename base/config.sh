@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 cd /srv/ledgersmb
 [[ -d ./local/conf/ ]] || mkdir ./local/conf/
 if [[ -n "$SSMTP_ROOT" ]]; then
@@ -157,19 +159,4 @@ EOF
   fi
 fi
 
-# start ledgersmb
-# --preload-app allows application initialization to kill the entire
-# starman instance (instead of just the worker, which will immediately
-# get restarted) on error; it also has a positive effect on memory use
-
-LSMB_CONFIG_FILE=${LSMB_CONFIG_FILE:-./local/conf/ledgersmb.yaml}
-export LSMB_CONFIG_FILE
-echo '--------- LEDGERSMB CONFIGURATION:  ledgersmb.conf'
-cat ${LSMB_CONFIG_FILE}
-echo '--------- LEDGERSMB CONFIGURATION --- END'
-
-# ':5762:' suppresses an uninitialized variable warning in starman
-# the last colon means "don't connect using tls"; without it, there's a warning
-exec starman --listen 0.0.0.0:5762 --workers ${LSMB_WORKERS:-5} \
-             -I lib -I old/lib \
-             --preload-app bin/ledgersmb-server.psgi
+exit 0

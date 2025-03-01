@@ -125,6 +125,8 @@ ENV POSTGRES_PORT=5432
 ENV DEFAULT_DB=lsmb
 
 COPY start.sh /usr/local/bin/start.sh
+COPY config.sh /usr/local/bin/config.sh
+COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/start.sh && \
   mkdir -p /var/www && \
