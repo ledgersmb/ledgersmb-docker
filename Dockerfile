@@ -80,7 +80,6 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install \
     wget ca-certificates gnupg iproute2 \
     $( cat /tmp/derived-deps ) \
-    libclass-c3-xs-perl \
     texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
     texlive-xetex fonts-liberation \
     lsb-release postgresql-common && \
