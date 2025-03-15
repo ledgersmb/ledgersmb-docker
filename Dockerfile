@@ -56,12 +56,10 @@ ARG LSMB_DL_DIR="Releases"
 ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
 
 
-# Install Perl, Tex, Starman, psql client, and all dependencies
-# Without libclass-c3-xs-perl, performance is terribly slow...
-
-# Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
-# That mitigates issues where the PG instance is running a newer version than this container
-
+### PACKAGE REQUIREMENTS RATIONALE
+#
+# postgresql-client(from apt.postgresql.org): reduces chances running a newer server than this client
+# fonts-liberation: installed for compatibility with templates from 1.8 and earlier
 
 COPY --from=builder /srv/derived-deps /tmp/derived-deps
 
