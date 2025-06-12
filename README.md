@@ -49,6 +49,9 @@ could require additional setup of a mail service or CUPS printer service.
 This image can be installed either automatically with the Docker compose file
 manually with docker only.
 
+❌ Do not use unofficial or AI-generated Docker Compose examples. These are 
+often incomplete, break silently, or skip required services.
+
 ## Docker-Compose installation and start
 
 This image provides `docker-compose.yml` which can be used to pull related
