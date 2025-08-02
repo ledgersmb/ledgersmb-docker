@@ -32,7 +32,10 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y dist-upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install \
-    wget curl ca-certificates libio-socket-ssl-perl && \
+    wget curl ca-certificates libio-socket-ssl-perl postgresql-common && \
+  /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
+  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
   cd /srv && \
   curl -s -o ledgersmb-installer -L https://get.ledgersmb.org/ledgersmb-installer && \
   ARTIFACT_LOCATION="$ARTIFACT_PATH" perl ledgersmb-installer install --yes --log-level=trace $LSMB_VERSION && \
