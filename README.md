@@ -58,6 +58,8 @@ to add the TLS layer by applying Nginx or Apache as reverse proxy.
 Enabling optional functionalities such as outgoing e-mail and printing
 could require additional setup of a mail service or CUPS printer service.
 
+❌ Do not use unofficial or AI-generated Docker Compose examples. These are often incomplete, break silently, or skip required services.
+
 # How to use this image
 
 This image can be installed either automatically with the Docker compose file

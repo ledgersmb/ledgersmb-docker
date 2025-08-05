@@ -1,44 +1,6 @@
 # Build time variables
 
-ARG SRCIMAGE=debian:bookworm-slim
-
-
-FROM  $SRCIMAGE AS builder
-
-ARG LSMB_VERSION="1.12.5"
-ARG LSMB_DL_DIR="Releases"
-ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
-
-
-RUN set -x ; \
-  DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -q -y dist-upgrade && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install dh-make-perl libmodule-cpanfile-perl git wget && \
-  apt-file update
-
-RUN set -x ; \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
-  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
-  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cd /srv/ledgersmb && \
-  ( ( for lib in $( cpanfile-dump --with-all-features --recommends --no-configure --no-build --no-test ) ; \
-    do \
-      if dh-make-perl locate "$lib" 2>/dev/null ; \
-      then  \
-        : \
-      else \
-        echo no : $lib ; \
-      fi ; \
-    done ) | grep -v dh-make-perl | grep -v 'not found' | grep -vi 'is in Perl ' | cut -d' ' -f4 | sort | uniq | tee /srv/derived-deps ) && \
-  cat /srv/derived-deps
-
-
-#
-#
-#  The real image build starts here
-#
-#
-
+ARG SRCIMAGE=debian:trixie-slim
 
 FROM  $SRCIMAGE
 LABEL org.opencontainers.image.authors="LedgerSMB project <devel@lists.ledgersmb.org>"
@@ -51,20 +13,12 @@ LABEL org.opencontainers.image.description="LedgerSMB is a full featured double-
  the LedgerSMB project is to bring high quality ERP and accounting capabilities\
  to Small and Midsize Businesses."
 
-ARG LSMB_VERSION="1.12.5"
-ARG LSMB_DL_DIR="Releases"
-ARG ARTIFACT_LOCATION="https://download.ledgersmb.org/f/$LSMB_DL_DIR/$LSMB_VERSION/ledgersmb-$LSMB_VERSION.tar.gz"
+ARG LSMB_VERSION="1.13.0-beta1"
+ARG ARTIFACT_PATH="https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/"
 
 
-# Install Perl, Tex, Starman, psql client, and all dependencies
-# Without libclass-c3-xs-perl, performance is terribly slow...
-
-# Installing psql client directly from instructions at https://wiki.postgresql.org/wiki/Apt
-# That mitigates issues where the PG instance is running a newer version than this container
-
-
-COPY --from=builder /srv/derived-deps /tmp/derived-deps
-
+# ARTIFACT_PATH is used to work around pre-1.13 Dockerfiles requiring
+# the ARTIFACT_LOCATION to point to the artifact, not to its path
 RUN set -x ; \
   echo -n "APT::Install-Recommends \"0\";\nAPT::Install-Suggests \"0\";\n" >> /etc/apt/apt.conf && \
   mkdir -p /usr/share/man/man1/ && \
@@ -78,31 +32,17 @@ RUN set -x ; \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y dist-upgrade && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install \
-    wget ca-certificates gnupg iproute2 \
-    $( cat /tmp/derived-deps ) \
-    libclass-c3-xs-perl \
-    texlive-plain-generic texlive-latex-recommended texlive-fonts-recommended \
-    texlive-xetex fonts-liberation \
-    lsb-release postgresql-common && \
+    wget curl ca-certificates libio-socket-ssl-perl postgresql-common && \
   /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y update && \
   DEBIAN_FRONTEND="noninteractive" apt-get -q -y install postgresql-client && \
-  DEBIAN_FRONTEND="noninteractive" apt-get -q -y install git cpanminus make gcc libperl-dev && \
-  wget --quiet -O /tmp/ledgersmb-$LSMB_VERSION.tar.gz "$ARTIFACT_LOCATION" && \
-  tar -xzf /tmp/ledgersmb-$LSMB_VERSION.tar.gz --directory /srv && \
-  rm -f /tmp/ledgersmb-$LSMB_VERSION.tar.gz && \
-  cpanm --metacpan --notest \
-    --with-feature=starman \
-    --with-feature=latex-pdf-ps \
-    --with-feature=openoffice \
-    --installdeps /srv/ledgersmb/ && \
-  DEBIAN_FRONTEND="noninteractive" apt-get purge -q -y git cpanminus make gcc libperl-dev && \
-  DEBIAN_FRONTEND="noninteractive" apt-get autoremove -q -y && \
-  DEBIAN_FRONTEND="noninteractive" apt-get clean -q && \
+  cd /srv && \
+  curl -s -o ledgersmb-installer -L https://get.ledgersmb.org/ledgersmb-installer && \
+  ARTIFACT_LOCATION="$ARTIFACT_PATH" perl ledgersmb-installer install --yes --log-level=trace $LSMB_VERSION && \
   rm -rf ~/.cpanm/ /var/lib/apt/lists/* /usr/share/man/*
 
-
 WORKDIR /srv/ledgersmb
+
 
 # master requirements
 
