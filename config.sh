@@ -159,4 +159,10 @@ EOF
   fi
 fi
 
+LSMB_CONFIG_FILE=${LSMB_CONFIG_FILE:-./local/conf/ledgersmb.yaml}
+export LSMB_CONFIG_FILE
+echo "--------- LEDGERSMB CONFIGURATION:  $LSMB_CONFIG_FILE"
+cat ${LSMB_CONFIG_FILE}
+echo '--------- LEDGERSMB CONFIGURATION --- END'
+
 exit 0
