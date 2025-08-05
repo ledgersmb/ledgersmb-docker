@@ -35,7 +35,7 @@ fi
 if [[ -n "$SSMTP_USE_STARTTLS" ]]; then
     echo "\$SSMTP_USE_STARTTLS set; parameter is deprecated"
     if [[ -z "$LSMB_MAIL_SMTPTLS" ]]; then
-        echo "  Deriving \$LSMB_MAIL_SMTPSENDER_HOSTNAME setting from \$SSMTP_USE_STARTTLS"
+        echo "  Deriving \$LSMB_MAIL_SMTPTLS setting from \$SSMTP_USE_STARTTLS"
         LSMB_MAIL_SMTPTLS=$SSMTP_USE_STARTTLS
     fi
     LSMB_HAVE_DEPRECATED=1
