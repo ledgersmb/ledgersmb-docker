@@ -65,8 +65,10 @@ ENV POSTGRES_PORT=5432
 ENV DEFAULT_DB=lsmb
 
 COPY start.sh /usr/local/bin/start.sh
+COPY config.sh /usr/local/bin/config.sh
+COPY run.sh /usr/local/bin/run.sh
 
-RUN chmod +x /usr/local/bin/start.sh && \
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/config.sh /usr/local/bin/run.sh && \
   mkdir -p /var/www && \
   mkdir -p /srv/ledgersmb/local/conf && \
   chown -R www-data /srv/ledgersmb/local
