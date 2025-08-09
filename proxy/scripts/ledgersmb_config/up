@@ -1,0 +1,3 @@
+foreground { echo "Running config..." }
+
+/usr/local/bin/config.sh
