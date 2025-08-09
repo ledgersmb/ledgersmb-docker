@@ -6,9 +6,19 @@ ${DOCKER:-docker} buildx build \
    --progress plain \
    --platform ${PLATFORM:-linux/amd64,linux/arm64,linux/arm/v7} \
    --build-arg "ARTIFACT_PATH=$ARTIFACT_PATH" \
+   -t ledgersmb/ledgersmb:$BRANCH-base \
+   -t ledgersmb/ledgersmb:$VERSION-base \
+   -t ghcr.io/ledgersmb/ledgersmb:$BRANCH-base \
+   -t ghcr.io/ledgersmb/ledgersmb:$VERSION-base \
+   ${SET_LATEST_TAG:+ -t ledgersmb/ledgersmb:latest-base -t ghcr.io/ledgersmb/ledgersmb:latest-base} \
+   --push base/
+
+${DOCKER:-docker} buildx build \
+   --progress plain \
+   --platform ${PLATFORM:-linux/amd64,linux/arm64,linux/arm/v7} \
    -t ledgersmb/ledgersmb:$BRANCH \
    -t ledgersmb/ledgersmb:$VERSION \
    -t ghcr.io/ledgersmb/ledgersmb:$BRANCH \
    -t ghcr.io/ledgersmb/ledgersmb:$VERSION \
    ${SET_LATEST_TAG:+ -t ledgersmb/ledgersmb:latest -t ghcr.io/ledgersmb/ledgersmb:latest} \
-   --push .
+   --push proxy/
