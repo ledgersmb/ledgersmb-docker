@@ -39,6 +39,7 @@ RUN set -x ; \
   cd /srv && \
   curl -s -o ledgersmb-installer -L https://get.ledgersmb.org/ledgersmb-installer && \
   ARTIFACT_LOCATION="$ARTIFACT_PATH" perl ledgersmb-installer install --yes --log-level=trace $LSMB_VERSION && \
+  mv /srv/ledgersmb/server-start /usr/local/bin/run.sh && \
   rm -rf ~/.cpanm/ /var/lib/apt/lists/* /usr/share/man/*
 
 WORKDIR /srv/ledgersmb
@@ -66,7 +67,6 @@ ENV DEFAULT_DB=lsmb
 
 COPY start.sh /usr/local/bin/start.sh
 COPY config.sh /usr/local/bin/config.sh
-COPY run.sh /usr/local/bin/run.sh
 
 RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/config.sh /usr/local/bin/run.sh && \
   mkdir -p /var/www && \
