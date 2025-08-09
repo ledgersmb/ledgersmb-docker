@@ -8,7 +8,7 @@
 # so no special care needs to be taken on
 # container upgrades.  With PostgreSQL, data is
 # persisted across upgrades by the use of a
-# special 'dbdata' volume
+# special 'pgdata' volume
 
 version: "3.2"
 services:
@@ -31,7 +31,7 @@ services:
   lsmb:
     depends_on:
       - postgres
-    image: ghcr.io/ledgersmb/ledgersmb:1.12
+    image: ghcr.io/ledgersmb/ledgersmb:1.13
       # In order to store the configuration outside the image, allowing it to
       # be edited between container restarts, uncomment the section below and
       # change the 'source' to the directory where you want the configuration
@@ -48,13 +48,15 @@ services:
     networks:
       - internal
       - default
-    # Comment the 'ports' section to disable mapping the LedgerSMB container port (5762)
-    #  to the host's port of the same number. Mapping "5762:5762" makes LedgerSMB
-    #  available on http://<host-dns-or-ip>:5762/
+    # Comment the 'ports' section to disable mapping the LedgerSMB container
+    # ports (80 and 5762) to host ports of the same number. The mapping below
+    # makes LedgerSMB available on http://localhost/ on the host.
+    #
     #     SECURITY NOTE:  Leave this uncommented for evaluation purposes only!
-    #       In production, be sure to use SSL/TLS (such as by reverse proxying) to protect 
+    #       In production, be sure to use SSL/TLS (such as by reverse proxying) to protect
     #       user's passwords and other sensitive data
     ports:
+      - "80:80"
       - "5762:5762"
     environment:
       # The LSMB_WORKERS environment variable lets you select the number
@@ -87,7 +89,7 @@ services:
     # unless it was manually stopped
     restart: unless-stopped
 
-# having the dbdata volume is required to persist our
+# having the pgdata volume is required to persist our
 # data between PostgreSQL container updates; without
 # that, the data is contained in the same volume as
 # the rest of the image and on update/upgrade, the
