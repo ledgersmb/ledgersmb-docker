@@ -1,3 +1,4 @@
 foreground { echo "Running config..." }
 
+with-contenv
 /usr/local/bin/config.sh
