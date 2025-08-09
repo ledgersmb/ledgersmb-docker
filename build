@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+${DOCKER:-docker} buildx build \
+   --progress plain \
+   --platform ${PLATFORM:-linux/amd64,linux/arm64,linux/arm/v7} \
+   --build-arg "ARTIFACT_LOCATION=$ARTIFACT_LOCATION" \
+   -t ledgersmb/ledgersmb:$BRANCH \
+   -t ledgersmb/ledgersmb:$VERSION \
+   -t ghcr.io/ledgersmb/ledgersmb:$BRANCH \
+   -t ghcr.io/ledgersmb/ledgersmb:$VERSION \
+   --push .
