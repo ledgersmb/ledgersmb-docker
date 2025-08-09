@@ -1,3 +1,10 @@
 #!/usr/bin/with-contenv /bin/bash
 
+
+LSMB_CONFIG_FILE=${LSMB_CONFIG_FILE:-/srv/ledgersmb/local/conf/ledgersmb.yaml}
+export LSMB_CONFIG_FILE
+echo "--------- LEDGERSMB CONFIGURATION:  $LSMB_CONFIG_FILE"
+cat ${LSMB_CONFIG_FILE}
+echo '--------- LEDGERSMB CONFIGURATION --- END'
+
 s6-setuidgid www-data /usr/local/bin/run.sh
