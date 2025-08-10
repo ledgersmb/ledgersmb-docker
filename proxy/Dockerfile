@@ -3,7 +3,7 @@ ARG LSMB_VERSION="1.13.0-beta2"
 # Install s6-overlay
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
-FROM ledgersmb/ledgersmb:$LSMB_VERSION
+FROM ledgersmb/ledgersmb:$LSMB_VERSION-base
 
 # Repeat args if we still want to use them
 ARG LSMB_VERSION
@@ -18,7 +18,7 @@ RUN set -x && \
     mkdir -p /var/lib/nginx/body /var/cache/nginx && \
     DEBIAN_FRONTEND=noninteractive apt-get autoremove -q -y && \
     DEBIAN_FRONTEND=noninteractive apt-get clean -q && \
-    ARCH="$(case "$(dpkg --print-architecture)" in armv7*) echo "armhf" ;; arm64) echo "aarch64" ;; amd64) echo "x86_64" ;; *) exit 1 ;; esac)" && \
+    ARCH="$(case "$(dpkg --print-architecture)" in armv7*|armhf) echo "armhf" ;; arm64) echo "aarch64" ;; amd64) echo "x86_64" ;; *) exit 1 ;; esac)" && \
     wget -O /tmp/s6-overlay-noarch.tar.xz https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz && \
     wget -O /tmp/s6-overlay-noarch.tar.xz.sha256 https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz.sha256 && \
     wget -O /tmp/s6-overlay-${ARCH}.tar.xz https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${ARCH}.tar.xz && \
