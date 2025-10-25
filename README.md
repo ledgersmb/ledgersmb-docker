@@ -17,6 +17,7 @@ Dockerfile for LedgerSMB Docker image
 # Supported tags
 
 - `1.13`, `1.13.x`, `latest` - Latest official release from the 1.13 branch
+- `1.13-base`, `1.13.x-base`, `latest-base` - Latest official release without reverse proxy
 - `1.12`, `1.12.x` - Latest official release from the 1.12 branch
 - `1.11`, `1.11.x` - Latest official release from the 1.11 branch
 - `1.10`, `1.10.38` - Last official release from the 1.10 branch (End-of-Life)
@@ -41,11 +42,18 @@ for different locales.
 
 The project aims to be the solution a start-up never outgrows.
 
-
 # How is this image designed to be used?
 
 This image is designed to be used in conjunction with a running PostgreSQL
 instance (such as may be provided through a separate image).
+
+## 1.13 and later images
+
+These images expose port 80 running an Nginx reverse proxy handling static
+web assets while forwarding application requests to Starman. These images
+also offer port 5762 as described below.
+
+## pre-1.13 and `*-base` images
 
 This image exposes port 5762 running a Starman HTTP application server. We
 do recommend not exposing this port publicly, because
