@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.description="LedgerSMB is a full featured double-
  the LedgerSMB project is to bring high quality ERP and accounting capabilities\
  to Small and Midsize Businesses."
 
-ARG LSMB_VERSION="1.13.0"
+ARG LSMB_VERSION="1.13.1"
 ARG ARTIFACT_PATH="https://download.ledgersmb.org/f/Releases/$LSMB_VERSION/"
 
 
