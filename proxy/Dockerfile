@@ -1,5 +1,5 @@
 # Install LedgerSMB version
-ARG LSMB_VERSION="1.13.2"
+ARG LSMB_VERSION="1.13.3"
 # Install s6-overlay
 ARG S6_OVERLAY_VERSION=3.2.0.2
 
