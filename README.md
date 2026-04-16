@@ -183,6 +183,13 @@ Default: lsmb
 Set this if you want to automatically log in to a particular LedgerSMB database
 without needing to enter the name of that database on the login.pl login screen.
 
+## `LSMB_BIND_ADDRESS`
+
+Default: 0.0.0.0:5762
+
+Sets the address (interface and port) to bind the ledgersmb server to. By default
+binds to all interfaces in the container.
+
 ## `LSMB_WORKERS`
 
 Default: 5
