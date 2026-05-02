@@ -83,8 +83,8 @@ only instructions required, after the optional edition of the file to adjust
 the environment variables, are:
 
 ```plain
- $ docker-compose pull
- $ docker-compose up -d
+ $ docker compose pull
+ $ docker compose up -d
 ```
 
 Or use the following to set a different password and/or parallel processing
